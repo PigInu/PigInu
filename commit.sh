@@ -1,7 +1,7 @@
 #!/bin/sh
 
-REPO=token-airdrop.git
-USER=softsun-cz
+REPO=PigInu.git
+USER=PigInu
 PASS=`cat ./.secret_git`
 
 if [ "$#" -eq 0 ]; then
