@@ -1,0 +1,18 @@
+{
+  "name": "PigInu",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "*",
+    "@nomiclabs/hardhat-ethers": "*",
+    "@nomiclabs/hardhat-etherscan": "*",
+    "@nomiclabs/hardhat-waffle": "*",
+    "chai": "*",
+    "ethereum-waffle": "*",
+    "ethers": "*",
+    "hardhat": "*"
+  }
+}
