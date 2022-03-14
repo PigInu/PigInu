@@ -1,14 +1,16 @@
 # Pig Inu - smart contracts and website
 
-<img src="piginu.png" alt="Pig Inu" width="100px" height="100px">
+<p align="center">
+ <img src="piginu.png" alt="Pig Inu" width="100px" height="100px">
+</p>
 
-Website: https://piginu.com
-E-mail: info@piginu.com
-Telegram: https://t.me/piginu_com
-Telegram Chat Group: https://t.me/piginu_group
-Telegram Announcements: https://t.me/piginu_ann
-Twitter: https://twitter.com/piginu_com
-Discord: https://discord.gg/Z3Sp4Yxhex
+- Website: https://piginu.com
+- E-mail: info@piginu.com
+- Telegram: https://t.me/piginu_com
+- Telegram Chat Group: https://t.me/piginu_group
+- Telegram Announcements: https://t.me/piginu_ann
+- Twitter: https://twitter.com/piginu_com
+- Discord: https://discord.gg/Z3Sp4Yxhex
 
 # Smart contracts
 If you'd like to deploy our smart contracts for test reasons:
