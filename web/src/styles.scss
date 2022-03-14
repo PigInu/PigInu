@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;600;700&display=swap');
+body{
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    font-family: 'Kumbh Sans', sans-serif;
+}
+h1{color: #1095C1;}
+h1,h2{margin-bottom: 10px;}
+tr{background: transparent;}
+.clear{clear: both;}
+input,  button{font-size: 1em; font-family: 'Kumbh Sans', sans-serif;}
+.container{
+    position: relative;
+    width: calc(100% - 40px);
+    max-width: 1900px;
+    margin: 0 auto;
+}
+
+.bluebox, .greenbox{
+    background: linear-gradient(#519be8, #2a7bd0);
+    display: inline-block;
+    border-radius: 40px;
+    padding: 20px;
+    margin: 20px;
+    max-width: calc(100% - 40px);
+    text-align: left;
+    font-size: min(30px, 5vw);
+    .bubble, .sat{
+        background-color: #fff!important;
+    }
+    h1, h2{
+        margin: 0;
+        text-align: center;
+    }
+    th{
+        color: #fff;
+        font-weight: bold;
+    }
+    td{
+        color: #EFF924;
+        a{
+            color: #EFF924;
+        }
+    }
+    th, td{
+        padding: min(10px, 2vw);
+    }
+
+    app-loader{
+        font-size: 0.1em;
+    }
+    span a{
+        word-break: break-all;
+    }
+}
+.greenbox{
+    background: linear-gradient(#00a940, #7bd027);
+}
+a:hover{
+    text-decoration: none;
+}
+
+.error, .success, .result, .resultError, .info{
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    padding: 0.2em 0.5em;
+    border: 2px solid #26B538;
+    color: #26B538;
+    background:#E4F6E7;
+    a{color: #26B538;}
+}
+.info{
+    border-color: #F5820F;
+    color: #F5820F;
+    background: #FEF0E1;
+    a{color: #F5820F;}
+}
+.error, .resultError{
+    border-color: #F50F0F;
+    color: #F50F0F;
+    background: #FEE9E9;
+    a{color: #F50F0F;}
+}
+
+h1{
+    line-height: min(84px, 15vw);
+    font-weight: bold;
+    font-size: min(75px, 12vw); 
+    color: rgba(23,34,45,1);
+}
+
+h2{
+    line-height: min(60px, 10vw);
+    font-weight: bold;
+    font-size: min(45px, 7vw); 
+}
+
+input{
+    background: #F7FBFF;
+    border: 2px solid #E4EFFA;
+    color: rgba(23,34,45,1);
+    border-radius: 10px;
+    padding: 10px 20px;
+    transition: all 0.3s;
+    &:active, &:focus{
+        box-shadow: 0px 0px 15px #326B96;
+        background-color: #EAF3F9;
+    }
+}
+
+table button{
+    border: 2px solid #E4EFFA;
+    background: transparent;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    display: block;
+    width: 100%;
+}

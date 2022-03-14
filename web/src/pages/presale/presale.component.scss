@@ -1,0 +1,109 @@
+:host{
+    text-align: center;
+    display: block;
+    table{
+        &.half{
+            width: 50%;
+            float: left;
+        }
+        td {
+            app-loader{
+                font-size: 0.1em;
+            }
+            span{
+                a{
+                    word-break: break-all;
+                }
+                .float{
+                    display: block;
+                    float: left;
+                }
+                .nowrap{
+                    white-space: nowrap;
+                    word-break: normal;
+                }
+                &.calc{
+                    text-align: center;
+                    display: flex;
+                    flex-flow: row;
+                    width: 100%;
+                    padding-top: 10px;
+                    align-items: center;
+                    .delimiter{
+                        font-size: 25px;
+                        font-weight: bold;
+                        padding: 0 10px;
+                        color: #fff;
+                    }
+                    .buttonWrap{
+                        button{margin: 0 0 0 5px;}
+                    }
+                    .inputWrap{
+                        width: 200px;
+                        max-width: 40%;
+                        position: relative;
+                        input{
+                            padding-right: 75px;
+                            margin: 0;
+                            align-items: center;
+                            text-align: right;
+                            height: 58px;
+                            max-width: 100%;
+                            box-sizing: border-box;
+                        }
+                        span{
+                            position: absolute;
+                            pointer-events: none;
+                            right: 10px;
+                            top:50%;
+                            transform: translate(0, -50%);
+                            padding: 5px 0;
+                            width: 60px;
+                            text-align: center;
+                            border-radius: 5px;
+                            background: #1095C1;
+                            color: #fff;
+                            font-weight: bold;
+                            font-size: 0.6em;
+                        }
+                    }
+                    ~ .result{
+                        margin-top: 10px;
+                    }
+                }
+            }
+            &.check{
+                input{width: calc(100% - 200px); float: left; margin-right: 5px; }
+                button{
+                    box-sizing: border-box;
+                    width: 150px;
+                    app-loader{
+                        font-size: 0.08em;
+                    }
+                }
+                input, button{
+                    margin-bottom: 5px;
+                    @media only screen and (max-width: 670px) {
+                        width: 100%;
+                        float: none;
+                    }
+                }
+            }
+        }
+    }
+    countdown ::ng-deep .item{
+        background-color: #1095C1;
+        text-align: center;
+        width: 2.65em;
+        display:inline-block;
+        margin-right: 4px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        color: #fff;
+        height: 1.8em;
+        line-height: 1.8em;
+    }
+    .center{
+        text-align: center;
+    }
+}

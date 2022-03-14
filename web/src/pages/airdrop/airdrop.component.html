@@ -1,0 +1,90 @@
+<h1>Airdrop</h1>
+<div class="bluebox">
+    <table> 
+    <tr>
+        <th>
+        End time: 
+        </th><td>
+            <span *ngIf="airdropTimeout() == -1"><app-loader></app-loader></span>
+            <span *ngIf="airdropTimeout() == 0">
+                <span>Not started yet</span>
+            </span>
+            <span *ngIf="airdropTimeout() > 0">
+            <span *ngIf="timestampToTimeout(airdropTimeout()) > 0"><countdown [config]="timeOutConfig(airdropTimeout())"></countdown> | </span>
+            {{airdropTimeout() * 1000 | dateTimeLocale}}
+            </span>
+        </td> 
+    </tr>
+    <tr>
+        <th>
+            Token: 
+        </th><td>
+            <span *ngIf="token() == ''"><app-loader></app-loader></span>
+            <span *ngIf="token() != ''">
+                {{token()}} 
+                <app-add-token-to-wallet [token]=tokenInstance()></app-add-token-to-wallet>
+            </span>
+        </td> 
+    </tr>
+    <tr>
+        <th>
+            Token address: 
+        </th><td>
+            <span *ngIf="tokenAddress() == ''"><app-loader></app-loader></span>
+            <span *ngIf="tokenAddress() != ''"><a href="{{tokenAddress() | addressLink}}" target="_blank">{{tokenAddress()}}</a></span>
+        </td> 
+    </tr>
+    <tr>
+        <th>
+            Airdrop contract address:
+        </th><td>
+            <span><a href="{{airdropTokenAddress() | addressLink}}" target="_blank">{{airdropTokenAddress()}}</a></span>
+        </td> 
+    </tr>
+    <tr>
+        <th>
+            Tokens in each airdrop: 
+        </th><td>
+            <span *ngIf="amountOfTokens == -1"><app-loader></app-loader></span>
+            <span *ngIf="amountOfTokens != -1">{{amountOfTokens | numberLocale}} {{tokenSymbol()}}</span>
+        </td>
+    </tr><tr>
+        <th>
+            Remaining tokens: 
+        </th><td>
+            <span *ngIf="remainingTokens == -1"><app-loader></app-loader></span>
+            <span *ngIf="remainingTokens != -1">{{remainingTokens | numberLocale}} {{tokenSymbol()}}</span>
+        </td> 
+    </tr>
+    <tr>
+        <th>
+            Airdrops count: 
+        </th><td>
+            <span *ngIf="airdropsTotal() == null"><app-loader></app-loader></span>
+            <div class="center" *ngIf="airdropsTotal() != null">
+                <app-progress [percent]="airdropsCountPercent()" [text]="(this.airdropsCount | numberLocale) + ' / ' + (airdropsTotal() | numberLocale)" ></app-progress>
+            </div>
+        </td> 
+    </tr><tr>
+        <th>
+            Total claimed: 
+        </th><td>
+            <span *ngIf="totalClaimed == -1"><app-loader></app-loader></span>
+            <span *ngIf="totalClaimed != -1">{{totalClaimed | numberLocale}} {{tokenSymbol()}}</span>
+        </td> 
+    </tr>
+    </table>
+</div>
+<div *ngIf="isAirdropPossible()" class="connectButton"> 
+  <button (click)="airDropClick()">
+    <span *ngIf="!airdropLoading">Get your free {{tokenSymbol()}} tokens</span>
+    <app-loader *ngIf="airdropLoading" class="center"></app-loader>
+  </button>
+  <div *ngIf="airdropError != null" class="error">
+    {{airdropError}}
+  </div>
+</div>
+<div class="connectButton" *ngIf="airdropRecieved()">
+    You have already received your {{tokenSymbol()}} tokens
+    <span *ngIf="airdropTransctionHash"><br />Transaction ID: <a href="{{airdropTransctionHash | transactionLink}}" target="_blank">{{airdropTransctionHash}}</a></span>
+</div>

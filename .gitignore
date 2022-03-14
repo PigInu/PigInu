@@ -3,12 +3,12 @@
 /.idea/
 /secrets.json
 /build/
-/test/
 /bin/
 .env
 coverage
 coverage.json
 typechain
+typechain-types
 cache
 artifacts
 accounts.json

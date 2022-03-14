@@ -1,0 +1,25 @@
+:host{
+    display: inline-block;
+    button{
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        background: transparent;
+        cursor: pointer;
+        border: 2px solid #fff;
+        border-radius: 10px;
+        padding: 2px 10px;
+        &::after{
+            content: "+";
+            font-weight: bold;
+            padding-left: 7px;
+            color: #fff;
+            position: relative;
+            top: -2px;
+        }
+        img{
+            width: 25px;
+            height: 25px;
+        }
+    }
+}

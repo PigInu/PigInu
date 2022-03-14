@@ -1,0 +1,58 @@
+:host{
+    display: inline-block;
+    margin: 0 -10px;
+    .data{
+        background: linear-gradient(45deg, #fff, #eef6fb);
+        border-radius: 30px;
+        padding: 20px 20px 10px;
+        margin: 5px 20px;
+        overflow: hidden;
+        table{
+            margin: 0;
+            border-collapse: collapse;
+            tr { 
+                td, th{
+                    padding: 10px 5px;
+                    border-bottom: 1px solid rgba(173,216,244,1);
+                    text-align: left;
+                    font-size: 17px;
+                    a{
+                        color: rgba(242,132,131,1);
+                        font-weight: bold;
+                    }
+                    .green{
+                        color: rgba(42,182,55,1);
+                        font-weight: bold;
+                    }
+                }
+                th{
+                    text-align: right;
+                    font-weight: bold;
+                }
+                &.noborder{
+                    td, th{
+                        border: none;
+                    }
+                }
+            }
+            .actions{
+                text-align: center;
+            }
+        }
+    }
+    input{
+        margin-bottom: 5px;
+    }
+    button{
+        background: linear-gradient(#26b538, #92d24a);
+        font-weight: bold;
+        border-radius: 50px;
+        font-size: 17px;
+        padding: 15px;
+        border: none;
+        margin-bottom: 10px;
+    }
+    app-loader{
+        font-size: 0.1em;
+    }
+}

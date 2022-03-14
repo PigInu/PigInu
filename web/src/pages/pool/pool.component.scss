@@ -1,0 +1,10 @@
+:host{
+    display: block;
+    text-align: center;
+    .pools{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-flow: row;
+    }
+}

@@ -1,0 +1,18 @@
+
+<h1>Pool</h1>
+<div class="bluebox">
+  <table>
+    <tr>
+      <th>
+        Pool contract address: 
+      </th><td>
+        <span><a href="{{poolAddress() | addressLink}}" target="_blank">{{poolAddress()}}</a></span>
+      </td> 
+    </tr>
+  </table>
+</div>
+<div class="pools">
+  <ng-container *ngFor="let p of state().pools; index as poolId;" >
+    <app-pool-element *ngIf=p [pool]=p [contractAddress]=poolAddress()></app-pool-element>
+  </ng-container>
+</div>
