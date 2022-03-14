@@ -1,6 +1,6 @@
 # Pig Inu - smart contracts and website
 
-![Pig Inu](pig.png)
+![Pig Inu](piginu.png)
 
 Website: https://piginu.com
 E-mail: info@piginu.com
