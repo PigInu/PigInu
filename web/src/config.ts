@@ -19,8 +19,21 @@ export class Config {
             {link: "", text: "Home"},
             {link: "airdrop", text: "Airdrop"},
             {link: "presale", text: "Presale"},
-            {link: "pool", text: "Pool"},
-            {href: "/assets/whitepaper.pdf", text: "Whitepaper"}
+            {link: "pool", text: "Staking pools"},
+            {href: "/assets/whitepaper.pdf", text: "Whitepaper"},
+            { text: "Trade", items :[
+                {href: "https://quickswap.exchange/#/swap?inputCurrency=0xF42a4429F107bD120C5E42E069FDad0AC625F615&outputCurrency=0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3", text: "Buy PIG for DAI", link: false},
+                {href: "https://quickswap.exchange/#/swap?outputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", text: "Buy DAI for MATIC"},
+                {href: "https://quickswap.exchange/#/add/0xF42a4429F107bD120C5E42E069FDad0AC625F615/0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3", text: "Buy PIG-DAI liquidity"}
+            ]},
+            { text: "Community", items :[
+                {href: "https://twitter.com/piginu_com", text: "Twitter", link: false},
+                {href: "https://discord.gg/T7FMU3pb", text: "Discord", link: false},
+                {href: "mailto:info@piginu.com", text: "E-mail", link: false},
+                {href: "https://t.me/piginu_com", text: "Telegram Support", link: false},
+                {href: "https://t.me/piginu_group", text: "Telegram Chat Group", link: false},
+                {href: "https://t.me/piginu_ann", text: "Telegram Announcements", link: false},
+            ]},
         ],
         explorer: 'https://mumbai.polygonscan.com/', // Polygon (MATIC) - Testnet
         chainID: 80001,

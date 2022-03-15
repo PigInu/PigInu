@@ -86,7 +86,7 @@
       </span> 
     </div>
     <div class="modal-footer">
-      <button class="cancel" (click)="toogleWithdrawModal()">Cancel</button>
+      <button class="cancel" (click)="toogleDepositModal()">Cancel</button>
       <button class="confirm" (click)="deposit(depositInput.value)">
           <span *ngIf="!depositLoading">Confirm</span>
           <app-loader *ngIf="depositLoading" class="center"></app-loader>

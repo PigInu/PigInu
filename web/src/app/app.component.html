@@ -75,6 +75,13 @@
                     <ng-container *ngFor="let m of mainMenu();" >              
                         <a *ngIf="m.link" (click)="toogleMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="{{m.link}}">{{m.text}}</a>
                         <a *ngIf="m.href" (click)="toogleMenu()" href="{{m.href}}" target="_blank">{{m.text}}</a>
+                        <div (click)="toogleSubitems($event)" *ngIf="m.items">{{m.text}} <span class="icon">></span></div>
+                        <div class="subitems" *ngIf="m.items">
+                            <ng-container *ngFor="let mm of m.items"> 
+                                <a *ngIf="mm.link" (click)="toogleMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="{{mm.link}}">{{mm.text}}</a>
+                                <a *ngIf="mm.href" (click)="toogleMenu()" href="{{mm.href}}" target="_blank">{{mm.text}}</a>
+                            </ng-container>
+                        </div>
                     </ng-container>
                 </div>
             </div>

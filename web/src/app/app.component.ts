@@ -83,6 +83,7 @@ export class AppComponent {
 
   disconnect(){
     this.web3ModalService.disconnect();
+    location.href = location.href;
   }
 
   badChainId(): boolean{
@@ -95,6 +96,14 @@ export class AppComponent {
 
   toogleSubmenu(){
     this.activeSubmenu = !this.activeSubmenu;
+  }
+
+  toogleSubitems(event: MouseEvent){
+    const el = event.target as HTMLElement;
+    if(el.classList.contains("subitems-open"))
+      el.classList.remove("subitems-open");
+    else
+      el.classList.add("subitems-open")
   }
 
   copyAddress(){

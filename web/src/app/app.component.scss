@@ -123,8 +123,9 @@
             content: " ";
         }
         .links{
-            padding: 36px 0 0 36px;
-            a{
+            padding: 36px 0 0 0;
+            a, div{
+                cursor: pointer;
                 line-height: 46px;
                 font-family: Kumbh Sans;
                 font-weight: bold;
@@ -135,6 +136,26 @@
                 text-decoration: none;
                 &.active, &:hover{
                     color: rgba(230,244,33,1);
+                }
+                position: relative;
+                .icon{
+                    position: absolute;
+                    right:0;
+                    top:0;
+                    transition: all 0.2s;
+                    pointer-events: none;
+                }
+            }
+            .subitems{
+                display: none;
+                margin-left: 20px;
+            }
+            .subitems-open {
+                .icon{
+                    transform: rotate(90deg);
+                }
+                + .subitems{
+                    display: block;
                 }
             }
         }
