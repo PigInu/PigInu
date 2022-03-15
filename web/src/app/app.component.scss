@@ -39,12 +39,18 @@
         box-sizing: border-box;
         height: 150px;
         position: relative;
+        @media only screen and (max-width: 750px) {
+            padding: 40px 20px;
+        }
         .logo{
             max-width: min(312px, 24vw);
             position: absolute;
-            top: min(5vw, 35px);
+            top: 35px;
             left: 50%;
             transform: translateX(-50%);
+            @media only screen and (max-width: 750px) {
+                top: 1vw;
+            }
         }
     }
     .promo{
@@ -64,7 +70,8 @@
             background: url("/assets/img/header.jpg");
             background-size: cover;
             height: 902px;
-            max-height: 47vw;
+            max-height: max(47vw, 380px);
+            background-position: center;
             .promo{
                 display: block;
             }
@@ -202,11 +209,17 @@
 
     .connectButton{
         text-align: center;
-        .info{
+        .info, .error{
             margin-top: 20px;
             display: inline-block;
             font-size: 20px;
             padding: 10px 20px;
+            word-wrap: anywhere;
+            a.error{
+                cursor: pointer;
+                border-radius: 21px;
+                padding: 8px 15px;
+            }
         }
         button{
             display: flex;
@@ -217,14 +230,46 @@
             background: transparent;
             cursor: pointer;
             padding: 10px 20px;
-            border-radius: 50px;
-            border: 2px solid #fff;;
+            border-radius: 21px;
+            border: 2px solid #fff;
+            background: #368AE2;
+            &.connectedButton{
+                display: block;
+                .flex{
+                    display: flex;
+                    flex-flow: row;
+                }
+                .submenu{
+                    a, span{
+                        display: block;
+                        text-align: right;
+                        text-decoration: none;
+                        padding: 5px 0 0;
+                        color: #fff;
+                        margin-left: -10px;
+                    }
+                }
+            }
+            @media only screen and (max-width: 750px) {
+                right: 20px;
+            }
             svg{
                 width: 24px;
+                margin-right: 10px;
             }
+            max-width: 300px;
             span{
                 color: #fff;
-                padding-left: 10px;
+                &.half{
+                    display: inline-block;
+                    width: 50%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    &--second{
+                        text-overflow: clip;
+                        text-align: right;
+                    }
+                }
             }
         }
     }

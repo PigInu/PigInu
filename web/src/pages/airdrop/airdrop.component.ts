@@ -89,6 +89,10 @@ export class AirdropComponent implements OnInit, OnDestroy {
     return AppState.airdropRecieved;
   }
 
+  isPeriodOver(){
+    return this.timestampToTimeout(this.airdropTimeout());
+  }
+
   isAirdropPossible(): boolean{
     if(this.airdropRecieved() || 
       this.airdropsTotal() == null || 

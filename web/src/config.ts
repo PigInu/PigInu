@@ -15,15 +15,22 @@ export class Config {
             symbol: "MATIC",
             decimals: 18
         },
+        mainMenu: [
+            {link: "", text: "Home"},
+            {link: "airdrop", text: "Airdrop"},
+            {link: "presale", text: "Presale"},
+            {link: "pool", text: "Pool"},
+            {href: "/assets/whitepaper.pdf", text: "Whitepaper"}
+        ],
         explorer: 'https://mumbai.polygonscan.com/', // Polygon (MATIC) - Testnet
         chainID: 80001,
         getHexChainId() : string{
             return "0x" +Config.main.chainID.toString(16);
         },       
-        addressToken: '0x7284517b7c0346bD39c2a2ddDD0d8CE86304728D',
-        addressAirdrop: '0x2ef8da53b94A4630621F5A633ced975466F6Bb15',
-        addressPresale: '0x84A4b4aC0d9975d79f16556cb46D3251a1c64616',
-        addressPool: '0xC6637E0141A6fF2504924baE105990D2e30D3895',
+        addressToken: '0x6411f12168f6ed7375dDD38Dd68A9130a9De7f91',
+        addressAirdrop: '0x86541beBa4888f306fb47bc7064314d638Cb4B14',
+        addressPresale: '0x409f4779c09a76d23c63d2F6aBd819EACA8D801C',
+        addressPool: '0xE7BB6F95755286Dd7509dE02C62e930499103aaC',
         airdropContractInterface: [] = [
             "function claimCount () view returns (uint)",
             //"event Transfer(address indexed from, address indexed to, uint amount)",

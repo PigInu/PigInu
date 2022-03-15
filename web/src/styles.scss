@@ -9,14 +9,16 @@ h1{color: #1095C1;}
 h1,h2{margin-bottom: 10px;}
 tr{background: transparent;}
 .clear{clear: both;}
-input,  button{font-size: 1em; font-family: 'Kumbh Sans', sans-serif;}
+input,  button{font-size: 1em; font-family: 'Kumbh Sans', sans-serif; box-sizing: border-box;}
 .container{
     position: relative;
     width: calc(100% - 40px);
     max-width: 1900px;
     margin: 0 auto;
 }
-
+p{
+    margin:0 0 10px;
+}
 .bluebox, .greenbox{
     background: linear-gradient(#519be8, #2a7bd0);
     display: inline-block;
@@ -25,7 +27,7 @@ input,  button{font-size: 1em; font-family: 'Kumbh Sans', sans-serif;}
     margin: 20px;
     max-width: calc(100% - 40px);
     text-align: left;
-    font-size: min(30px, 5vw);
+    font-size: min(20px, 3.5vw);
     .bubble, .sat{
         background-color: #fff!important;
     }
@@ -44,7 +46,7 @@ input,  button{font-size: 1em; font-family: 'Kumbh Sans', sans-serif;}
         }
     }
     th, td{
-        padding: min(10px, 2vw);
+        padding: min(10px, 1vw);
     }
 
     app-loader{
@@ -119,4 +121,100 @@ table button{
     padding: 10px;
     display: block;
     width: 100%;
+}
+
+.token-flex{
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    img{
+        width: min(40px, 10vw);
+        height: min(40px, 10vw);
+        margin-right: 5px;
+    }
+}
+
+
+.modal{
+    position: fixed;
+    left:0; 
+    top:0;
+    bottom:0;
+    right:0;
+    background: rgba(0,0,0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .modal-data{
+        text-align: left;
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        min-width: 500px;
+        max-width: 90%;
+        .modal-header{
+            padding: 20px;
+            background: linear-gradient(#fff, #E5F0FB);
+            color: #A1C9F2;
+            font-size: 20px;
+            font-weight: bold;
+            position: relative;
+            padding-right: 50px;
+            .close{
+                position: absolute;
+                right: 10px;
+                top: -6px;
+                font-size: 50px;
+                cursor: pointer;
+            }
+        }
+        .modal-body{
+            padding: 20px;
+            .inputWrap{
+                width: 100%;
+                position: relative;
+                input{
+                    padding-right: 95px;
+                    margin: 0;
+                    align-items: center;
+                    text-align: right;
+                    height: 58px;
+                    width: 100%;
+                }
+                span{
+                    position: absolute;
+                    pointer-events: none;
+                    right: 10px;
+                    top:50%;
+                    transform: translate(0, -50%);
+                    padding: 5px 0;
+                    width: 80px;
+                    text-align: center;
+                    border-radius: 5px;
+                    background: #1095C1;
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: 0.8em;
+                }
+            }
+        }
+        .modal-footer{
+            border-top: 1px solid #A1C9F2;
+            padding: 20px;
+            text-align: right;
+            button{
+                cursor: pointer;
+                border: none;
+                color: #fff;
+                padding: 10px 15px;
+                border-radius: 21px;
+                font-weight: bold;
+                margin-left: 10px;
+                background: linear-gradient(#FD6C82, #FD96A6);
+                &.confirm{
+                    background: linear-gradient(#26B538, #92D24A);
+                }
+            }
+        }
+    }
 }

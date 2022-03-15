@@ -14,7 +14,8 @@ export class AppComponent {
   title = 'airdrop';
   actualYear: string = "";
   activeMenu: boolean = false;
-  
+  activeSubmenu: boolean = false;
+
   constructor(private router: Router, private web3ModalService: Web3ModalService, private titleService: Title){
     this.actualYear = new Date().getFullYear().toString();
     this.titleService.setTitle(this.projectName());
@@ -33,6 +34,10 @@ export class AppComponent {
 
   public tokenName(): string{
     return AppState.token.name;
+  }
+
+  public mainMenu(){
+    return Config.main.mainMenu;
   }
 
   public tokenSYmbol(): string{
@@ -68,6 +73,10 @@ export class AppComponent {
     return AppState.selectedAddress == null ? "" : AppState.selectedAddress;
   }
 
+  walletAddressCut(): string{
+    return AppState.selectedAddress == null ? "" : AppState.selectedAddress.substring(0, 7) + "..." + AppState.selectedAddress.substring( AppState.selectedAddress.length - 7) ;
+  }
+
   connect(){
     this.web3ModalService.web3Modal();
   }
@@ -82,5 +91,18 @@ export class AppComponent {
 
   toogleMenu(){
     this.activeMenu = !this.activeMenu;
+  }
+
+  toogleSubmenu(){
+    this.activeSubmenu = !this.activeSubmenu;
+  }
+
+  copyAddress(){
+    const el = document.createElement('textarea');
+    el.value = AppState.selectedAddress ? AppState.selectedAddress : "";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
 }

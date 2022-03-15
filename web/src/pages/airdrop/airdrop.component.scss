@@ -16,4 +16,21 @@
     .center{
         text-align: center;
     }
+
+    button{
+        background: linear-gradient(#26b538, #92d24a);
+        font-weight: bold;
+        border-radius: 50px;
+        font-size: 17px;
+        padding: 15px;
+        border: none;
+        margin-bottom: 10px;
+        color: #fff;
+        cursor: pointer;
+        &.disabled{
+            background: linear-gradient(#ccc, #ddd);
+            color: #000;
+            cursor: default;
+        }
+    }
 }

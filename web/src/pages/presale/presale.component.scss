@@ -1,7 +1,35 @@
 :host{
     text-align: center;
     display: block;
+    .grid{
+        display: inline-grid;
+        grid-template-columns: 50% 50%;
+        .firstbox{
+            grid-row-start: 1;
+            grid-row-end: 4;
+            grid-column: 1;
+            width: 800px;
+            max-width: 100%;
+        }
+        .secondbox{
+            grid-column: 2;
+            grid-row-start: 1;
+            grid-row-end: 1;
+            width: 800px;
+            max-width: 100%;
+        }
+        .thirdbox{
+            grid-column: 2;
+            grid-row: 2;
+            width: 800px;
+            max-width: 100%;
+        }
+        @media only screen and (max-width: 1600px) {
+            display: inline-block;
+        }
+    }
     table{
+        width: 100%;
         &.half{
             width: 50%;
             float: left;
@@ -17,6 +45,10 @@
                 .float{
                     display: block;
                     float: left;
+                    margin-right: 5px;
+                    .float{
+                        margin: 0;
+                    }
                 }
                 .nowrap{
                     white-space: nowrap;
@@ -29,6 +61,10 @@
                     width: 100%;
                     padding-top: 10px;
                     align-items: center;
+                    flex-wrap: wrap;
+                    @media only screen and (max-width: 900px) {
+                        flex-flow: column;
+                    }
                     .delimiter{
                         font-size: 25px;
                         font-weight: bold;
@@ -37,11 +73,23 @@
                     }
                     .buttonWrap{
                         button{margin: 0 0 0 5px;}
+                        @media only screen and (max-width: 900px) {
+                            width: 100%;
+                            margin-top: 10px;
+                            button{
+                                width: auto;
+                                float: right;
+                            }
+                        }
                     }
                     .inputWrap{
                         width: 200px;
                         max-width: 40%;
                         position: relative;
+                        @media only screen and (max-width: 900px) {
+                            width: 100%;
+                            max-width: 100%;
+                        }
                         input{
                             padding-right: 75px;
                             margin: 0;
@@ -50,6 +98,9 @@
                             height: 58px;
                             max-width: 100%;
                             box-sizing: border-box;
+                            @media only screen and (max-width: 900px) {
+                                width: 100%;
+                            }
                         }
                         span{
                             position: absolute;
@@ -76,7 +127,7 @@
                 input{width: calc(100% - 200px); float: left; margin-right: 5px; }
                 button{
                     box-sizing: border-box;
-                    width: 150px;
+                    width: 195px;
                     app-loader{
                         font-size: 0.08em;
                     }

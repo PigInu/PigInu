@@ -41,13 +41,9 @@
 
 
           <div class="calc"  *ngIf="isTokenDepositApproved()">
-            <span class="inputWrap">
-              <input onlyNumbers [allowDecimals]="true" #depositInput value="" /> 
-            </span>
             <span class="buttonWrap">
-              <button (click)="deposit(depositInput.value)">
-                <span *ngIf="!depositLoading">Deposit</span>
-                <app-loader *ngIf="depositLoading" class="center"></app-loader>
+              <button (click)="toogleDepositModal()">
+                <span>Deposit</span>
               </button>
             </span>
           </div>
@@ -56,17 +52,11 @@
           </div>
           <div *ngIf="depositError != null" class="resultError">
             {{depositError}}
-          </div>
-
-          
+          </div>          
           <div class="calc"  *ngIf="isTokenDepositApproved()">
-            <span class="inputWrap">
-              <input onlyNumbers [allowDecimals]="true" #withdrawInput value="" /> 
-            </span>
             <span class="buttonWrap">
-              <button (click)="withdraw(withdrawInput.value)">
-                <span *ngIf="!withdrawLoading">Withdraw</span>
-                <app-loader *ngIf="withdrawLoading" class="center"></app-loader>
+              <button (click)="toogleWithdrawModal()">
+                <span>Withdraw</span>
               </button>
             </span>
           </div>
@@ -81,6 +71,48 @@
       </td>
     </tr>
   </table>
+</div>
 
+<div class="modal" *ngIf="depositModal">
+  <div class="modal-data">
+    <div class="modal-header">
+      Deposit
+      <span class="close" (click)="toogleDepositModal()">⨯</span>
+    </div>
+    <div class="modal-body">
+      <span class="inputWrap">
+        <input onlyNumbers #depositInput [allowDecimals]="true"  value="" /> 
+        <span>{{pool.tokenDeposit.name}}</span>
+      </span> 
+    </div>
+    <div class="modal-footer">
+      <button class="cancel" (click)="toogleWithdrawModal()">Cancel</button>
+      <button class="confirm" (click)="deposit(depositInput.value)">
+          <span *ngIf="!depositLoading">Confirm</span>
+          <app-loader *ngIf="depositLoading" class="center"></app-loader>
+      </button>
+    </div>
+  </div>
+</div>
 
+<div class="modal" *ngIf="withdrawModal">
+  <div class="modal-data">
+    <div class="modal-header">
+      Withdraw
+      <span class="close" (click)="toogleWithdrawModal()">⨯</span>
+    </div>
+    <div class="modal-body">
+      <span class="inputWrap">
+        <input onlyNumbers #withdrawInput [allowDecimals]="true"  value="" /> 
+        <span>{{pool.tokenEarn.name}}</span>
+      </span> 
+    </div>
+    <div class="modal-footer">
+      <button class="cancel" (click)="toogleWithdrawModal()">Cancel</button>
+      <button class="confirm" (click)="withdraw(withdrawInput.value)">
+          <span *ngIf="!withdrawLoading">Confirm</span>
+          <app-loader *ngIf="withdrawLoading" class="center"></app-loader>
+      </button>
+    </div>
+  </div>
 </div>

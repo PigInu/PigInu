@@ -100,6 +100,10 @@ export class PoolElementComponent implements OnInit {
     });
   }
 
+  toogleDepositModal(){
+    this.depositModal = !this.depositModal;
+  }
+  depositModal: boolean = false;
   depositTransactionHash: string | undefined;
   depositError: string | null = null;
   depositLoading: boolean = false;
@@ -121,10 +125,15 @@ export class PoolElementComponent implements OnInit {
       this.depositLoading = false;
     })
   }
-
+  withdrawModal: boolean = false;
   withdrawTransactionHash: string | undefined;
   withdrawError: string | null = null;
   withdrawLoading: boolean = false;
+
+  toogleWithdrawModal(){
+    this.withdrawModal = !this.withdrawModal;
+  }
+
   withdraw(amountString: string){
     const amount = Number(amountString);
     this.withdrawLoading = true;

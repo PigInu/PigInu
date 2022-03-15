@@ -20,8 +20,9 @@
             Token: 
         </th><td>
             <span *ngIf="token() == ''"><app-loader></app-loader></span>
-            <span *ngIf="token() != ''">
-                {{token()}} 
+            <span class="token-flex" *ngIf="token() != ''">
+                <img src="/assets/icons/PIG.png" alt="" />
+                <span>{{token()}}</span> 
                 <app-add-token-to-wallet [token]=tokenInstance()></app-add-token-to-wallet>
             </span>
         </td> 
@@ -83,6 +84,11 @@
   <div *ngIf="airdropError != null" class="error">
     {{airdropError}}
   </div>
+</div>
+<div *ngIf="isPeriodOver()">
+    <button class="disabled">
+        Claim period is over
+    </button>
 </div>
 <div class="connectButton" *ngIf="airdropRecieved()">
     You have already received your {{tokenSymbol()}} tokens

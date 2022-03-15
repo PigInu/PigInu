@@ -37,10 +37,7 @@ contract Token is ERC20, Ownable {
     devAddress = _devAddress;
   }
 
-  function setTaxExclusion(address _excludedAddress, bool _excluded)
-    public
-    onlyOwner
-  {
+  function setTaxExclusion(address _excludedAddress, bool _excluded) public onlyOwner {
     excludedFromTax[_excludedAddress] = _excluded;
   }
 }
