@@ -16,7 +16,7 @@ export class PoolElementComponent implements OnInit {
   private isApproved: boolean | null = null;
   private pendingTokens: number = -1;
   private addressPoolData: AddressPoolData | number = -1;
-  approveTransactionHash: string= "";
+  approveTransactionHash: string = "";
   approveWaiting: boolean = false;
 
   constructor(private web3ModalSevice: Web3ModalService, private poolService: PoolService) { }
