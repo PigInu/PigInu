@@ -48,9 +48,16 @@ cd ./web
 
 If you'd like to run development version of Pig Inu website, you can run (default port: 4001):
 
-```console
 cd ./web
 ./runweb.sh
 ```
 
 Then open browser: http://localhost:4001
+
+This requires screen package.
+
+You can watch log file using:
+
+```console
+screen -x PigInu
+```
