@@ -73,7 +73,7 @@
                 </div>
                 <div class="links">
                     <ng-container *ngFor="let m of mainMenu();" >              
-                        <a *ngIf="m.link" (click)="toogleMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="{{m.link}}">{{m.text}}</a>
+                        <a *ngIf="m.link || m.link == ''" (click)="toogleMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="{{m.link}}">{{m.text}}</a>
                         <a *ngIf="m.href" (click)="toogleMenu()" href="{{m.href}}" target="_blank">{{m.text}}</a>
                         <div (click)="toogleSubitems($event)" *ngIf="m.items">{{m.text}} <span class="icon">></span></div>
                         <div class="subitems" *ngIf="m.items">
@@ -90,14 +90,17 @@
     </header>
     <main>
         <div class="connectButton"> 
-            <div *ngIf="badChainId()" class="error"> 
-                Bad network - please change
-                <div> 
-                    <a class="error" (click)="switchNetwork()">Switch / add network</a>
-                </div>
-            </div>
             <!--<div class="info" *ngIf="walletConnected()">Wallet connected: <a href="{{walletAddress() | addressLink}}" target="_blank">{{walletAddress()}}</a></div>-->
-            <button class="connectedButton" *ngIf="walletConnected()"> 
+            <button class="connectedButton badNetwork" *ngIf="badChainId()"> 
+                <div class="flex" (click)="switchNetwork()">
+                    <svg class="walletIcon" viewBox="0 1 23.731 22.104">
+                        <path style="fill: #fff" d="M 21.03418350219727 18.89384651184082 C 18.35799026489258 18.89384651184082 16.18014335632324 16.76869010925293 16.18014335632324 14.15723991394043 C 16.18014335632324 11.54579162597656 18.35799026489258 9.420633316040039 21.03418350219727 9.420633316040039 L 23.73087692260742 9.420633316040039 L 23.73087692260742 7.315474987030029 C 23.73087692260742 6.154479503631592 22.7633056640625 5.210317134857178 21.57352447509766 5.210317134857178 L 20.49484825134277 5.210317134857178 L 20.49484825134277 3.10515832901001 C 20.49484825134277 1.94416332244873 19.52727508544922 0.9999998211860657 18.33749389648438 0.9999998211860657 L 3.236028671264648 0.9999998211860657 C 1.636351823806763 0.9999998211860657 0.3138946890830994 2.140995979309082 0.05501260608434677 3.630395650863647 C 0.031281728297472 3.716707229614258 1.192092682344992e-07 3.800913572311401 1.192092682344992e-07 3.894593000411987 L 1.192092682344992e-07 19.9464282989502 C 1.192092682344992e-07 21.68739318847656 1.451898097991943 23.10416412353516 3.236028671264648 23.10416412353516 L 21.57352447509766 23.10416412353516 C 22.7633056640625 23.10416412353516 23.73087692260742 22.15999984741211 23.73087692260742 20.99900436401367 L 23.73087692260742 18.89384651184082 L 21.03418350219727 18.89384651184082 Z M 2.157352209091187 4.157737255096436 C 2.157352209091187 3.57776665687561 2.640599489212036 3.10515832901001 3.236028671264648 3.10515832901001 L 18.33749389648438 3.10515832901001 L 18.33749389648438 5.210317134857178 L 3.236028671264648 5.210317134857178 C 2.640599489212036 5.210317134857178 2.157352209091187 4.737709522247314 2.157352209091187 4.157737255096436 Z">
+                        </path>
+                    </svg>
+                    <span>Bad network<!-- - switch / add--></span>     
+                </div>           
+            </button>
+            <button class="connectedButton" *ngIf="walletConnected() && !badChainId()"> 
                 <div class="flex" (click)="toogleSubmenu()">
                     <svg class="walletIcon" viewBox="0 1 23.731 22.104">
                         <path style="fill: #fff" d="M 21.03418350219727 18.89384651184082 C 18.35799026489258 18.89384651184082 16.18014335632324 16.76869010925293 16.18014335632324 14.15723991394043 C 16.18014335632324 11.54579162597656 18.35799026489258 9.420633316040039 21.03418350219727 9.420633316040039 L 23.73087692260742 9.420633316040039 L 23.73087692260742 7.315474987030029 C 23.73087692260742 6.154479503631592 22.7633056640625 5.210317134857178 21.57352447509766 5.210317134857178 L 20.49484825134277 5.210317134857178 L 20.49484825134277 3.10515832901001 C 20.49484825134277 1.94416332244873 19.52727508544922 0.9999998211860657 18.33749389648438 0.9999998211860657 L 3.236028671264648 0.9999998211860657 C 1.636351823806763 0.9999998211860657 0.3138946890830994 2.140995979309082 0.05501260608434677 3.630395650863647 C 0.031281728297472 3.716707229614258 1.192092682344992e-07 3.800913572311401 1.192092682344992e-07 3.894593000411987 L 1.192092682344992e-07 19.9464282989502 C 1.192092682344992e-07 21.68739318847656 1.451898097991943 23.10416412353516 3.236028671264648 23.10416412353516 L 21.57352447509766 23.10416412353516 C 22.7633056640625 23.10416412353516 23.73087692260742 22.15999984741211 23.73087692260742 20.99900436401367 L 23.73087692260742 18.89384651184082 L 21.03418350219727 18.89384651184082 Z M 2.157352209091187 4.157737255096436 C 2.157352209091187 3.57776665687561 2.640599489212036 3.10515832901001 3.236028671264648 3.10515832901001 L 18.33749389648438 3.10515832901001 L 18.33749389648438 5.210317134857178 L 3.236028671264648 5.210317134857178 C 2.640599489212036 5.210317134857178 2.157352209091187 4.737709522247314 2.157352209091187 4.157737255096436 Z">
@@ -106,7 +109,10 @@
                     <span>{{walletAddressCut()}}</span>
                 </div>
                 <div *ngIf="activeSubmenu" class="submenu">
-                    <span (click)="copyAddress(); toogleSubmenu()">Copy address</span>
+                    <span (click)="copyAddress();">
+                        <span>Copy address</span>
+                        <span class="copied" [class]="{visible: isCopiedVisible}">Copied</span>
+                    </span>
                     <a href="{{walletAddress() | addressLink}}" (click)="toogleSubmenu()" target="_blank">Show address in explorer</a>
                     <span (click)="disconnect(); toogleSubmenu()">Disconnect</span>
                 </div>
@@ -127,9 +133,14 @@
             <a target="_blank" href="https://twitter.com/piginu_com"><img src="/assets/img/ico-twitter.jpg"><span>Twitter</span></a>
             <a target="_blank" href="https://discord.com/invite/Z3Sp4Yxhex"><img src="/assets/img/ico-discord.jpg"><span>Discord</span></a>
             <a href="mailto:info@piginu.com"><img src="/assets/img/ico-bitcoin-talk.jpg"><span>E-mail</span></a>
-            <a target="_blank" href="https://t.me/piginu_com"><img src="/assets/img/ico-telegram.jpg"><span>Telegram Support</span></a>
-            <a target="_blank" href="https://t.me/piginu_group"><img src="/assets/img/ico-telegram.jpg"><span>Telegram Chat Group</span></a>
-            <a target="_blank" href="https://t.me/piginu_ann"><img src="/assets/img/ico-telegram.jpg"><span>Telegram Announcements</span></a>
+            <span>
+                <img src="/assets/img/ico-telegram.jpg">
+                <span>
+                    <a target="_blank" href="https://t.me/piginu_com">Telegram Support</a>
+                    <a target="_blank" href="https://t.me/piginu_group">Telegram Chat Group</a>
+                    <a target="_blank" href="https://t.me/piginu_ann">Telegram Announcements</a>
+                </span>
+            </span>
         </div>
     </footer>
 </div>

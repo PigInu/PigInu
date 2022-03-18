@@ -38,6 +38,8 @@ export class AirdropComponent implements OnInit, OnDestroy {
     });
   }
 
+  
+
   tokenInstance(): StateToken{
     return AppState.token;
   }
@@ -90,7 +92,7 @@ export class AirdropComponent implements OnInit, OnDestroy {
   }
 
   isPeriodOver(){
-    return this.timestampToTimeout(this.airdropTimeout());
+    return this.timestampToTimeout(this.airdropTimeout()) > 0;
   }
 
   isAirdropPossible(): boolean{

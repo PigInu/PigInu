@@ -217,8 +217,8 @@
             justify-content: center;
             flex-wrap: wrap;
             padding: 20px;
-            a{
-                font-size: min(20px, 5vw);
+            a, > span{
+                font-size: min(16px, 4vw);
                 display: flex;
                 flex-flow: row;
                 align-items: center;
@@ -259,6 +259,9 @@
             background: #368AE2;
             &.connectedButton{
                 display: block;
+                &.badNetwork{
+                    background: #F50F0F;
+                }
                 .flex{
                     display: flex;
                     flex-flow: row;
@@ -271,6 +274,26 @@
                         padding: 5px 0 0;
                         color: #fff;
                         margin-left: -10px;
+                        position: relative;
+                        .copied{
+                            position: absolute;
+                            left: 10px;
+                            top: 7px;
+                            bottom: -5px;
+                            right: -3px;
+                            background-color: #fff;
+                            border-radius: 20px;
+                            color: #368AE2;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            padding: 0;
+                            opacity: 0;
+                            transition: opacity 0.2s ease-in-out;
+                            &.visible{
+                                opacity: 1;
+                            }
+                        }
                     }
                 }
             }

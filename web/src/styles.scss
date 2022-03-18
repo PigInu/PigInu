@@ -123,6 +123,19 @@ table button{
     width: 100%;
 }
 
+.greenbox button{
+    background: linear-gradient(#519be8, #2a7bd0);
+}
+
+.bluebox button{
+    background: linear-gradient(#00a940, #7bd027);
+}
+.greenbox button.disabled, .bluebox button.disabled{
+    background: linear-gradient(#ccc, #ddd);
+    color: #000;
+    cursor: default;
+}
+
 .token-flex{
     display: flex;
     flex-flow: row;

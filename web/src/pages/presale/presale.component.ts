@@ -163,6 +163,14 @@ export class PresaleComponent implements OnInit, OnDestroy  {
   timeOutConfig(timestamp: number): CountdownConfig {
     return AppState.timeOutConfig(timestamp);
   }
+
+  depositPeriodOver(){
+    return this.timestampToTimeout(this.presale().depositTimeOut);
+  }
+
+  claimPeriodOver(){
+    return this.timestampToTimeout(this.presale().claimTimeOut);
+  }
   
   depositTransactionHash: string | undefined;
   depositError: string | null = null;

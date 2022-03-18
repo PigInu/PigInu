@@ -15,6 +15,7 @@ export class AppComponent {
   actualYear: string = "";
   activeMenu: boolean = false;
   activeSubmenu: boolean = false;
+  isCopiedVisible: boolean = false;
 
   constructor(private router: Router, private web3ModalService: Web3ModalService, private titleService: Title){
     this.actualYear = new Date().getFullYear().toString();
@@ -113,5 +114,10 @@ export class AppComponent {
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
+    this.isCopiedVisible = true;
+    const that = this;
+    setTimeout(function(){
+      that.isCopiedVisible = false;
+    }, 1000);
   }
 }

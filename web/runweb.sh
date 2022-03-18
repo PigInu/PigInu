@@ -1,3 +1,3 @@
 #!/bin/sh
 
-screen -dmS PigInu ng serve --port 4001
+screen -d -m -S token ng serve --port 4001
