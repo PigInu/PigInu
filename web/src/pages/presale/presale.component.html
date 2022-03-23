@@ -141,12 +141,12 @@
     </tr>
     <tr>
         <th>
-            Buy {{presale().tokenTheir.symbol}}: 
+          Buy {{presale().tokenOur.symbol}} for {{presale().tokenTheir.symbol}}: 
         </th><td>
             <span *ngIf="theirToken() == ''"><app-loader></app-loader></span>
 
             <div class="token-flex" *ngIf="theirToken() != ''">
-              <img src="/assets/icons/DAI.png" alt="" />
+              <img src="{{presale().tokenTheir.icon}}" alt="" />
               <span><a href="{{presale().tokenTheir.address | addressLink}}" target="_blank">{{theirToken()}}</a></span>
               <app-add-token-to-wallet [token]=this.presale().tokenTheir></app-add-token-to-wallet>
             </div>
@@ -241,11 +241,11 @@
   </tr>
   <tr>
       <th>
-        Buy {{presale().tokenOur.symbol}} for {{presale().tokenTheir.symbol}}: 
+        Buy {{presale().tokenOur.symbol}}: 
       </th><td>
           <span *ngIf="ourToken() == ''"><app-loader></app-loader></span>
           <div class="token-flex" *ngIf="ourToken() != ''">
-            <img src="/assets/icons/PIG.png" alt="" />
+            <img src="{{presale().tokenOur.icon}}" alt="" />
             <span><a href="{{presale().tokenOur.address | addressLink}}" target="_blank">{{ourToken()}}</a></span>
             <app-add-token-to-wallet [token]=this.presale().tokenOur></app-add-token-to-wallet>
           </div>

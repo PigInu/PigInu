@@ -17,7 +17,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   stateToken : StateToken;
 
   constructor() { 
-    this.stateToken = new StateToken("/assets/token.png", Config.main.addressToken);
+    this.stateToken = new StateToken("/assets/icons/PIG.png", Config.main.addressToken);
   }
 
   ngOnInit(): void {
@@ -42,6 +42,10 @@ export class HomepageComponent implements OnInit, OnDestroy {
     return this.stateToken;
   }
 
+  public config(){
+    return Config.main;
+  }
+
   token(): string{
     if(!this.tokenInstance().isReady())
       return "";
@@ -55,6 +59,22 @@ export class HomepageComponent implements OnInit, OnDestroy {
       this.tokenInstance().updateTotalSupply();
     this.tokenInstance().updateBalance();
     this.tokenInstance().updateBurned();
+  }
+
+  copyText(address: string){
+    const el = document.createElement('textarea');
+    el.value = address;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    /*
+    this.isCopiedVisible = true;
+    const that = this;
+    setTimeout(function(){
+      that.isCopiedVisible = false;
+    }, 1000);
+    */
   }
 }
 

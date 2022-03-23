@@ -1,6 +1,10 @@
 :host{
     display: inline-block;
     margin: 0 -10px;
+    .avaliable{
+        text-align: right;
+        margin-bottom: 5px;
+    }
     .data{
         background: linear-gradient(45deg, #fff, #eef6fb);
         border-radius: 30px;

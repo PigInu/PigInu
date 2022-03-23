@@ -1,10 +1,20 @@
 <div class="data" *ngIf="pool.tokenDeposit.isReady()">
   <table>
     <tr>
-      <th>Deposit:</th><td><a href="{{pool.tokenDeposit.address | addressLink}}" target="_blank">{{pool.tokenDeposit.name}}</a></td>
+      <th>Deposit:</th><td>
+        <div class="token-flex">
+          <img src="{{pool.tokenDeposit.icon}}" alt="" />
+          <a href="{{pool.tokenDeposit.address | addressLink}}" target="_blank">{{pool.tokenDeposit.name}}</a>
+        </div>
+        </td>
     </tr>
     <tr>
-      <th>Earn:</th><td><a href="{{pool.tokenEarn.address | addressLink}}" target="_blank">{{pool.tokenEarn.name}}</a></td>
+      <th>Earn:</th><td>
+        <div class="token-flex">
+          <img src="{{pool.tokenEarn.icon}}" alt="" />
+          <a href="{{pool.tokenEarn.address | addressLink}}" target="_blank">{{pool.tokenEarn.name}}</a>
+        </div>
+      </td>
     </tr>
     <tr>
       <th>Deposit fee:</th><td><div class="green">{{pool.feePercent() | numberLocale}} %</div></td>
@@ -119,6 +129,7 @@
       <span class="close" (click)="toogleWithdrawModal()">⨯</span>
     </div>
     <div class="modal-body">
+      <div class="avaliable" *ngIf="walletSigned()">Avaliable <strong>{{amount()| numberLocale}}</strong> {{pool.tokenDeposit.name}}</div>
       <span class="inputWrap">
         <input onlyNumbers #withdrawInput [allowDecimals]="true"  value="" /> 
         <span>{{pool.tokenEarn.name}}</span>

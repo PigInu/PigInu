@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { AppState } from 'src/appState';
+import { AppState, StateToken } from 'src/appState';
 import { Config } from 'src/config';
 import { Web3ModalService } from 'src/services/web3-modal.service';
 @Component({
@@ -41,8 +41,8 @@ export class AppComponent {
     return Config.main.mainMenu;
   }
 
-  public tokenSYmbol(): string{
-    return AppState.token.symbol;
+  public token(): StateToken{
+    return AppState.token;
   }
 
   public goToHomepage(event: any){

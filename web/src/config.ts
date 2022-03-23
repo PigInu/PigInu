@@ -25,9 +25,6 @@ export class Config {
             {link: "presale", text: "Presale"},
             {link: "airdrop", text: "Airdrop"},
             {link: "pool", text: "Staking pools"},
-            { text: "Other links", items :[
-                {href: "./", text: "GitHub sources", link: false},
-            ]},
             { text: "Community", items :[
                 {href: "https://t.me/piginu_ann", text: "Telegram Announcements", link: false},
                 {href: "https://t.me/piginu_group", text: "Telegram Chat Group", link: false},
@@ -36,7 +33,27 @@ export class Config {
                 {href: "https://discord.com/invite/Z3Sp4Yxhex", text: "Discord", link: false},
                 {href: "mailto:info@piginu.com", text: "E-mail", link: false},
             ]},
+            { text: "Other links", items :[
+                {href: "https://github.com/PigInu/PigInu/", text: "GitHub sources", link: false},
+            ]},
             {href: "/assets/whitepaper.pdf", text: "Whitepaper"},
+        ],
+        tokenAlias: [
+            {
+                name: 'PIG',
+                icon: "/assets/icons/PIG.png",
+                address: '0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3',
+            }, 
+            {
+                name: 'UNI',
+                icon: "/assets/icons/PIG-DAI.png",
+                address: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
+            }, 
+            {
+                name: 'DAI',
+                icon: "/assets/icons/DAI.png",
+                address: '0xF42a4429F107bD120C5E42E069FDad0AC625F615',
+            },             
         ],
         explorer: 'https://mumbai.polygonscan.com/', // Polygon (MATIC) - Testnet
         chainID: 80001,

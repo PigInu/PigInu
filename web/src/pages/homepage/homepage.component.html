@@ -1,58 +1,104 @@
-<div class="bluebox">
-    <table>
-        <tr>
-        <th>
-                Token: 
-        </th><td>
-                <span *ngIf="token()  == ''"><app-loader></app-loader></span>
-                <span *ngIf="token()  != ''">
-                    {{token()}}
-                    <app-add-token-to-wallet [token]=tokenInstance()></app-add-token-to-wallet>
-                </span>
-        </td> 
-        </tr>
-        <tr>
-            <th>
-                Token address: 
-            </th><td>
-                    <span *ngIf="token()  == ''"><app-loader></app-loader></span>
-                    <span *ngIf="token()  != ''">
-                    <a href="{{tokenInstance().address | addressLink}}" target="_blank">{{tokenInstance().address}}</a>
-                    </span>
-            </td> 
-        </tr>
-        <tr>
-            <th>
-                Total supply: 
-            </th><td>
+<div class="data" *ngIf="tokenInstance().isReady()">
+    <div>
+        <img src="/assets/img/graph.png" />
+        <div>
+            <strong>Total supply</strong>
+            <div>
                 <span *ngIf="tokenInstance().totalSupply < 0 || token() == ''"><app-loader></app-loader></span>
                 <span *ngIf="tokenInstance().totalSupply >= 0 &&  token() != ''">{{tokenInstance().totalSupply | numberLocale}} {{tokenInstance().symbol}}</span>
-            </td> 
-        </tr>
-        <tr>
-            <th>
-                Burned: 
-            </th><td>
-                <span *ngIf="tokenInstance().burned < 0 || token() == ''"><app-loader></app-loader></span>
-                <span *ngIf="tokenInstance().burned >= 0 &&  token() != ''">{{tokenInstance().burned | numberLocale}} {{tokenInstance().symbol}}</span>
-            </td> 
-        </tr>
-        <tr>
-            <th>
-                Circulating supply: 
-            </th><td>
+            </div>
+        </div>
+    </div>
+    <div>
+        <img src="/assets/img/circulating.png" />
+        <div>
+            <strong>Circulating</strong>
+            <div>
                 <span *ngIf="tokenInstance().burned < 0 || tokenInstance().totalSupply < 0 || token() == ''"><app-loader></app-loader></span>
                 <span *ngIf="tokenInstance().burned >= 0 && tokenInstance().totalSupply >= 0 &&  token() != ''">{{(tokenInstance().totalSupply - tokenInstance().burned) | numberLocale}} {{tokenInstance().symbol}}</span>
-            </td> 
-        </tr>
-        <tr>
-            <th>
-                Your wallet balance: 
-            </th><td>
+            </div>
+        </div>
+    </div>
+    <div>
+        <img src="/assets/img/burn.png" />
+        <div>
+            <strong>Burned</strong>
+            <div>
+                <span *ngIf="tokenInstance().burned < 0 || token() == ''"><app-loader></app-loader></span>
+                <span *ngIf="tokenInstance().burned >= 0 &&  token() != ''">{{tokenInstance().burned | numberLocale}} {{tokenInstance().symbol}}</span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <img src="/assets/img/graph.png" />
+        <div>
+            <strong>Balance</strong>
+            <div>
                 <span *ngIf="!walletConnected()">Wallet not connected</span>
                 <span *ngIf="walletConnected() && tokenInstance().balance < 0"><app-loader></app-loader></span>
                 <span *ngIf="walletConnected() && tokenInstance().balance >= 0">{{tokenInstance().balance | numberLocale}} {{tokenInstance().symbol}}</span>
-            </td> 
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flex">
+    <div class="bluebox">
+        <h2>Transaction fees</h2>
+        <table>
+            <tr>
+                <th>
+                    Developers: 
+                </th><td>
+                        <span *ngIf="token()  == ''"><app-loader></app-loader></span>
+                        <span *ngIf="token()  != ''">
+                            3%
+                        </span>
+                </td> 
+            </tr>
+            <tr>
+                <th>
+                    Burn: 
+                </th><td>
+                    <span *ngIf="tokenInstance().totalSupply < 0 || token() == ''"><app-loader></app-loader></span>
+                    <span *ngIf="tokenInstance().totalSupply >= 0 &&  token() != ''">
+                        2%    
+                    </span>
+                </td> 
+            </tr>
+            <tr>
+                <th colspan="2" class="right">
+                    total 5%
+                </th>
+            </tr>
+        </table>
+        <div class="small">Presale and airdrop are excluded from transaction fees.</div>
+    </div>
+
+    <div class="greenbox">
+        <h2>Contracts</h2>
+        <div class="contracts">
+            <div class="contract">
+                <div class="name">{{tokenInstance().name}}</div>
+                <span class="address">{{config().addressToken}}</span>
+                <span (click)="copyText(config().addressToken)" class="copy"><span>Copy</span> <img src="/assets/img/copy.png"></span>
+            </div>
+            <div class="contract">
+                <div class="name">Presale</div>
+                <span class="address">{{config().addressPresale}}</span>
+                <span (click)="copyText(config().addressPresale)" class="copy"><span>Copy</span> <img src="/assets/img/copy.png"></span>
+            </div>
+        </div>
+        <div class="contracts">
+            <div class="contract">
+                <div class="name">Airdrop</div>
+                <span class="address">{{config().addressAirdrop}}</span>
+                <span (click)="copyText(config().addressAirdrop)" class="copy"><span>Copy</span> <img src="/assets/img/copy.png"></span>
+            </div>
+            <div class="contract">
+                <div class="name">Staking</div>
+                <span class="address">{{config().addressPool}}</span>
+                <span (click)="copyText(config().addressPool)" class="copy"><span>Copy</span> <img src="/assets/img/copy.png"></span>
+            </div>
+        </div>
+    </div>
 </div>

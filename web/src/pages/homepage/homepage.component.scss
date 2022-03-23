@@ -1,4 +1,114 @@
 :host{
     text-align: center;
     display: block;
+    .data{
+        font-size: min(18px, 4vw);
+        line-height: 20px;
+        display: flex;
+        margin-top: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        > div{
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            strong{
+                display:block;
+                text-transform: uppercase;
+                color: #519BE8;
+            }
+            img{
+                margin-right: 10px;
+            }
+            div{
+                text-align: left;
+            }
+            span{
+                margin-top: 5px;
+                font-size: 1.4em;
+                display: block;
+                font-weight: bold;
+            }
+            app-loader{
+                font-size: 0.05em;
+            }
+        }
+    }
+    .flex{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 40px;
+    }
+    .bluebox, .greenbox{
+        min-width: 30%;
+        padding: 40px;
+        color: #fff;
+        h2{
+            margin: 0 0 10px;
+        }
+        .small{
+            font-size: 0.7em;
+            text-align: center;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            td,th{
+                padding: 10px;
+                border-bottom: 2px solid #ADD0F6;
+            }
+            td, .right{
+                text-align: right;
+            }
+            .right{
+                font-size: 2em;
+                border: none;
+            }
+        }
+    }
+    .contracts{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        &:last-child{
+            margin-top: 10px;
+        }
+        .contract{
+            width: 200px;
+            max-width: calc(50% - 35px);
+            background: #20A334;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px #188F33;
+            .name{
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .address{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: calc(100% - 70px);
+                display: inline-block;
+                font-size: 0.8em;
+                position: relative;
+                top: 5px;
+            }
+            .copy{
+                display: inline-block;
+                font-size: 0.8em;
+                cursor: pointer;
+                color: #EFF924;
+                span{
+                    text-decoration: underline;
+                }
+                &:hover span{
+                    text-decoration: none;
+                }
+            }
+        }
+        
+    }
 }

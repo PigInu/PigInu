@@ -86,9 +86,43 @@
                 </div>
             </div>
             <a class="logoLink" href="./" routerLink=""><img class="logo" src="/assets/svg/logo.svg" alt="logo" /></a>
-            <div class="promo">The cutest token<br />in the world</div>
+            <div class="promo">
+                The cutest token<br />in the world
+                <div class="data" *ngIf="token().isReady()">
+                    <div>
+                        <strong>Name</strong>
+                        <div>{{token().name}}({{token().symbol}}) <app-add-token-to-wallet [token]=token()></app-add-token-to-wallet></div>
+                    </div>
+                    <div>
+                        <strong>token price</strong>
+                        <div>14,25 USD / PIG</div>
+                    </div>
+                    <div>
+                        <strong>Market cap</strong>
+                        <div>123 456 USD</div>
+                    </div>
+                </div>
+            </div>
     </header>
     <main>
+        <div class="promo-mobile" *ngIf="token().isReady()">
+            <div class="bluebox">
+                <div class="data">
+                    <div>
+                        <strong>Name</strong>
+                        <div>{{token().name}}({{token().symbol}}) <app-add-token-to-wallet [token]=token()></app-add-token-to-wallet></div>
+                    </div>
+                    <div>
+                        <strong>token price</strong>
+                        <div>14,25 USD / PIG</div>
+                    </div>
+                    <div>
+                        <strong>Market cap</strong>
+                        <div>123 456 USD</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="connectButton"> 
             <!--<div class="info" *ngIf="walletConnected()">Wallet connected: <a href="{{walletAddress() | addressLink}}" target="_blank">{{walletAddress()}}</a></div>-->
             <button class="connectedButton badNetwork" *ngIf="badChainId()"> 

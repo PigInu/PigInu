@@ -17,6 +17,13 @@ export class StateToken {
     constructor(icon: string = "", address: string = ""){
         if(icon != "")
             this.icon  = location.protocol + "//" + location.host + icon;
+        for(let i = 0; i < Config.main.tokenAlias.length; i++){
+            const t = Config.main.tokenAlias[i];
+            if(t.address == address){
+                this.icon = t.icon;
+                this.name = t.name;
+            }
+        }
         if(address != "")
             this.initialize(address);
     }
@@ -26,7 +33,8 @@ export class StateToken {
         const contract = this.getContract(false);
         if(contract) {
             const that = this
-            contract.name().then((value: string) => { that.name = value; });
+            if(that.name == "")
+                contract.name().then((value: string) => { that.name = value; });
             contract.symbol().then((value: string) => { that.symbol = value; });
             contract.decimals().then((value: BigNumber) => { that.decimals = value.toNumber(); });
         }
@@ -189,7 +197,7 @@ export class AppState {
     public static airDropTimeout: number = -1;
     public static reduceActualTimestamp: number = -1;
      
-    public static token : StateToken = new StateToken("/assets/token.png");
+    public static token : StateToken = new StateToken("/assets/icons/PIG.png");
     public static walletConnected(): boolean {
         return AppState.selectedAddress != null;
     }
@@ -239,8 +247,8 @@ export class AppState {
     }
 
     public static presale : IPresale = {
-        tokenOur: new StateToken("/assets/token.png"),
-        tokenTheir: new StateToken("/assets/XUSD.png"),
+        tokenOur: new StateToken("/assets/icons/PIG.png"),
+        tokenTheir: new StateToken("/assets/icons/DAI.png"),
         depositedCount: -1,
         claimedCount: -1,
         tokenPrice: -1,

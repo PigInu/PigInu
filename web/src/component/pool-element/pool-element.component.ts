@@ -1,6 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ethers } from 'ethers';
+import { interval, Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 import { AppState } from 'src/appState';
+import { Config } from 'src/config';
 import { AddressPoolData, PoolService, PoolState } from 'src/services/pool.service';
 import { Web3ModalService } from 'src/services/web3-modal.service';
 
@@ -9,20 +12,30 @@ import { Web3ModalService } from 'src/services/web3-modal.service';
   templateUrl: './pool-element.component.html',
   styleUrls: ['./pool-element.component.scss']
 })
-export class PoolElementComponent implements OnInit {
+export class PoolElementComponent implements OnInit, OnDestroy {
   @Input() pool!: PoolState;
   @Input() contractAddress!: string;
 
   private isApproved: boolean | null = null;
+  private initialized: boolean = false;
   private pendingTokens: number = -1;
   private addressPoolData: AddressPoolData | number = -1;
   approveTransactionHash: string = "";
   approveWaiting: boolean = false;
+  subscription: Subscription | null = null;
 
   constructor(private web3ModalSevice: Web3ModalService, private poolService: PoolService) { }
+  ngOnDestroy(): void {
+    this.initialized = false;
+  }
 
   ngOnInit() {
-
+    this.initialized = true;
+    this.subscription = interval(Config.main.updateInterval * 1000)
+    .pipe(takeWhile(() => this.initialized))
+    .subscribe(() => {
+      this.getAddressPoolData();
+    });
   }
 
   walletSigned(): boolean{
@@ -115,6 +128,7 @@ export class PoolElementComponent implements OnInit {
     this.pool.deposit(amount).then(tr => {
       this.depositLoading = false;
       this.depositTransactionHash = tr.hash;
+      this.depositModal = false;
     }, (reject) => {
       if(reject.data != null && reject.data.message != null)
         this.depositError = reject.data.message;
@@ -139,6 +153,7 @@ export class PoolElementComponent implements OnInit {
     this.withdrawLoading = true;
     this.withdrawTransactionHash = undefined;
     this.withdrawError = null;
+    this.withdrawModal = false;
     this.pool.withdraw(amount).then(tr => {
       this.withdrawLoading = false;
       this.withdrawTransactionHash = tr.hash;
