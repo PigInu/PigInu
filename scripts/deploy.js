@@ -33,7 +33,7 @@ async function main() {
  const tokenOurDecimals = 18;
  const tokenOurBurnFee = 2;
  const tokenOurDevFee = 3;
- 
+
  getWelcomeMessage('Token');
  netInfo = await getNetworkInfo();
  getNetworkMessage();
@@ -99,6 +99,7 @@ async function main() {
  // POOL:
  console.log('LiquidityManager - getPairAddress:');
  var tokenOurLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
+ console.log('Pair address: ' + tokenOurLPAddress);
  console.log('Pool - createPool - tokenOur:');
  await runFunction(pool, 'createPool', tokenOur.address, tokenOur.address, poolTokensOurPerBlock, 0); // Our -> Our
  console.log('Pool - createPool - tokenTheir:');
