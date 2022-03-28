@@ -63,7 +63,7 @@ contract Pool is Ownable, ReentrancyGuard {
       return;
     }
     uint multiplier = block.number.sub(pools[_poolID].lastRewardBlock);
-    pool.accTokenPerShare = pool.accTokenPerShare.add(multiplier.mul(1e12).div(supply));
+    pool.accTokenPerShare = pool.accTokenPerShare.add(multiplier.mul(pool.tokensEarnPerBlock).mul(1e12).div(supply));
     pool.lastRewardBlock = block.number;
   }
 
