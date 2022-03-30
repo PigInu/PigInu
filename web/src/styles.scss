@@ -87,9 +87,9 @@ a:hover{
 }
 
 h1{
-    line-height: min(84px, 15vw);
+    line-height: min(55px, 14vw);
     font-weight: bold;
-    font-size: min(75px, 12vw); 
+    font-size: min(45px, 11vw); 
     color: rgba(23,34,45,1);
 }
 
@@ -140,10 +140,13 @@ table button{
     display: flex;
     flex-flow: row;
     align-items: center;
+    gap: 5px;
     img{
         width: min(40px, 10vw);
         height: min(40px, 10vw);
-        margin-right: 5px;
+    }
+    app-add-token-to-wallet{
+        margin-left: 5px;
     }
 }
 
@@ -158,6 +161,7 @@ table button{
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10;
     .modal-data{
         text-align: left;
         background: #fff;
@@ -208,6 +212,28 @@ table button{
                     color: #fff;
                     font-weight: bold;
                     font-size: 0.8em;
+                }
+                &.inputWrapMax{
+                    display: block;
+                    input{
+                        padding-right: 170px;
+                    }
+                    .max{
+                        position: absolute;
+                        cursor: pointer;
+                        right: 0;
+                        top:0;
+                        bottom:0;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 15px;
+                        background: #E4EFFA;
+                        color: #1095C1;
+                        border-radius: 0 10px 10px 0;
+                    }
+                    span{
+                        right: 80px;
+                    }
                 }
             }
         }

@@ -12,6 +12,7 @@ export class StateToken {
     totalSupply: number = -1;
     balance: number = -1;
     burned: number = -1;
+    price: number = -1;
 
     private approvedAddreses: Array<string> = new Array<string>();
     constructor(icon: string = "", address: string = ""){
@@ -71,6 +72,24 @@ export class StateToken {
             this.totalSupply = -1;
         }
     }
+
+    async updatePrice(){
+        if(this.price == -2)
+            return;
+        if(Web3ModalService.instance){
+            this.price = -2;
+            const c = this.getContract(false);
+            const usdc = new ethers.Contract(Config.main.addressUSDToken, Config.main.tokenContractInterface, Web3ModalService.instance.notLoggedProvider);
+            if(c && usdc){
+                const price = this.reduceDecimals(await c.balanceOf(Config.main.addressLPToken) as BigNumber);
+                const priceUsd = this.reduceDecimals(await usdc.balanceOf(Config.main.addressLPToken) as BigNumber);
+                //console.log(price);
+                //console.log(priceUsd);
+                this.price = priceUsd / price;
+            }
+        }
+    }
+
     updateBalance(){
         if(AppState.selectedAddress == null || this.balance == -2)
             return;

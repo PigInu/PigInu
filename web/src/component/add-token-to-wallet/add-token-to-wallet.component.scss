@@ -23,4 +23,12 @@
             height: 25px;
         }
     }
+    &.dark{
+        button{
+            border-color: #555555;
+            &::after{
+                color: #555555;
+            }
+        }
+    }
 }

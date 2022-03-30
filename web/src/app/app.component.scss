@@ -39,7 +39,7 @@
         box-sizing: border-box;
         height: 150px;
         position: relative;
-        @media only screen and (max-width: 750px) {
+        @media only screen and (max-width: 950px) {
             padding: 40px 20px;
         }
         .logo{
@@ -48,7 +48,7 @@
             top: 35px;
             left: 50%;
             transform: translateX(-50%);
-            @media only screen and (max-width: 750px) {
+            @media only screen and (max-width: 950px) {
                 top: 1vw;
             }
         }
@@ -85,6 +85,14 @@
                 }
             }
         }
+        .flex-buttons{
+            display: flex;
+            flex-wrap: wrap;
+            img{
+                height: 70px;
+                margin: 20px 0 0 -10px;
+            }
+        }
     }
     .promo{
         .data > div{
@@ -100,9 +108,18 @@
         }
     }
     .promo-mobile{
+        flex-flow: column;
+        > div{
+            display: flex;
+            justify-content: center;
+        }
         .data{
             justify-content: center;
             gap: 20px;
+        }
+        .flex-buttons {
+            justify-content: center;
+            img{margin-top: 0;}
         }
     }
     .page-home {
@@ -123,7 +140,7 @@
                 justify-content: center;
                 color: #fff;
             }
-            .promo .data{
+            .promo .data, .promo .flex-buttons{
                 display: none;
             }
         }
@@ -261,6 +278,36 @@
             box-sizing: border-box;
             height: 637px;
             max-height: 37vw;
+            .flex-buttons{
+                font-size: 1.7vw;
+                display: flex;
+                justify-content: center;
+                gap: 14vw;
+                padding: 6vw 0 0 14vw;
+                a{
+                    position: relative;
+                    display: inline-block;
+                    .button-bg{
+                        height: 6.5em;
+                    }
+                    .button-ico, span{
+                        position: absolute;
+                        top: 2.5em;
+                        left: 1.5em;
+                        transform: translateY(-50%);
+                        height: 2em;
+                    }
+                    span{
+                        height: auto;
+                        left: 4em;
+                        color: #fff;
+                        font-weight: bold;
+                    }
+                    &:last-child{
+                        margin-top: 4vw;
+                    }
+                }
+            }
         }
         .footer-links{
             display: flex;
@@ -283,6 +330,13 @@
     }
 
     .connectButton{
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        gap: 10px;
+        position: absolute;
+        right:40px;
+        top:50px;
         text-align: center;
         .info, .error{
             margin-top: 20px;
@@ -299,9 +353,6 @@
         button{
             display: flex;
             flex-flow: row;
-            position: absolute;
-            right:40px;
-            top:50px;
             background: transparent;
             cursor: pointer;
             padding: 10px 20px;

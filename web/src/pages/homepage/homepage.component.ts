@@ -17,7 +17,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   stateToken : StateToken;
 
   constructor() { 
-    this.stateToken = new StateToken("/assets/icons/PIG.png", Config.main.addressToken);
+    this.stateToken = AppState.token;//new StateToken("/assets/icons/PIG.png", Config.main.addressToken);
   }
 
   ngOnInit(): void {
@@ -49,16 +49,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
   token(): string{
     if(!this.tokenInstance().isReady())
       return "";
-    if(this.tokenInstance().totalSupply == -1 || (this.tokenInstance().balance == -1 && this.walletConnected()))
-      this.loadData();
     return this.tokenInstance().name + " (" + this.tokenInstance().symbol + ")"
-  }
-
-  private loadData(){
-    if(this.tokenInstance().totalSupply == -1)
-      this.tokenInstance().updateTotalSupply();
-    this.tokenInstance().updateBalance();
-    this.tokenInstance().updateBurned();
   }
 
   copyText(address: string){

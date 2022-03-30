@@ -32,7 +32,7 @@
     <div>
         <img src="/assets/img/graph.png" />
         <div>
-            <strong>Balance</strong>
+            <strong>Wallet balance</strong>
             <div>
                 <span *ngIf="!walletConnected()">Wallet not connected</span>
                 <span *ngIf="walletConnected() && tokenInstance().balance < 0"><app-loader></app-loader></span>
@@ -101,4 +101,9 @@
             </div>
         </div>
     </div>
+</div>
+<div class="flex-buttons">
+    <a routerLink="presale">Presale ></a>
+    <a class="airdrop" routerLink="airdrop">Airdrop ></a>
+    <a class="pool" routerLink="pool">Staking ></a>
 </div>

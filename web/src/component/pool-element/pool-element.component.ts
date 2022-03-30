@@ -1,9 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ethers } from 'ethers';
 import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { AppState } from 'src/appState';
 import { Config } from 'src/config';
+import { NumberLocalePipe } from 'src/pipe/numberLocale.pipe';
 import { AddressPoolData, PoolService, PoolState } from 'src/services/pool.service';
 import { Web3ModalService } from 'src/services/web3-modal.service';
 
@@ -15,6 +16,8 @@ import { Web3ModalService } from 'src/services/web3-modal.service';
 export class PoolElementComponent implements OnInit, OnDestroy {
   @Input() pool!: PoolState;
   @Input() contractAddress!: string;
+  @Output() transactionHash = new EventEmitter<string>();
+  @Output() transactionError = new EventEmitter<string>();
 
   private isApproved: boolean | null = null;
   private initialized: boolean = false;
@@ -23,8 +26,12 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   approveTransactionHash: string = "";
   approveWaiting: boolean = false;
   subscription: Subscription | null = null;
+  tokenPriceValue: number = -1;
+  numberPipe: NumberLocalePipe;
 
-  constructor(private web3ModalSevice: Web3ModalService, private poolService: PoolService) { }
+  constructor(private web3ModalSevice: Web3ModalService, private poolService: PoolService) {
+    this.numberPipe = new NumberLocalePipe();
+   }
   ngOnDestroy(): void {
     this.initialized = false;
   }
@@ -36,6 +43,9 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     .subscribe(() => {
       this.getAddressPoolData();
     });
+    
+    this.pool.tokenDeposit.updateTotalSupply();
+    this.tokenPriceValue = -2;
   }
 
   walletSigned(): boolean{
@@ -52,6 +62,22 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     }
     return this.pendingTokens;
   }
+  
+  public tokenPrice() : string{
+    if(!this.pool.tokenDeposit.isReady())
+      return "-";
+    if(this.pool.tokenDeposit.totalSupply >= 0 && this.tokenPriceValue == -2)
+    {
+      this.tokenPriceValue = -1;
+      this.pool.tokenDeposit.updatePrice();
+    }
+    if(this.tokenPriceValue < 0 && this.pool.tokenDeposit.price >= 0){
+      this.tokenPriceValue = this.pool.tokenDeposit.price;
+    }
+    if(this.tokenPriceValue <= 0)
+      return "-";
+    return this.numberPipe.transform(this.tokenPriceValue);
+  }
 
   getAddressPoolData() : AddressPoolData | null{
     if(this.isApproved != true)
@@ -59,14 +85,23 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     if(this.addressPoolData == -1){
       this.addressPoolData  = -2;
       const that = this;
+      this.pool.tokenDeposit.updateBalance();
       this.pool.addressPoolData().then(value => {
-        if(value != null)
+        if(value != null){
           that.addressPoolData = value;
+          this.tokenPriceValue = -2;
+        }
       })
     }
     if(this.addressPoolData < 0)
       return null;
     return this.addressPoolData as AddressPoolData; 
+  }
+
+  share(): number{
+    if(this.getAddressPoolData() == null || this.pool.tokenDeposit.balance < 0 || this.amount() <= 0)
+      return 0;
+    return this.amount() / this.pool.tokenDeposit.balance * 100;
   }
 
   amount(): number{
@@ -104,6 +139,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
         const t = value as ethers.Transaction;
         if(t.hash){
           this.approveTransactionHash = t.hash;
+          this.transactionHash.emit(t.hash);
           this.web3ModalSevice.notLoggedProvider.waitForTransaction(this.approveTransactionHash).then(value => {
             this.approveWaiting = false;
             this.isApproved = true;
@@ -113,21 +149,26 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     });
   }
 
-  toogleDepositModal(){
+  toogleDepositModal(reloadBalance: boolean = false){
+    if(reloadBalance)
+      this.pool.tokenDeposit.updateBalance();
     this.depositModal = !this.depositModal;
   }
+
   depositModal: boolean = false;
   depositTransactionHash: string | undefined;
   depositError: string | null = null;
   depositLoading: boolean = false;
-  deposit(amountString: string){
+  deposit(amountString: string | number){
     const amount = Number(amountString);
     this.depositLoading = true;
     this.depositTransactionHash = undefined;
     this.depositError = null;
+    this.transactionError.emit("");
     this.pool.deposit(amount).then(tr => {
       this.depositLoading = false;
       this.depositTransactionHash = tr.hash;
+      this.transactionHash.emit(tr.hash);
       this.depositModal = false;
     }, (reject) => {
       if(reject.data != null && reject.data.message != null)
@@ -136,6 +177,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
         this.depositError = reject.message;
       else
         this.depositError = reject;
+      this.transactionError.emit(this.depositError?.toString());
       this.depositLoading = false;
     })
   }
@@ -148,15 +190,25 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     this.withdrawModal = !this.withdrawModal;
   }
 
+  compound(){
+      this.deposit(this.pendingTokens);
+  }
+
+  harvest(){
+    this.deposit(0);
+}
+
   withdraw(amountString: string){
     const amount = Number(amountString);
     this.withdrawLoading = true;
     this.withdrawTransactionHash = undefined;
     this.withdrawError = null;
+    this.transactionError.emit("");
     this.withdrawModal = false;
     this.pool.withdraw(amount).then(tr => {
       this.withdrawLoading = false;
       this.withdrawTransactionHash = tr.hash;
+      this.transactionHash.emit(tr.hash);
     }, (reject) => {
       if(reject.data != null && reject.data.message != null)
         this.withdrawError = reject.data.message;
@@ -164,6 +216,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
         this.withdrawError = reject.message;
       else
         this.withdrawError = reject;
+      this.transactionError.emit(this.withdrawError?.toString());
       this.withdrawLoading = false;
     })
   }

@@ -1,5 +1,5 @@
 
-<h1>Pool</h1>
+<h1>Staking pools</h1>
 <div class="bluebox">
   <table>
     <tr>
@@ -11,8 +11,14 @@
     </tr>
   </table>
 </div>
+<div *ngIf="transactionHash != ''">
+  <div class="result">Transaction ID: <a href="{{transactionHash | transactionLink}}" target="_blank">{{transactionHash}}</a></div>
+</div>
+<div *ngIf="transactionError != ''">
+  <div class="resultError">{{transactionError}}</div>
+</div>
 <div class="pools">
   <ng-container *ngFor="let p of state().pools; index as poolId;" >
-    <app-pool-element *ngIf=p [pool]=p [contractAddress]=poolAddress()></app-pool-element>
+    <app-pool-element *ngIf=p [pool]=p (transactionHash)="notifyTransaction($event)" (transactionError)="notifyTransactionError($event)" [contractAddress]=poolAddress()></app-pool-element>
   </ng-container>
 </div>

@@ -10,6 +10,9 @@ import { PoolService } from 'src/services/pool.service';
 })
 export class PoolComponent implements OnInit {
 
+  public transactionHash: string = "";
+  public transactionError: string = "";
+
   constructor(private poolService: PoolService) { 
 
   }
@@ -33,5 +36,13 @@ export class PoolComponent implements OnInit {
 
   poolAddress(): string{
     return Config.main.addressPool;
+  }
+
+  notifyTransaction(transactionHash: string){
+    this.transactionHash = transactionHash;
+  }
+
+  notifyTransactionError(transactionError: string){
+    this.transactionError = transactionError;
   }
 }

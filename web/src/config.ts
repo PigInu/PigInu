@@ -1,8 +1,8 @@
 
 export class Config {
     public static main = {
-        project: 'Test Token Airdrop',
-        description: 'Claim your Test tokens!',
+        project: 'PIG Inu - The cutest Token in The world',
+        description: 'Claim your PIG tokens!',
         updateInterval: 30,
        
         // network: 'https://rpc-mainnet.matic.quiknode.pro', // Polygon (MATIC) - Mainnet
@@ -45,7 +45,7 @@ export class Config {
                 address: '0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3',
             }, 
             {
-                name: 'UNI',
+                name: 'PIG-DAI LP',
                 icon: "/assets/icons/PIG-DAI.png",
                 address: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
             }, 
@@ -64,6 +64,8 @@ export class Config {
         addressAirdrop: '0x86541beBa4888f306fb47bc7064314d638Cb4B14',
         addressPresale: '0x409f4779c09a76d23c63d2F6aBd819EACA8D801C',
         addressPool: '0xE7BB6F95755286Dd7509dE02C62e930499103aaC',
+        addressUSDToken: '0xf42a4429f107bd120c5e42e069fdad0ac625f615',
+        addressLPToken: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
         airdropContractInterface: [] = [
             "function claimCount () view returns (uint)",
             //"event Transfer(address indexed from, address indexed to, uint amount)",
