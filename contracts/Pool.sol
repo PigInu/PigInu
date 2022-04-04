@@ -83,7 +83,7 @@ contract Pool is Ownable, ReentrancyGuard {
 		return pool.tokenDeposit.balanceOf(address(this));
 	}
 
-	function pendingToken(uint256 _poolID, address _user) external view returns (uint256) {
+	function pendingTokens(uint256 _poolID, address _user) external view returns (uint256) {
 		PoolInfo storage pool = pools[_poolID];
 		UserInfo storage user = users[_poolID][_user];
 		uint256 accTokenPerShare = pool.accTokenPerShare;
