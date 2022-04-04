@@ -481,9 +481,9 @@ describe("Pool tests", function () {
 		const accTokenPerShare = tokenReward.mul(1e12).div(BigNumber.from(poolTokensDeposit));
 		const pendingTokens = BigNumber.from(poolTokensDeposit).mul(accTokenPerShare).div(1e12);
 
-		await expect(await _poolContract.pendingToken(poolOurId, _owner.address)).to.be.equal(pendingTokens);
+		await expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(pendingTokens);
 		await ethers.provider.send("evm_mine", []);
-		await expect(await _poolContract.pendingToken(poolOurId, _owner.address)).to.be.equal(pendingTokens.mul(2));
+		await expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(pendingTokens.mul(2));
 	});
 
 	it("Should withdraw with 0 amount", async function () {
@@ -491,7 +491,7 @@ describe("Pool tests", function () {
 		await _poolContract.deposit(poolOurId, poolTokensDeposit);
 		const preBlockNumber = await ethers.provider.getBlockNumber();
 		await ethers.provider.send("evm_mine", []);
-		const amountToWithdraw = await _poolContract.pendingToken(poolOurId, _owner.address);
+		const amountToWithdraw = await _poolContract.pendingTokens(poolOurId, _owner.address);
 		expect(await _poolContract.withdraw(poolOurId, 0))
 			.to.emit(_poolContract, "eventWithdraw")
 			.withArgs(_owner.address, poolOurId, amountToWithdraw);
@@ -506,7 +506,7 @@ describe("Pool tests", function () {
 		await _poolContract.deposit(poolOurId, poolTokensDeposit);
 		const preBlockNumber = await ethers.provider.getBlockNumber();
 		await ethers.provider.send("evm_mine", []);
-		const amountToWithdraw = await _poolContract.pendingToken(poolOurId, _owner.address);
+		const amountToWithdraw = await _poolContract.pendingTokens(poolOurId, _owner.address);
 		expect(await _poolContract.withdraw(poolOurId, poolTokensDeposit))
 			.to.emit(_poolContract, "eventWithdraw")
 			.withArgs(_owner.address, poolOurId, amountToWithdraw);
@@ -547,8 +547,8 @@ describe("Pool tests", function () {
 		await ethers.provider.send("evm_mine", []);
 
 		//await ethers.provider.send("hardhat_mine", ["0x1312D00"]);
-		const pendingTokensOurs = await _poolContract.pendingToken(poolOurId, _owner.address);
-		const pendingTokensUSDs = await _poolContract.pendingToken(poolUSDId, _owner.address);
+		const pendingTokensOurs = await _poolContract.pendingTokens(poolOurId, _owner.address);
+		const pendingTokensUSDs = await _poolContract.pendingTokens(poolUSDId, _owner.address);
 
 		await _poolContract.withdraw(poolOurId, 0);
 		await _poolContract.withdraw(poolUSDId, 0);
@@ -576,8 +576,8 @@ describe("Pool tests", function () {
 		await ethers.provider.send("evm_mine", []);
 
 		//await ethers.provider.send("hardhat_mine", ["0x1312D00"]);
-		const pendingTokensOurs = await _poolContract.pendingToken(poolOurId, _owner.address);
-		const pendingTokensUSDs = await _poolContract.pendingToken(poolUSDId, _owner.address);
+		const pendingTokensOurs = await _poolContract.pendingTokens(poolOurId, _owner.address);
+		const pendingTokensUSDs = await _poolContract.pendingTokens(poolUSDId, _owner.address);
 
 		await _poolContract.withdraw(poolOurId, depositOur);
 		await _poolContract.withdraw(poolUSDId, depositUSD);
@@ -611,11 +611,11 @@ describe("Pool tests", function () {
 		const totalReward = tokenRewardPerBlock.mul(timeInBlocks);
 
 		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
-		expect(await _poolContract.pendingToken(poolOurId, _owner.address)).to.be.equal(totalReward);
+		expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(totalReward);
 
 		await ethers.provider.send("evm_setAutomine", [true]);
 		await ethers.provider.send("evm_mine", []);
-		expect(await _poolContract.pendingToken(poolOurId, _owner.address)).to.be.equal(totalReward);
+		expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(totalReward);
 
 		await _poolContract.withdraw(poolOurId, poolTokensDeposit);
 		await ethers.provider.send("evm_mine", []);

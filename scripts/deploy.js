@@ -24,9 +24,15 @@ async function main() {
  const presalePriceLiquidity = '2000000000000000000'; // 2 USD
  const presaleDepositTime = '300'; // 5 minutes
  const presaleClaimTime = '300'; // 5 minutes
- const poolTokensOurPerBlock = '100000000000000000'; // 0.1 tokens / block
- const poolTokensUSDPerBlock = '200000000000000000'; // 0.2 tokens / block
- const poolTokensOurLPPerBlock = '300000000000000000'; // 0.3 tokens / block
+ const poolTokensPerBlock = '100000000000000000'; // 0.1 tokens / block
+ const poolTokensOurAllocPoint = 100;
+ const poolTokensUSDAllocPoint = 900;
+ const poolTokensLPAllocPoint = 0;
+ // TEST
+ const poolTokens = "10000000000000000000"; // 10 tokens
+ //RELELASE
+ //const poolTokens = "2000000000000000000000000"; // 2 000 000 tokens
+ const poolStartBlock = 1; // maybe start block offest here and used as block.number + poolStartBlock
  const tokenOurName = 'Test token';
  const tokenOurSymbol = 'TEST';
  const tokenOurSupply = 10000000; // 10 000 000 tokens
@@ -44,7 +50,7 @@ async function main() {
  var liquidityManager = await deploy('LiquidityManager');
  var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, devAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
  var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
- var pool = await deploy('Pool', devAddress);
+ var pool = await deploy("Pool", tokenOur.address, burnAddress, devAddress, poolTokensPerBlock, poolStartBlock, poolTokens);
 
  /*
  // TEST ONLY:
@@ -101,19 +107,13 @@ async function main() {
  var tokenOurLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
  console.log('Pair address: ' + tokenOurLPAddress);
  console.log('Pool - createPool - tokenOur:');
- await runFunction(pool, 'createPool', tokenOur.address, tokenOur.address, poolTokensOurPerBlock, 0); // Our -> Our
+ await runFunction(pool, 'createPool', poolTokensOurAllocPoint, tokenOur.address,  0); // Our -> Our
  console.log('Pool - createPool - tokenTheir:');
- await runFunction(pool, 'createPool', tokenTheir.address, tokenOur.address, poolTokensUSDPerBlock, 400); // BUSD -> Our
+ await runFunction(pool, 'createPool', poolTokensUSDAllocPoint, tokenTheir.address,  400); // BUSD -> Our
  console.log('Pool - createPool - tokenOurLP:');
- await runFunction(pool, 'createPool', tokenOurLPAddress, tokenOur.address, poolTokensOurLPPerBlock, 0); // Our-BUSD -> Our
-
- // POOL - RELEASE:
- //console.log('TokenOur - transfer:');
- //await runFunction(tokenOur, 'transfer', pool.address, '2000000000000000000000000'); // 2 000 000 tokens
-
- // POOL - TEST:
+ await runFunction(pool, 'createPool', poolTokensLPAllocPoint, tokenOurLPAddress,  0); // Our-BUSD -> Our
  console.log('TokenOur - transfer:');
- await runFunction(tokenOur, 'transfer', pool.address, '10000000000000000000'); // 10 tokens
+ await runFunction(tokenOur, "transfer", pool.address, poolTokens);
 
  // SUMMARY:
  getTotalCost();
