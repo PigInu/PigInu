@@ -21,12 +21,12 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 const config: HardhatUserConfig = {
   solidity: {
     version: '0.8.11',
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
-    }
+    //settings: {
+    //  optimizer: {
+    //    enabled: true,
+    //    runs: 200
+    //  }
+    //}
   },
   networks: {
     polygonTestnet: {
@@ -36,6 +36,7 @@ const config: HardhatUserConfig = {
       //url: 'https://matic-testnet-archive-rpc.bwarelabs.com',
       chainId: 80001,
       accounts: { mnemonic: mnemonic },
+      gasPrice: 35000000000,
     },
     polygonMainnet: {
       url: 'https://polygon-rpc.com',
