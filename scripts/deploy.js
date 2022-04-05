@@ -46,10 +46,10 @@ async function main() {
  console.log();
  console.log('Deploying smart contracts ...');
  console.log();
- var tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
- var liquidityManager = await deploy('LiquidityManager');
- var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, devAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
- var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
+ //var tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
+ //var liquidityManager = await deploy('LiquidityManager');
+ //var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, devAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
+ //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
  var pool = await deploy("Pool", tokenOur.address, burnAddress, devAddress, poolTokensPerBlock, poolStartBlock, poolTokens);
 
  /*
