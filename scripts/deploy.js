@@ -25,9 +25,9 @@ async function main() {
  const presaleDepositTime = '300'; // 5 minutes
  const presaleClaimTime = '300'; // 5 minutes
  const poolTokensPerBlock = '100000000000000000'; // 0.1 tokens / block
- const poolTokensOurAllocPoint = 100;
- const poolTokensUSDAllocPoint = 900;
- const poolTokensLPAllocPoint = 0;
+ const poolTokenOurAllocPoint = 1;
+ const poolTokenUSDAllocPoint = 2;
+ const poolTokenOurUSDLPAllocPoint = 5;
  // TEST
  const poolTokens = "10000000000000000000"; // 10 tokens
  //RELELASE
@@ -67,7 +67,7 @@ async function main() {
  */
  createVerifyScript();
  getTotalCost();
-
+/*
  // TOKEN:
  console.log('TokenOur - approve:');
  await runFunction(tokenOur, 'approve', presale.address, maxint);
@@ -101,17 +101,17 @@ async function main() {
  await runFunction(tokenOur, 'transfer', airdrop.address, '2000000000000000000'); // 2 tokens
  console.log('Airdrop - start:');
  await runFunction(airdrop, 'start', airdropTime);
-
+*/
  // POOL:
  console.log('LiquidityManager - getPairAddress:');
  var tokenOurLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
  console.log('Pair address: ' + tokenOurLPAddress);
  console.log('Pool - createPool - tokenOur:');
- await runFunction(pool, 'createPool', poolTokensOurAllocPoint, tokenOur.address,  0); // Our -> Our
+ await runFunction(pool, 'createPool', poolTokenOurAllocPoint, tokenOur.address,  0); // Our -> Our
  console.log('Pool - createPool - tokenTheir:');
- await runFunction(pool, 'createPool', poolTokensUSDAllocPoint, tokenTheir.address,  400); // BUSD -> Our
+ await runFunction(pool, 'createPool', poolTokenUSDAllocPoint, tokenTheir.address,  400); // BUSD -> Our
  console.log('Pool - createPool - tokenOurLP:');
- await runFunction(pool, 'createPool', poolTokensLPAllocPoint, tokenOurLPAddress,  0); // Our-BUSD -> Our
+ await runFunction(pool, 'createPool', poolTokenOurUSDLPAllocPoint, tokenOurLPAddress,  0); // Our-BUSD -> Our
  console.log('TokenOur - transfer:');
  await runFunction(tokenOur, "transfer", pool.address, poolTokens);
 
