@@ -1,5 +1,5 @@
 {
-  "name": "TOKEN",
+  "name": "PIG-INU",
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
@@ -10,7 +10,7 @@
     "@nomiclabs/hardhat-ethers": "*",
     "@nomiclabs/hardhat-etherscan": "*",
     "@nomiclabs/hardhat-waffle": "*",
-    "@typechain/hardhat": "^2.3.1",
+    "@typechain/hardhat": "*",
     "@typechain/ethers-v5": "*",
     "@types/mocha": "*",
     "chai": "*",
