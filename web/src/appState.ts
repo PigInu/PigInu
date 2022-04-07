@@ -130,7 +130,7 @@ export class StateToken {
         return this.address != "" && this.name != "" && this.symbol != "" && this.decimals != -1;
     };
     reduceDecimals(number: BigNumber) : number{
-        return Number(number.toBigInt()) / (10 ** this.decimals);
+        return Math.floor(Number(number.toBigInt() * BigInt(10)) / 10) / (10 ** this.decimals);
     };
     isApproved(contractAddress: string) : Promise<boolean>{
         return new Promise(async (resolve) => {
@@ -201,7 +201,9 @@ export interface IPresale {
     totalClaimed: number,
     startTime: number,
     depositTimeOut: number,
+    depositPeriodOver: number,
     claimTimeOut: number,
+    claimPeriodOver: number,
     totalClaimable: number,
     devFeePercent: number;
     devAddress: string,
@@ -275,7 +277,9 @@ export class AppState {
         totalClaimed: -1,
         startTime: -1,
         depositTimeOut: -1,
+        depositPeriodOver: -1,
         claimTimeOut: -1,
+        claimPeriodOver: -1,
         devFeePercent: -1,
         totalClaimable: -1,
         devAddress: "",

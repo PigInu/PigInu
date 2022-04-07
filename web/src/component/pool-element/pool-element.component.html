@@ -31,13 +31,13 @@
     <tr>
       <th>Your stake:</th><td>
         <div *ngIf="!walletSigned()">Wallet not connected</div>
-        <div class="green" *ngIf="walletSigned()">{{amount()| numberLocale}}</div>
+        <div class="green" *ngIf="walletSigned()">{{amount()| numberLocale}} {{this.pool.tokenDeposit.symbol}}</div>
       </td>
     </tr>
     <tr>
       <th>Earned:</th><td>
         <div *ngIf="!walletSigned()">Wallet not connected</div>
-        <div class="green" *ngIf="walletSigned() && getPendingTokens() >= 0">{{getPendingTokens() | numberLocale}}</div>
+        <div class="green" *ngIf="walletSigned() && getPendingTokens() >= 0">{{getPendingTokens() | numberLocale}} {{this.pool.tokenEarn.symbol}}</div>
       </td>
     </tr>
     <tr>
@@ -78,9 +78,9 @@
             {{depositError}}
           </div>        
 
-          <div class="calc"  *ngIf="isTokenDepositApproved()">
+          <div class="calc" *ngIf="isTokenDepositApproved()">
             <span class="buttonWrap">
-              <button (click)="toogleWithdrawModal()">
+              <button [disabled]="amount() == 0" (click)="toogleWithdrawModal()">
                 <span>Withdraw</span>
               </button>
             </span>
@@ -94,7 +94,7 @@
 
           <div class="calc" *ngIf="isTokenDepositApproved() && pool.tokenDeposit.address == pool.tokenEarn.address">
             <span class="buttonWrap">
-              <button (click)="compound()">
+              <button  [disabled]="getPendingTokens() == 0"  (click)="compound()">
                 <span>Compound</span>
               </button>
             </span>
@@ -102,7 +102,7 @@
 
           <div class="calc" *ngIf="isTokenDepositApproved()">
             <span class="buttonWrap">
-              <button (click)="harvest()">
+              <button  [disabled]="getPendingTokens() == 0" (click)="harvest()">
                 <span>Harvest</span>
               </button>
             </span>

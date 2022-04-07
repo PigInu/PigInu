@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StateToken } from 'src/appState';
 import { Config } from 'src/config';
-import { PoolService } from 'src/services/pool.service';
+import { PoolService, PoolServiceState } from 'src/services/pool.service';
 
 @Component({
   selector: 'app-pool',
@@ -12,26 +12,19 @@ export class PoolComponent implements OnInit {
 
   public transactionHash: string = "";
   public transactionError: string = "";
+  public poolServiceState: PoolServiceState;
 
   constructor(private poolService: PoolService) { 
-
+    this.poolServiceState = this.poolService.getState();
   }
 
   ngOnInit() {
   }
 
-  getToken() : StateToken{
-    return this.poolService.getState().token;
-  }
-
-  state(){
-    return this.poolService.getState();
-  }
-
   token(): string{
-    if(!this.getToken().isReady())
+    if(!this.poolServiceState.token.isReady())
       return "";
-    return this.getToken().name + " (" + this.getToken().symbol + ")"
+    return this.poolServiceState.token.name + " (" + this.poolServiceState.token.symbol + ")"
   }
 
   poolAddress(): string{

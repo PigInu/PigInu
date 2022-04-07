@@ -16,8 +16,11 @@ import { isNumber } from 'util';
 export class PresaleComponent implements OnInit, OnDestroy  {
   initialized: boolean = false;
   subscription: any;
+  public presale: IPresale;
 
-  constructor(private web3ModalSevice: Web3ModalService) { }
+  constructor(private web3ModalSevice: Web3ModalService) {
+    this.presale = AppState.getPresale();
+  }
   ngOnDestroy(): void {
     this.initialized = false;
   }
@@ -34,22 +37,18 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     });
   }
 
-  presale() : IPresale{
-    return AppState.getPresale();
-  }
-
   claimablePercent() : number{
-    if(this.presale().totalClaimable == -1 || this.presale().totalClaimed == -1 || !this.presale().tokenOur.isReady())
+    if(this.presale.totalClaimable == -1 || this.presale.totalClaimed == -1 || !this.presale.tokenOur.isReady())
       return -1;
-    if(this.presale().totalClaimable == 0)
+    if(this.presale.totalClaimable == 0)
       return 100;
-    return Math.floor(this.presale().totalClaimed / (this.presale().totalClaimable / 100));
+    return Math.floor(this.presale.totalClaimed / (this.presale.totalClaimable / 100));
   }
 
   progressPercent() : number{
-    if(this.presale().tokenTheirMax == -1 || this.presale().totalDeposited == -1 || !this.presale().tokenTheir.isReady())
+    if(this.presale.tokenTheirMax == -1 || this.presale.totalDeposited == -1 || !this.presale.tokenTheir.isReady())
       return -1;
-    return Math.floor(this.presale().totalDeposited / (this.presale().tokenTheirMax / 100));
+    return Math.floor(this.presale.totalDeposited / (this.presale.tokenTheirMax / 100));
   }
 
   presaleContractAddress(): string{
@@ -66,15 +65,15 @@ export class PresaleComponent implements OnInit, OnDestroy  {
   }
 
   ourToken(): string{
-    if(this.presale().tokenOur.name == "" || this.presale().tokenOur.symbol == "")
+    if(this.presale.tokenOur.name == "" || this.presale.tokenOur.symbol == "")
       return "";
-    return this.presale().tokenOur.name + " (" + this.presale().tokenOur.symbol + ")"
+    return this.presale.tokenOur.name + " (" + this.presale.tokenOur.symbol + ")"
   }
 
   theirToken(): string{
-    if(this.presale().tokenTheir.name == "" || this.presale().tokenTheir.symbol == "")
+    if(this.presale.tokenTheir.name == "" || this.presale.tokenTheir.symbol == "")
       return "";
-    return this.presale().tokenTheir.name + " (" + this.presale().tokenTheir.symbol + ")"
+    return this.presale.tokenTheir.name + " (" + this.presale.tokenTheir.symbol + ")"
   }
 
   walletAddress(): string{
@@ -162,14 +161,6 @@ export class PresaleComponent implements OnInit, OnDestroy  {
 
   timeOutConfig(timestamp: number): CountdownConfig {
     return AppState.timeOutConfig(timestamp);
-  }
-
-  depositPeriodOver(){
-    return this.timestampToTimeout(this.presale().depositTimeOut);
-  }
-
-  claimPeriodOver(){
-    return this.timestampToTimeout(this.presale().claimTimeOut);
   }
   
   depositTransactionHash: string | undefined;

@@ -110,8 +110,14 @@ export class Web3ModalService {
     this.presaleNotLoggedContract.claimedCount().then((value: BigNumber) => { AppState.presale.claimedCount = Number(value.toString()); });
     this.presaleNotLoggedContract.depositedCount().then((value: BigNumber) => { AppState.presale.depositedCount = Number(value.toString()); });    
     this.presaleNotLoggedContract.startTime().then((value: BigNumber) => { AppState.presale.startTime = Number(value.toString()); });
-    this.presaleNotLoggedContract.claimTimeOut().then((value: BigNumber) => { AppState.presale.claimTimeOut = Number(value.toString()); });
-    this.presaleNotLoggedContract.depositTimeOut().then((value: BigNumber) => { AppState.presale.depositTimeOut = Number(value.toString()); });
+    this.presaleNotLoggedContract.claimTimeOut().then((value: BigNumber) => { 
+      AppState.presale.claimTimeOut = Number(value.toString()); 
+      AppState.presale.claimPeriodOver = AppState.timestampToTimeout(AppState.presale.claimTimeOut);
+    });
+    this.presaleNotLoggedContract.depositTimeOut().then((value: BigNumber) => { 
+      AppState.presale.depositTimeOut = Number(value.toString()); 
+      AppState.presale.depositPeriodOver = AppState.timestampToTimeout(AppState.presale.depositTimeOut);
+    });
     this.presaleNotLoggedContract.totalClaimable().then((ret: BigNumber) => { this.reduceNumberDecimals(ret).then(value =>{ AppState.presale.totalClaimable = value; })});
   }
   

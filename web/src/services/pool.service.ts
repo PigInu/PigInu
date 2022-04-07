@@ -72,7 +72,7 @@ export class PoolService {
   }
 }
 
-interface PoolServiceState {
+export interface PoolServiceState {
   token: StateToken,
   pools: Array<PoolState>
 }

@@ -42,7 +42,9 @@ export class OnlyNumbers {
         this.validateValue(value);
         e.preventDefault();
     }
-
+    @HostListener('keyup', ['$event']) OnKeyUp(e: any) {
+        this.hostElement.nativeElement.value = this.hostElement.nativeElement.value.replace(",", ".");
+    }
     /**
      * Event handler for host's keydown event
      * @param event

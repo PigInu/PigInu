@@ -92,6 +92,11 @@
         padding: 15px;
         border: none;
         margin-bottom: 10px;
+        &:disabled{
+            background: linear-gradient(#ccc, #ddd);
+            cursor: default;
+            pointer-events: none;
+        }
     }
     app-loader{
         font-size: 0.1em;

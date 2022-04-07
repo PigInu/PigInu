@@ -18,7 +18,7 @@
   <div class="resultError">{{transactionError}}</div>
 </div>
 <div class="pools">
-  <ng-container *ngFor="let p of state().pools; index as poolId;" >
+  <ng-container *ngFor="let p of poolServiceState.pools; index as poolId;" >
     <app-pool-element *ngIf=p [pool]=p (transactionHash)="notifyTransaction($event)" (transactionError)="notifyTransactionError($event)" [contractAddress]=poolAddress()></app-pool-element>
   </ng-container>
 </div>

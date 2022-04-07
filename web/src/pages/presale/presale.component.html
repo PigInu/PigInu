@@ -7,10 +7,10 @@
       <th>
         Start time: 
       </th><td>
-          <span *ngIf="presale().startTime == -1"><app-loader></app-loader></span>
-          <span *ngIf="presale().startTime != -1">
-            <span *ngIf="timestampToTimeout(this.presale().startTime) > 0"><countdown [config]="timeOutConfig(this.presale().startTime)"></countdown> | </span>
-            {{presale().startTime * 1000 | dateTimeLocale}}
+          <span *ngIf="presale.startTime == -1"><app-loader></app-loader></span>
+          <span *ngIf="presale.startTime != -1">
+            <span *ngIf="timestampToTimeout(this.presale.startTime) > 0"><countdown [config]="timeOutConfig(this.presale.startTime)"></countdown> | </span>
+            {{presale.startTime * 1000 | dateTimeLocale}}
           </span>
       </td> 
     </tr>
@@ -25,47 +25,47 @@
       <th>
         Dev address: 
       </th><td>
-          <span *ngIf="presale().devAddress  == ''"><app-loader></app-loader></span>
-          <span *ngIf="presale().devAddress  != ''"><a href="{{presale().devAddress | addressLink}}" target="_blank">{{presale().devAddress}}</a></span>
+          <span *ngIf="presale.devAddress  == ''"><app-loader></app-loader></span>
+          <span *ngIf="presale.devAddress  != ''"><a href="{{presale.devAddress | addressLink}}" target="_blank">{{presale.devAddress}}</a></span>
       </td> 
     </tr>
     <tr>
       <th>
         Deposited distribution:
       </th><td>
-          <span *ngIf="presale().devFeePercent  == -1"><app-loader></app-loader></span>
-          <span *ngIf="presale().devFeePercent  != -1">{{presale().devFeePercent}}% to dev wallet, {{100 - presale().devFeePercent}}% to liquidity</span>
+          <span *ngIf="presale.devFeePercent  == -1"><app-loader></app-loader></span>
+          <span *ngIf="presale.devFeePercent  != -1">{{presale.devFeePercent}}% to dev wallet, {{100 - presale.devFeePercent}}% to liquidity</span>
       </td> 
     </tr>
     <tr>
       <th>
         Number of deposits: 
       </th><td>
-          <span *ngIf="presale().depositedCount == -1"><app-loader></app-loader></span>
-          <span *ngIf="presale().depositedCount != -1">{{presale().depositedCount | numberLocale}}</span>
+          <span *ngIf="presale.depositedCount == -1"><app-loader></app-loader></span>
+          <span *ngIf="presale.depositedCount != -1">{{presale.depositedCount | numberLocale}}</span>
       </td> 
     </tr>
     <tr>
         <th>
           Number of claims: 
         </th><td>
-            <span *ngIf="presale().claimedCount == -1"><app-loader></app-loader></span>
-            <span *ngIf="presale().claimedCount != -1">{{presale().claimedCount | numberLocale}}</span>
+            <span *ngIf="presale.claimedCount == -1"><app-loader></app-loader></span>
+            <span *ngIf="presale.claimedCount != -1">{{presale.claimedCount | numberLocale}}</span>
         </td> 
     </tr>
     <tr>
       <th>
         Presale token price: 
       </th><td>
-          <span *ngIf="presale().tokenPrice == -1 || this.presale().tokenTheir.symbol =='' || this.presale().tokenOur.symbol ==''"><app-loader></app-loader></span>
-          <span *ngIf="presale().tokenPrice != -1 && this.presale().tokenTheir.symbol != '' && this.presale().tokenOur.symbol != ''">
+          <span *ngIf="presale.tokenPrice == -1 || this.presale.tokenTheir.symbol =='' || this.presale.tokenOur.symbol ==''"><app-loader></app-loader></span>
+          <span *ngIf="presale.tokenPrice != -1 && this.presale.tokenTheir.symbol != '' && this.presale.tokenOur.symbol != ''">
             <span class="float">
-              <span class="float">{{presale().tokenPrice | numberLocale}} {{this.presale().tokenTheir.symbol}} /&nbsp;</span>
-              <span class="float">1 {{this.presale().tokenOur.symbol}}</span>
+              <span class="float">{{presale.tokenPrice | numberLocale}} {{this.presale.tokenTheir.symbol}} /&nbsp;</span>
+              <span class="float">1 {{this.presale.tokenOur.symbol}}</span>
             </span> 
             <span class="float">
-              <span class="float">({{(1 / presale().tokenPrice) | numberLocale}} {{this.presale().tokenOur.symbol}} /&nbsp;</span>
-              <span class="float">1 {{this.presale().tokenTheir.symbol}})</span>
+              <span class="float">({{(1 / presale.tokenPrice) | numberLocale}} {{this.presale.tokenOur.symbol}} /&nbsp;</span>
+              <span class="float">1 {{this.presale.tokenTheir.symbol}})</span>
             </span>
           </span>
       </td> 
@@ -74,16 +74,16 @@
       <th>
         Initial exchange token price:
       </th><td>
-          <span *ngIf="presale().tokenPriceLiquidity == -1 || this.presale().tokenTheir.symbol =='' || this.presale().tokenOur.symbol ==''"><app-loader></app-loader></span>
+          <span *ngIf="presale.tokenPriceLiquidity == -1 || this.presale.tokenTheir.symbol =='' || this.presale.tokenOur.symbol ==''"><app-loader></app-loader></span>
           
-          <span *ngIf="presale().tokenPriceLiquidity != -1 && this.presale().tokenTheir.symbol != '' && this.presale().tokenOur.symbol != ''">
+          <span *ngIf="presale.tokenPriceLiquidity != -1 && this.presale.tokenTheir.symbol != '' && this.presale.tokenOur.symbol != ''">
             <span class="float">
-              <span class="float">{{presale().tokenPriceLiquidity | numberLocale}} {{this.presale().tokenTheir.symbol}} /&nbsp;</span>
-              <span class="float">1 {{this.presale().tokenOur.symbol}}</span>
+              <span class="float">{{presale.tokenPriceLiquidity | numberLocale}} {{this.presale.tokenTheir.symbol}} /&nbsp;</span>
+              <span class="float">1 {{this.presale.tokenOur.symbol}}</span>
             </span> 
             <span class="float">
-              <span class="float">({{(1 / presale().tokenPriceLiquidity) | numberLocale}} {{this.presale().tokenOur.symbol}} /&nbsp;</span>
-              <span class="float">1 {{this.presale().tokenTheir.symbol}})</span>
+              <span class="float">({{(1 / presale.tokenPriceLiquidity) | numberLocale}} {{this.presale.tokenOur.symbol}} /&nbsp;</span>
+              <span class="float">1 {{this.presale.tokenTheir.symbol}})</span>
             </span>
           </span>
       </td> 
@@ -92,8 +92,8 @@
       <th>
         Total deposited: 
       </th><td>
-          <span *ngIf="presale().totalDeposited == -1 || this.presale().tokenTheir.symbol ==''"><app-loader></app-loader></span>
-          <span *ngIf="presale().totalDeposited != -1 &&  this.presale().tokenTheir.symbol != ''">{{presale().totalDeposited | numberLocale}} {{this.presale().tokenTheir.symbol}}</span>
+          <span *ngIf="presale.totalDeposited == -1 || this.presale.tokenTheir.symbol ==''"><app-loader></app-loader></span>
+          <span *ngIf="presale.totalDeposited != -1 &&  this.presale.tokenTheir.symbol != ''">{{presale.totalDeposited | numberLocale}} {{this.presale.tokenTheir.symbol}}</span>
       </td> 
     </tr>
     <tr>
@@ -102,7 +102,7 @@
         </th><td>
             <span *ngIf="claimablePercent() == -1"><app-loader></app-loader></span>
             <div *ngIf="claimablePercent() > -1" class="center">
-              <app-progress [percent]="claimablePercent()" [text]="(presale().totalClaimable | numberLocale) + ' ' + this.presale().tokenOur.symbol + ' / ' + (presale().totalClaimed | numberLocale) + ' ' + this.presale().tokenOur.symbol"></app-progress>
+              <app-progress [percent]="claimablePercent()" [text]="(presale.totalClaimable | numberLocale) + ' ' + this.presale.tokenOur.symbol + ' / ' + (presale.totalClaimed | numberLocale) + ' ' + this.presale.tokenOur.symbol"></app-progress>
             </div>
         </td> 
     </tr>
@@ -110,26 +110,26 @@
       <th>
         Total claimable before first claim: 
       </th><td>
-          <span *ngIf="presale().totalClaimableNotDeducted == -1 || this.presale().tokenOur.symbol ==''"><app-loader></app-loader></span>
-          <span *ngIf="presale().totalClaimableNotDeducted != -1 && this.presale().tokenOur.symbol != ''">{{presale().totalClaimableNotDeducted | numberLocale}} {{this.presale().tokenOur.symbol}}</span>
+          <span *ngIf="presale.totalClaimableNotDeducted == -1 || this.presale.tokenOur.symbol ==''"><app-loader></app-loader></span>
+          <span *ngIf="presale.totalClaimableNotDeducted != -1 && this.presale.tokenOur.symbol != ''">{{presale.totalClaimableNotDeducted | numberLocale}} {{this.presale.tokenOur.symbol}}</span>
       </td> 
     </tr>
     <tr>
       <th>
         Goes to liquidity: 
       </th><td>
-          <span *ngIf="presale().liquidityTokenOur == -1 || this.presale().tokenOur.symbol ==''"><app-loader></app-loader></span>
-          <span class="" *ngIf="presale().liquidityTokenOur != -1 && this.presale().tokenOur.symbol != ''">{{presale().liquidityTokenOur | numberLocale}} {{this.presale().tokenOur.symbol}}</span>
-          <span *ngIf="presale().liquidityTokenTheir != -1 && this.presale().tokenTheir.symbol != ''"> + {{presale().liquidityTokenTheir | numberLocale}} {{this.presale().tokenTheir.symbol}}</span>
+          <span *ngIf="presale.liquidityTokenOur == -1 || this.presale.tokenOur.symbol ==''"><app-loader></app-loader></span>
+          <span class="" *ngIf="presale.liquidityTokenOur != -1 && this.presale.tokenOur.symbol != ''">{{presale.liquidityTokenOur | numberLocale}} {{this.presale.tokenOur.symbol}}</span>
+          <span *ngIf="presale.liquidityTokenTheir != -1 && this.presale.tokenTheir.symbol != ''"> + {{presale.liquidityTokenTheir | numberLocale}} {{this.presale.tokenTheir.symbol}}</span>
       </td> 
     </tr>
     <tr>
       <th>
         Tokens in this contract:
       </th><td>
-          <span *ngIf="presale().balanceTokenOur == -1 || this.presale().tokenOur.symbol ==''"><app-loader></app-loader></span>
-          <span *ngIf="presale().balanceTokenOur != -1 && this.presale().tokenOur.symbol != ''">{{presale().balanceTokenOur | numberLocale}} {{this.presale().tokenOur.symbol}}</span>
-          <span *ngIf="presale().balanceTokenTheir != -1 && this.presale().tokenTheir.symbol != ''"> + {{presale().balanceTokenTheir | numberLocale}} {{this.presale().tokenTheir.symbol}}</span>
+          <span *ngIf="presale.balanceTokenOur == -1 || this.presale.tokenOur.symbol ==''"><app-loader></app-loader></span>
+          <span *ngIf="presale.balanceTokenOur != -1 && this.presale.tokenOur.symbol != ''">{{presale.balanceTokenOur | numberLocale}} {{this.presale.tokenOur.symbol}}</span>
+          <span *ngIf="presale.balanceTokenTheir != -1 && this.presale.tokenTheir.symbol != ''"> + {{presale.balanceTokenTheir | numberLocale}} {{this.presale.tokenTheir.symbol}}</span>
       </td> 
     </tr>
     </table>
@@ -145,15 +145,15 @@
         </th><td>
             <span *ngIf="theirToken() == ''"><app-loader></app-loader></span>
 
-            <div class="token-flex" *ngIf="presale().tokenOur.isReady() && presale().tokenTheir.isReady()">
+            <div class="token-flex" *ngIf="presale.tokenOur.isReady() && presale.tokenTheir.isReady()">
               Buy
-              <img src="{{presale().tokenOur.icon}}" alt="" />
-              <span><a href="{{presale().tokenOur.address | addressLink}}" target="_blank">{{presale().tokenOur.symbol}}</a></span>
-              <app-add-token-to-wallet [token]=this.presale().tokenOur></app-add-token-to-wallet>
+              <img src="{{presale.tokenOur.icon}}" alt="" />
+              <span><a href="{{presale.tokenOur.address | addressLink}}" target="_blank">{{presale.tokenOur.symbol}}</a></span>
+              <app-add-token-to-wallet [token]=this.presale.tokenOur></app-add-token-to-wallet>
               for
-              <img src="{{presale().tokenTheir.icon}}" alt="" />
-              <span><a href="{{presale().tokenTheir.address | addressLink}}" target="_blank">{{presale().tokenTheir.symbol}}</a></span>
-              <app-add-token-to-wallet [token]=this.presale().tokenTheir></app-add-token-to-wallet>
+              <img src="{{presale.tokenTheir.icon}}" alt="" />
+              <span><a href="{{presale.tokenTheir.address | addressLink}}" target="_blank">{{presale.tokenTheir.symbol}}</a></span>
+              <app-add-token-to-wallet [token]=this.presale.tokenTheir></app-add-token-to-wallet>
             </div>
         </td> 
     </tr>
@@ -161,14 +161,14 @@
       <th>
         Deposit timeout: 
       </th><td>
-          <span *ngIf="presale().depositTimeOut == -1"><app-loader></app-loader></span>
-          <span *ngIf="presale().depositTimeOut != -1">
-            <span *ngIf="timestampToTimeout(this.presale().depositTimeOut) > 0"><countdown [config]="timeOutConfig(this.presale().depositTimeOut)"></countdown> | </span>
-            {{presale().depositTimeOut * 1000 | dateTimeLocale}}
+          <span *ngIf="presale.depositTimeOut == -1"><app-loader></app-loader></span>
+          <span *ngIf="presale.depositTimeOut != -1">
+            <span *ngIf="presale.depositPeriodOver > 0"><countdown [config]="timeOutConfig(this.presale.depositTimeOut)"></countdown> | </span>
+            {{presale.depositTimeOut * 1000 | dateTimeLocale}}
           </span>
       </td> 
     </tr>
-    <tr *ngIf="presale().tokenOur.isReady()">
+    <tr *ngIf="presale.tokenOur.isReady()">
       <th>
         Deposited: 
       </th>
@@ -179,30 +179,30 @@
           <app-loader *ngIf="checkDepositedLoading" class="center"></app-loader>
         </button>
         <div *ngIf="checkDepositedResult != -1" class="result">
-            {{checkDepositedResult}} {{this.presale().tokenTheir.symbol}}
+            {{checkDepositedResult}} {{this.presale.tokenTheir.symbol}}
         </div>
         <div *ngIf="checkDepositedError != null" class="resultError">
           {{checkDepositedError}}
         </div>
       </td> 
     </tr>
-    <tr *ngIf="presale().tokenTheir.isReady() && walletSigned() && ispresaleApproved() == true">
+    <tr *ngIf="presale.tokenTheir.isReady() && walletSigned() && ispresaleApproved() == true">
       <th>
         Buy token: 
       </th>
       <td>
-        <button *ngIf="depositPeriodOver()" class="disabled">
+        <button *ngIf="presale.depositPeriodOver" class="disabled">
           Deposit period is over
         </button>
-        <span class="calc"  *ngIf="!depositPeriodOver() && presale().tokenPrice != -1 && this.presale().tokenTheir.symbol != '' && this.presale().tokenOur.symbol != ''">
+        <span class="calc"  *ngIf="!presale.depositPeriodOver && presale.tokenPrice != -1 && this.presale.tokenTheir.symbol != '' && this.presale.tokenOur.symbol != ''">
           <span class="inputWrap">
-            <input onlyNumbers [allowDecimals]="true" #tokenOurPrice (change)="calcPrice(tokenOurPrice, tokenTheirPrice,  presale().tokenPrice)" (keyup)="calcPrice(tokenOurPrice, tokenTheirPrice,  presale().tokenPrice)"  value="" /> 
-            <span>{{this.presale().tokenOur.symbol}}</span>
+            <input onlyNumbers [allowDecimals]="true" #tokenOurPrice (change)="calcPrice(tokenOurPrice, tokenTheirPrice,  presale.tokenPrice)" (keyup)="calcPrice(tokenOurPrice, tokenTheirPrice,  presale.tokenPrice)"  value="" /> 
+            <span>{{this.presale.tokenOur.symbol}}</span>
           </span> 
           <span class="delimiter">/</span> 
           <span class="inputWrap">
-            <input onlyNumbers [allowDecimals]="true"  #tokenTheirPrice (change)="calcPrice(tokenTheirPrice, tokenOurPrice, 1 / presale().tokenPrice)" (keyup)="calcPrice(tokenTheirPrice, tokenOurPrice, 1 / presale().tokenPrice)"  value="" /> 
-            <span>{{this.presale().tokenTheir.symbol}}</span>
+            <input onlyNumbers [allowDecimals]="true"  #tokenTheirPrice (change)="calcPrice(tokenTheirPrice, tokenOurPrice, 1 / presale.tokenPrice)" (keyup)="calcPrice(tokenTheirPrice, tokenOurPrice, 1 / presale.tokenPrice)"  value="" /> 
+            <span>{{this.presale.tokenTheir.symbol}}</span>
           </span>
           <span class="buttonWrap">
             <button (click)="deposit(tokenTheirPrice.value)">
@@ -220,7 +220,7 @@
         </div>
       </td> 
     </tr>
-    <tr *ngIf="presale().tokenTheir.isReady() && ispresaleApproved() == false">
+    <tr *ngIf="presale.tokenTheir.isReady() && ispresaleApproved() == false">
       <th>
         Buy token: 
       </th>
@@ -250,9 +250,9 @@
       </th><td>
           <span *ngIf="ourToken() == ''"><app-loader></app-loader></span>
           <div class="token-flex" *ngIf="ourToken() != ''">
-            <img src="{{presale().tokenOur.icon}}" alt="" />
-            <span><a href="{{presale().tokenOur.address | addressLink}}" target="_blank">{{ourToken()}}</a></span>
-            <app-add-token-to-wallet [token]=this.presale().tokenOur></app-add-token-to-wallet>
+            <img src="{{presale.tokenOur.icon}}" alt="" />
+            <span><a href="{{presale.tokenOur.address | addressLink}}" target="_blank">{{ourToken()}}</a></span>
+            <app-add-token-to-wallet [token]=this.presale.tokenOur></app-add-token-to-wallet>
           </div>
       </td> 
   </tr>
@@ -260,10 +260,10 @@
     <th>
       Claim timeout: 
     </th><td>
-        <span *ngIf="presale().claimTimeOut == -1"><app-loader></app-loader></span>
-        <span *ngIf="presale().claimTimeOut != -1">
-          <span *ngIf="timestampToTimeout(this.presale().claimTimeOut) > 0"><countdown [config]="timeOutConfig(this.presale().claimTimeOut)"></countdown> | </span>
-          {{presale().claimTimeOut * 1000 | dateTimeLocale}}
+        <span *ngIf="presale.claimTimeOut == -1"><app-loader></app-loader></span>
+        <span *ngIf="presale.claimTimeOut != -1">
+          <span *ngIf="presale.claimPeriodOver > 0"><countdown [config]="timeOutConfig(this.presale.claimTimeOut)"></countdown> | </span>
+          {{presale.claimTimeOut * 1000 | dateTimeLocale}}
         </span>
     </td> 
   </tr>
@@ -273,11 +273,11 @@
       </th><td>
           <span *ngIf="progressPercent() == -1"><app-loader></app-loader></span>
           <div *ngIf="progressPercent() > -1" class="center">
-            <app-progress [percent]="progressPercent()" [text]="(presale().totalDeposited | numberLocale) + ' ' + this.presale().tokenTheir.symbol + ' / ' + (presale().tokenTheirMax | numberLocale) + ' ' + this.presale().tokenTheir.symbol"></app-progress>
+            <app-progress [percent]="progressPercent()" [text]="(presale.totalDeposited | numberLocale) + ' ' + this.presale.tokenTheir.symbol + ' / ' + (presale.tokenTheirMax | numberLocale) + ' ' + this.presale.tokenTheir.symbol"></app-progress>
         </div>
       </td> 
   </tr>
-  <tr *ngIf="presale().tokenOur.isReady()">
+  <tr *ngIf="presale.tokenOur.isReady()">
     <th>
         Claimed: 
     </th>
@@ -288,14 +288,14 @@
           <app-loader *ngIf="checkClaimedLoading" class="center"></app-loader>
         </button>
         <div *ngIf="checkClaimedResult != -1" class="result">
-            {{checkClaimedResult}} {{this.presale().tokenOur.symbol}}
+            {{checkClaimedResult}} {{this.presale.tokenOur.symbol}}
         </div>
         <div *ngIf="checkClaimedError != null" class="resultError">
           {{checkClaimedError}}
         </div>
     </td> 
   </tr>
-  <tr *ngIf="presale().tokenOur.isReady()">
+  <tr *ngIf="presale.tokenOur.isReady()">
     <th>
         Claimable: 
     </th>
@@ -306,22 +306,22 @@
           <app-loader *ngIf="checkClaimableLoading" class="center"></app-loader>
         </button>
         <div *ngIf="checkClaimableResult != -1" class="result">
-            {{checkClaimableResult}} {{this.presale().tokenOur.symbol}}
+            {{checkClaimableResult}} {{this.presale.tokenOur.symbol}}
         </div>
         <div *ngIf="checkClaimableError != null" class="resultError">
           {{checkClaimableError}}
         </div>
     </td> 
   </tr>
-  <tr *ngIf="presale().tokenOur.isReady() && walletSigned()">
+  <tr *ngIf="presale.tokenOur.isReady() && walletSigned()">
     <th>
       &nbsp;
     </th>
     <td>
-      <button *ngIf="claimPeriodOver()"class="disabled">
+      <button *ngIf="presale.claimPeriodOver"class="disabled">
         Claim period is over
       </button>
-      <button *ngIf="!claimPeriodOver()" (click)="claim()">
+      <button *ngIf="!presale.claimPeriodOver" (click)="claim()">
         <span *ngIf="!claimLoading">Claim</span>
         <app-loader *ngIf="claimLoading" class="center"></app-loader>
       </button>

@@ -38,10 +38,10 @@ export class PoolElementComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initialized = true;
-    this.subscription = interval(Config.main.updateInterval * 1000)
+    this.subscription = interval(Config.main.poolUpdateInterval * 1000)
     .pipe(takeWhile(() => this.initialized))
     .subscribe(() => {
-      this.getAddressPoolData();
+      this.refreshData();
     });
     
     this.pool.tokenDeposit.updateTotalSupply();
@@ -77,6 +77,11 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     if(this.tokenPriceValue <= 0)
       return "-";
     return this.numberPipe.transform(this.tokenPriceValue);
+  }
+
+  refreshData(){
+    this.addressPoolData = -1;
+    this.getAddressPoolData();
   }
 
   getAddressPoolData() : AddressPoolData | null{

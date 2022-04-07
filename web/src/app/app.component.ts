@@ -59,6 +59,10 @@ export class AppComponent implements OnInit {
     return Config.main.mainMenu;
   }
 
+  public footerLinks(){
+    return Config.main.footerLinks;
+  }
+
   public token(): StateToken{
     return AppState.token;
   }

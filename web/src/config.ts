@@ -1,9 +1,10 @@
 
 export class Config {
     public static main = {
-        project: 'PIG Inu - The cutest Token in The world',
+        project: 'Pig Inu - The cutest Token in The world',
         description: 'Claim your PIG tokens!',
         updateInterval: 30,
+        poolUpdateInterval: 30,
        
         // network: 'https://rpc-mainnet.matic.quiknode.pro', // Polygon (MATIC) - Mainnet
         // explorer: 'https://polygonscan.com/', // Polygon (MATIC) - Mainnet
@@ -14,6 +15,10 @@ export class Config {
             name: "MATIC",
             symbol: "MATIC",
             decimals: 18
+        },
+        footerLinks:{
+            github: 'https://github.com/PigInu/PigInu/',
+            twitter: 'https://twitter.com/piginu_com'
         },
         mainMenu: [
             {link: "", text: "About"},
