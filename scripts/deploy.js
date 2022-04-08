@@ -31,7 +31,7 @@ async function main() {
  const poolTokenOurAllocPoint = 1;
  const poolTokenUSDAllocPoint = 2;
  const poolTokenOurUSDLPAllocPoint = 5;
- const poolStartBlock = 1; // maybe start block offest here and used as block.number + poolStartBlock
+ const poolStartBlockInMinutes = 5; 
 
  // POOL SETTINGS - TEST:
  const poolTokens = '10000000000000000000'; // 10 tokens
@@ -74,6 +74,7 @@ async function main() {
  //var liquidityManager = await deploy('LiquidityManager');
  //var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, devAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
  //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
+ const poolStartBlock = (await ethers.provider.getBlockNumber()) + (poolStartBlockInMinutes * 60);
  var pool = await deploy('Pool', tokenOur.address, burnAddress, devAddress, poolTokensPerBlock, poolStartBlock, poolTokens);
 
  createVerifyScript();
