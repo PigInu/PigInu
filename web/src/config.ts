@@ -4,7 +4,7 @@ export class Config {
         project: 'Pig Inu - The cutest Token in The world',
         description: 'Claim your PIG tokens!',
         updateInterval: 30,
-        poolUpdateInterval: 30,
+        poolUpdateInterval: 10,
        
         // network: 'https://rpc-mainnet.matic.quiknode.pro', // Polygon (MATIC) - Mainnet
         // explorer: 'https://polygonscan.com/', // Polygon (MATIC) - Mainnet

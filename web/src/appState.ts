@@ -130,7 +130,8 @@ export class StateToken {
         return this.address != "" && this.name != "" && this.symbol != "" && this.decimals != -1;
     };
     reduceDecimals(number: BigNumber) : number{
-        return Math.floor(Number(number.toBigInt() * BigInt(10)) / 10) / (10 ** this.decimals);
+        //return Math.floor(Number(number.toBigInt() * BigInt(10)) / 10) / (10 ** this.decimals);
+        return Number(number.toBigInt()) / (10 ** this.decimals);
     };
     isApproved(contractAddress: string) : Promise<boolean>{
         return new Promise(async (resolve) => {

@@ -27,6 +27,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   approveWaiting: boolean = false;
   subscription: Subscription | null = null;
   tokenPriceValue: number = -1;
+  tokenPriceValueLoaded: boolean | null = false;
   numberPipe: NumberLocalePipe;
 
   constructor(private web3ModalSevice: Web3ModalService, private poolService: PoolService) {
@@ -45,8 +46,28 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     });
     
     this.pool.tokenDeposit.updateTotalSupply();
-    this.tokenPriceValue = -2;
+    this.tokenPriceValueLoaded = null;
   }
+
+  
+  getAPR(totalAllocPoint: number, blockTime: number, tokensPerBlock: number, tokenPrice: number, poolAllocPoint: number, totalValue: number, days: number) {
+    if(typeof days == "undefined")
+      days = 365;
+    var poolWeight = poolAllocPoint / totalAllocPoint;
+    var blocksPerYear = this.getBlocksPerDays(days, blockTime);
+    var tokenRewardPerBlock = this.toEth(tokensPerBlock) * poolWeight;
+    var tokenRewardPerYear = blocksPerYear * tokenRewardPerBlock;
+    var apr = (tokenPrice * tokenRewardPerYear / totalValue) * 100;
+    return apr;
+  }
+
+  toEth(tokens: number){
+    return tokens;
+  }
+
+  getBlocksPerDays(days: number, blockTime: number) {
+    return (60 * 60 * 24 * days) / blockTime;
+   }
 
   walletSigned(): boolean{
     return AppState.walletSigned();
@@ -66,13 +87,14 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   public tokenPrice() : string{
     if(!this.pool.tokenDeposit.isReady())
       return "-";
-    if(this.pool.tokenDeposit.totalSupply >= 0 && this.tokenPriceValue == -2)
+    if(this.pool.tokenDeposit.totalSupply >= 0 && this.tokenPriceValueLoaded == null)
     {
-      this.tokenPriceValue = -1;
+      this.tokenPriceValueLoaded = false;
       this.pool.tokenDeposit.updatePrice();
     }
-    if(this.tokenPriceValue < 0 && this.pool.tokenDeposit.price >= 0){
+    if(this.tokenPriceValueLoaded == false && this.pool.tokenDeposit.price >= 0){
       this.tokenPriceValue = this.pool.tokenDeposit.price;
+      this.tokenPriceValueLoaded = true;
     }
     if(this.tokenPriceValue <= 0)
       return "-";
@@ -94,7 +116,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
       this.pool.addressPoolData().then(value => {
         if(value != null){
           that.addressPoolData = value;
-          this.tokenPriceValue = -2;
+          this.tokenPriceValueLoaded = null;
         }
       })
     }
@@ -166,6 +188,8 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   depositLoading: boolean = false;
   deposit(amountString: string | number){
     const amount = Number(amountString);
+    if(amount <= 0)
+      return;
     this.depositLoading = true;
     this.depositTransactionHash = undefined;
     this.depositError = null;
@@ -205,6 +229,8 @@ export class PoolElementComponent implements OnInit, OnDestroy {
 
   withdraw(amountString: string){
     const amount = Number(amountString);
+    if(amount <= 0)
+      return;
     this.withdrawLoading = true;
     this.withdrawTransactionHash = undefined;
     this.withdrawError = null;

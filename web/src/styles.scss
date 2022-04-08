@@ -240,7 +240,8 @@ table button{
         .modal-footer{
             border-top: 1px solid #A1C9F2;
             padding: 20px;
-            text-align: right;
+            display: flex;
+            justify-content: end;
             button{
                 cursor: pointer;
                 border: none;
@@ -248,10 +249,16 @@ table button{
                 padding: 10px 15px;
                 border-radius: 21px;
                 font-weight: bold;
-                margin-left: 10px;
+                margin: 0 0 0 10px;
                 background: linear-gradient(#FD6C82, #FD96A6);
                 &.confirm{
                     background: linear-gradient(#26B538, #92D24A);
+                }
+                app-loader{
+                    font-size: 0.08em;
+                    .bubble, .sat{
+                        background-color: #fff!important;
+                    }
                 }
             }
         }

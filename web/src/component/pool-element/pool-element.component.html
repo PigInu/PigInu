@@ -31,13 +31,19 @@
     <tr>
       <th>Your stake:</th><td>
         <div *ngIf="!walletSigned()">Wallet not connected</div>
-        <div class="green" *ngIf="walletSigned()">{{amount()| numberLocale}} {{this.pool.tokenDeposit.symbol}}</div>
+        <div class="green" *ngIf="walletSigned()">
+          {{amount()| numberLocale}} {{this.pool.tokenDeposit.symbol}}
+          <span *ngIf="tokenPriceValueLoaded == true">({{(amount() / this.tokenPriceValue) | numberLocale}} USD)</span>
+        </div>
       </td>
     </tr>
     <tr>
       <th>Earned:</th><td>
         <div *ngIf="!walletSigned()">Wallet not connected</div>
-        <div class="green" *ngIf="walletSigned() && getPendingTokens() >= 0">{{getPendingTokens() | numberLocale}} {{this.pool.tokenEarn.symbol}}</div>
+        <div class="green" *ngIf="walletSigned() && getPendingTokens() >= 0">
+          {{getPendingTokens() | numberLocale}} {{this.pool.tokenEarn.symbol}}
+          <span *ngIf="tokenPriceValueLoaded == true">({{(getPendingTokens() / this.tokenPriceValue) | numberLocale}} USD)</span>
+        </div>
       </td>
     </tr>
     <tr>

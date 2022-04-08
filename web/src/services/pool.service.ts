@@ -16,14 +16,16 @@ export class PoolService {
     "function userInfo(address)",
     "function tokensPerBlock () view returns (uint)",
     "function startBlock () view returns (uint)",
+    "function tokenEarn() view returns (address)",
     "function deposit (uint256, uint256)",
     "function withdraw  (uint256, uint256)",
     "function pendingTokens (uint256, address) view returns (uint)",
     "function users (uint256, address) view returns (tuple(uint256 amount,uint256 rewardDebt) addressPoolData)",
-    "function pools(uint256) view returns (tuple(address tokenDeposit,address tokenEarn,uint256 tokensEarnPerBlock,uint256 lastRewardBlock,uint256 accTokenPerShare,uint256 fee) pool)"
+    "function pools(uint256) view returns (tuple(address tokenDeposit,uint256 allocPoint,uint256 lastRewardBlock,uint256 accTokenPerShare,uint256 fee) pool)"
   ];
   private state : PoolServiceState = {
     token: new StateToken("/assets/token.png"),
+    tokenEarn: "",
     pools: []
   }
 
@@ -36,7 +38,10 @@ export class PoolService {
     //this.notLoggedContract.token().then((address : BigNumber) => {
     //  this.state.token.initialize(address.toHexString());
     //});    
-    this.loadData();
+    this.notLoggedContract.tokenEarn().then((tokenEarn: string) => {
+      this.getState().tokenEarn = tokenEarn;
+      this.loadData();
+    });
   }
 
   private getSignedContract() : ethers.Contract{
@@ -50,7 +55,7 @@ export class PoolService {
       const that = this;
       const idx = i;
       this.notLoggedContract.pools(idx).then((pool: PoolData) => {
-        that.state.pools[idx] = new PoolState(pool, idx, that);
+        that.state.pools[idx] = new PoolState(pool, idx, that, this.getState().tokenEarn);
       });
     }
   }
@@ -74,6 +79,7 @@ export class PoolService {
 
 export interface PoolServiceState {
   token: StateToken,
+  tokenEarn: string,
   pools: Array<PoolState>
 }
 
@@ -83,12 +89,12 @@ export class PoolState {
   public tokenDeposit : StateToken;
   public tokenEarn : StateToken;
   private service: PoolService;
-  constructor(poolData: PoolData, poolId: number,service: PoolService) {
+  constructor(poolData: PoolData, poolId: number,service: PoolService, tokenEarn: string) {
     this.data = poolData;
     this.poolId = poolId;
     this.service = service;
     this.tokenDeposit = new StateToken("/assets/token.png", poolData.tokenDeposit);
-    this.tokenEarn = new StateToken("/assets/token.png", poolData.tokenEarn);
+    this.tokenEarn = new StateToken("/assets/token.png", tokenEarn);
   }
   public feePercent() : number{
     return this.data.fee.toNumber() / 100;
@@ -135,8 +141,6 @@ export interface AddressPoolData{
 
 interface PoolData {
   tokenDeposit: string, //address
-  tokenEarn: string, //   address :  0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3
-  tokensEarnPerBlock: BigNumber, //   uint256 :  200000000000000000
   lastRewardBlock: BigNumber, //   uint256 :  0
   accTokenPerShare: BigNumber, //   uint256 :  0
   fee: BigNumber, //   uint256 :  400
