@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.0;
-import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -82,7 +81,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
     function getTokensToBeBurned() public view returns (uint256) {
-         if (startBlock > block.number) {
+        if (startBlock > block.number) {
             return 0;
         }
         uint rewardBlockNumber = getRewardBlockNumber();
@@ -90,15 +89,15 @@ contract Pool is Ownable, ReentrancyGuard {
             return tokensToBurn;
         }
         uint tokensToBurnTemp = tokensToBurn;
-        uint multiplier = getMultiplier(block.number, rewardBlockNumber);
         for (uint256 poolID = 0; poolID < pools.length; poolID++) {
             PoolInfo memory pool = pools[poolID];
-			if(pool.tokenDeposit.balanceOf(address(this)) == 0) {
+			if(getPoolSupply(poolID) == 0) {
+                uint multiplier = getMultiplier(pool.lastRewardBlock, rewardBlockNumber);
                 uint256 tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
                 tokensToBurnTemp = tokensToBurnTemp.add(tokenReward);
             }
 		}
-        return tokensToBurn;
+        return tokensToBurnTemp;
     }
 
     function getDistributedTokens() public view returns (uint256) {
