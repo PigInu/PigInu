@@ -424,7 +424,7 @@ describe("Pool tests", function () {
 		_pairAddress = await _liquidityManagerContract.callStatic.createPair(_uniswapV2RouterMockContract.address, _tokenContract.address, _stablecoinContract.address);
 
 		const Pool = await ethers.getContractFactory("Pool");
-		var block = await ethers.provider.getBlockNumber();
+		var block = (await ethers.provider.getBlockNumber()) + 6;
 		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, _developer.address, poolTokensOPerBlock, block, poolTokens);
 		await _poolContract.deployed();
 		await _tokenContract.transfer(_poolContract.address, poolTokens);
@@ -650,10 +650,12 @@ describe("Pool tests", function () {
 		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
 		await _poolContract.withdraw(poolOurId, poolTokensDeposit);
 		const rewardTokensLeft = await _poolContract.rewardTokensLeft.call({});
+		const tokensToBurn = await _poolContract.tokensToBurn.call({});
 
 		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(0);
 		await _poolContract.burnRemainingTokens();
-		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(rewardTokensLeft);
+		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(tokensToBurn);
+		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(0);
 	});
 
 	it("Should revert burning token - not finished", async function () {
