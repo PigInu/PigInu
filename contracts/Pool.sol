@@ -18,10 +18,11 @@ contract Pool is Ownable, ReentrancyGuard {
 	uint256 public tokenPerBlock;
 	address public devFeeAddress;
 	address public burnAddress;
-	bool started = false;
-	bool finished = false;
+	bool public started = false;
+	bool public finished = false;
 	uint256 public rewardTokensLeft;
 	uint256 public poolRewardAmount;
+    uint256 public tokensToBurn = 0;
 	uint256 public endRewardBlockNumber;
 	uint256 public startBlock;
 	uint256 public totalAllocPoint = 0;
@@ -65,7 +66,11 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function getMultiplier(uint256 _from, uint256 _to) public pure returns (uint256) {
-		return _to.sub(_from);
+        uint multiplier = _to.sub(_from);
+        if(multiplier == 0) {
+            return 1;
+        }
+		return multiplier;
 	}
 
 	function getRewardBlockNumber() public view returns (uint256) {
@@ -74,6 +79,43 @@ contract Pool is Ownable, ReentrancyGuard {
 		}
 		return block.number;
 	}
+
+    function getTokensToBeBurned() public view returns (uint256) {
+        if (startBlock > block.number) {
+            return 0;
+        }
+        uint rewardBlockNumber = getRewardBlockNumber();
+        if (block.number > rewardBlockNumber) {
+            return tokensToBurn;
+        }
+        uint tokensToBurnTemp = tokensToBurn;
+        for (uint256 poolID = 0; poolID < pools.length; poolID++) {
+            PoolInfo memory pool = pools[poolID];
+			if(getPoolSupply(poolID) == 0) {
+                uint multiplier = getMultiplier(pool.lastRewardBlock, rewardBlockNumber);
+                uint256 tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
+                tokensToBurnTemp = tokensToBurnTemp.add(tokenReward);
+            }
+		}
+        return tokensToBurnTemp;
+    }
+
+    function getDistributedTokens() public view returns (uint256) {
+        if (startBlock > block.number) {
+            return 0;
+        }
+        uint rewardBlockNumber = getRewardBlockNumber();
+        if (block.number > rewardBlockNumber) {
+            return poolRewardAmount;
+        }
+        uint multiplier = getMultiplier(startBlock, rewardBlockNumber);
+        return tokenPerBlock.mul(multiplier);
+    }
+
+    function getTokensToBeDistributed() public view returns (uint256) {
+        uint distributedTokens = getDistributedTokens();
+        return poolRewardAmount.sub(distributedTokens);
+    }
 
 	function getPoolSupply(uint256 _poolID) public view returns (uint256) {
 		PoolInfo storage pool = pools[_poolID];
@@ -116,15 +158,21 @@ contract Pool is Ownable, ReentrancyGuard {
 		if (block.number <= pool.lastRewardBlock || finished) {
 			return;
 		}
+        
 		uint256 blockNumber = getRewardBlockNumber();
-		uint256 lpSupply = getPoolSupply(_poolID);
-		if (lpSupply == 0 || pool.allocPoint == 0) {
+        if (pool.allocPoint == 0) {
 			pool.lastRewardBlock = blockNumber;
 			return;
 		}
-		uint256 multiplier = getMultiplier(pool.lastRewardBlock, blockNumber);
+		uint256 lpSupply = getPoolSupply(_poolID);
+        uint256 multiplier = getMultiplier(pool.lastRewardBlock, blockNumber);
 		uint256 tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-		rewardTokensLeft = rewardTokensLeft.sub(tokenReward);
+        if (lpSupply == 0) {
+            tokensToBurn = tokensToBurn.add(tokenReward);
+            pool.lastRewardBlock = blockNumber;
+			return;
+        }
+        rewardTokensLeft = rewardTokensLeft.sub(tokenReward);
 		pool.accTokenPerShare = pool.accTokenPerShare.add(tokenReward.mul(1e12).div(lpSupply));
 		pool.lastRewardBlock = blockNumber;
 	}
@@ -135,7 +183,7 @@ contract Pool is Ownable, ReentrancyGuard {
 		updateAllPools();
 		if (user.amount > 0) {
 			uint256 pending = user.amount.mul(pool.accTokenPerShare).div(1e12).sub(user.rewardDebt);
-			if (pending > 0) safeTokenTransfer(address(tokenEarn), msg.sender, pending);
+			if (pending > 0) safeTokenTransfer(msg.sender, pending);
 		}
 		if (_amount > 0) {
 			pool.tokenDeposit.safeTransferFrom(msg.sender, address(this), _amount);
@@ -157,7 +205,7 @@ contract Pool is Ownable, ReentrancyGuard {
 		require(user.amount >= _amount, "withdraw: Amount is too big");
 		updateAllPools();
 		uint256 pending = user.amount.mul(pool.accTokenPerShare).div(1e12).sub(user.rewardDebt);
-		if (pending > 0) safeTokenTransfer(address(tokenEarn), msg.sender, pending);
+		if (pending > 0) safeTokenTransfer(msg.sender, pending);
 		if (_amount > 0) {
 			user.amount = user.amount.sub(_amount);
 			pool.tokenDeposit.safeTransfer(address(msg.sender), _amount);
@@ -176,24 +224,18 @@ contract Pool is Ownable, ReentrancyGuard {
 		emit eventEmergencyWithdraw(msg.sender, _poolID, amount);
 	}
 
-	function safeTokenTransfer(
-		address _tokenAddress,
-		address _toAddress,
-		uint256 _amount
-	) internal {
-		IERC20 token = IERC20(_tokenAddress);
-		uint256 tokenBal = token.balanceOf(address(this));
-		bool transferSuccess = false;
-		if (_amount > tokenBal) transferSuccess = token.transfer(_toAddress, tokenBal);
-		else transferSuccess = token.transfer(_toAddress, _amount);
-		require(transferSuccess, "safeTokenTransfer: transfer failed");
-	}
+	function safeTokenTransfer(address _to, uint256 _amount) internal {
+        uint256 tokenBal = tokenEarn.balanceOf(address(this));
+        bool transferSuccess = false;
+        if (_amount > tokenBal) {
+            transferSuccess = tokenEarn.transfer(_to, tokenBal);
+        } else {
+            transferSuccess = tokenEarn.transfer(_to, _amount);
+        }
+        require(transferSuccess, "safeTokenTransfer: transfer failed");
+    }
 
-	function createPool(
-		uint256 _allocPoint,
-		IERC20 _lpToken,
-		uint16 _depositFeeBP
-	) public onlyOwner {
+	function createPool(uint256 _allocPoint, IERC20 _lpToken, uint16 _depositFeeBP) public onlyOwner {
 		uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
 		totalAllocPoint = totalAllocPoint.add(_allocPoint);
 		pools.push(PoolInfo({ tokenDeposit: _lpToken, allocPoint: _allocPoint, lastRewardBlock: lastRewardBlock, accTokenPerShare: 0, feeDeposit: _depositFeeBP }));
@@ -207,7 +249,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	function burnRemainingTokens() external onlyOwner {
 		require(finished, "burnRemainingTokens: not yet finished");
 		require(rewardTokensLeft > 0, "burnRemainingTokens: no tokens to burn");
-		tokenEarn.safeTransfer(burnAddress, rewardTokensLeft);
+		tokenEarn.safeTransfer(burnAddress, tokensToBurn);
 	}
 
 	function setDevFeeAddress(address _devFeeAddress) public onlyOwner {

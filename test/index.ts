@@ -424,7 +424,7 @@ describe("Pool tests", function () {
 		_pairAddress = await _liquidityManagerContract.callStatic.createPair(_uniswapV2RouterMockContract.address, _tokenContract.address, _stablecoinContract.address);
 
 		const Pool = await ethers.getContractFactory("Pool");
-		var block = await ethers.provider.getBlockNumber();
+		var block = (await ethers.provider.getBlockNumber()) + 6;
 		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, _developer.address, poolTokensOPerBlock, block, poolTokens);
 		await _poolContract.deployed();
 		await _tokenContract.transfer(_poolContract.address, poolTokens);
@@ -546,7 +546,6 @@ describe("Pool tests", function () {
 		const preBlockNumber = await ethers.provider.getBlockNumber();
 		await ethers.provider.send("evm_mine", []);
 
-		//await ethers.provider.send("hardhat_mine", ["0x1312D00"]);
 		const pendingTokensOurs = await _poolContract.pendingTokens(poolOurId, _owner.address);
 		const pendingTokensUSDs = await _poolContract.pendingTokens(poolUSDId, _owner.address);
 
@@ -575,7 +574,6 @@ describe("Pool tests", function () {
 		const preBlockNumber = await ethers.provider.getBlockNumber();
 		await ethers.provider.send("evm_mine", []);
 
-		//await ethers.provider.send("hardhat_mine", ["0x1312D00"]);
 		const pendingTokensOurs = await _poolContract.pendingTokens(poolOurId, _owner.address);
 		const pendingTokensUSDs = await _poolContract.pendingTokens(poolUSDId, _owner.address);
 
@@ -641,22 +639,47 @@ describe("Pool tests", function () {
 		const timeInBlocks = BigNumber.from(endRewardBlockNumber).sub(preBlockNumber);
 		const timeInBlocksHex = timeInBlocks.toHexString().replace(/0x0+/, "0x");
 
-		const sumPoolsAllocPoints = poolTokensAllocPoints.reduce(function (a, b) {
-			return a + b;
-		}, 0);
-		const tokenRewardPerBlock = BigNumber.from(poolTokensOPerBlock).mul(poolTokensOurAllocPoint).div(sumPoolsAllocPoints);
-		const totalReward = tokenRewardPerBlock.mul(timeInBlocks);
-
 		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
 		await _poolContract.withdraw(poolOurId, poolTokensDeposit);
-		const rewardTokensLeft = await _poolContract.rewardTokensLeft.call({});
+		const tokensToBurn = await _poolContract.tokensToBurn.call({});
 
 		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(0);
 		await _poolContract.burnRemainingTokens();
-		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(rewardTokensLeft);
+		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(tokensToBurn);
+		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(0);
 	});
 
 	it("Should revert burning token - not finished", async function () {
 		await expect(_poolContract.burnRemainingTokens()).to.be.revertedWith("burnRemainingTokens: not yet finished");
+	});
+
+	it("Should return tokens to burn", async function () {
+		await ethers.provider.send("evm_mine", []);
+		let tokensToBurn = await _poolContract.getTokensToBeBurned();
+		expect(tokensToBurn).to.be.equal(0);
+
+		await ethers.provider.send("evm_mine", []);
+		tokensToBurn = await _poolContract.getTokensToBeBurned();
+		expect(tokensToBurn).to.be.equal(poolTokensOPerBlock);
+	});
+
+	it("Should return distributed tokens", async function () {
+		await ethers.provider.send("evm_mine", []);
+		let distributedTokens = await _poolContract.getDistributedTokens();
+		expect(distributedTokens).to.be.equal(0);
+
+		await ethers.provider.send("evm_mine", []);
+		distributedTokens = await _poolContract.getDistributedTokens();
+		expect(distributedTokens).to.be.equal(poolTokensOPerBlock);
+	});
+
+	it("Should return tokens to be distributed", async function () {
+		await ethers.provider.send("evm_mine", []);
+		let tokensToBeDistributed = await _poolContract.getTokensToBeDistributed();
+		expect(tokensToBeDistributed).to.be.equal(poolTokens);
+
+		await ethers.provider.send("evm_mine", []);
+		tokensToBeDistributed = await _poolContract.getTokensToBeDistributed();
+		expect(tokensToBeDistributed).to.be.equal(BigNumber.from(poolTokens).sub(poolTokensOPerBlock));
 	});
 });
