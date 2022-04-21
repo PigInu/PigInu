@@ -21,7 +21,8 @@ export class PoolService {
     "function withdraw  (uint256, uint256)",
     "function pendingTokens (uint256, address) view returns (uint)",
     "function users (uint256, address) view returns (tuple(uint256 amount,uint256 rewardDebt) addressPoolData)",
-    "function pools(uint256) view returns (tuple(address tokenDeposit,uint256 allocPoint,uint256 lastRewardBlock,uint256 accTokenPerShare,uint256 fee) pool)"
+    "function pools(uint256) view returns (tuple(address tokenDeposit,uint256 allocPoint,uint256 lastRewardBlock,uint256 accTokenPerShare,uint256 fee) pool)",
+    "function getMultiplier (uint256, uint256) view returns (uint256)",
   ];
   private state : PoolServiceState = {
     token: new StateToken("/assets/token.png"),
@@ -75,6 +76,12 @@ export class PoolService {
   users(poolId: number, address: string): Promise<AddressPoolData>{
     return this.getSignedContract().users(poolId, address);
   }
+
+  getMultiplier(from: string, to: string): Promise<BigNumber>{
+    //console.log(from + "|" + to);
+    return this.getSignedContract().getMultiplier(from, to);
+  }
+
 }
 
 export interface PoolServiceState {

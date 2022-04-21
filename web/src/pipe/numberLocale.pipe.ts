@@ -17,6 +17,8 @@ export class NumberLocalePipe implements PipeTransform {
       const digits = (10 ** maximumDigits);
       value = Math.round(value * digits) / digits;
     }
+    if(maximumDigits > 20)
+      maximumDigits = 20;
     return value?.toLocaleString(NumberLocalePipe.getLocale(),  { maximumFractionDigits: maximumDigits });
   }
 

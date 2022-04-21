@@ -254,6 +254,9 @@ table button{
                 &.confirm{
                     background: linear-gradient(#26B538, #92D24A);
                 }
+                &:disabled{
+                    background: linear-gradient(#ccc, #ddd);
+                }
                 app-loader{
                     font-size: 0.08em;
                     .bubble, .sat{

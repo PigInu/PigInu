@@ -145,15 +145,20 @@
         </th><td>
             <span *ngIf="theirToken() == ''"><app-loader></app-loader></span>
 
-            <div class="token-flex" *ngIf="presale.tokenOur.isReady() && presale.tokenTheir.isReady()">
-              Buy
-              <img src="{{presale.tokenOur.icon}}" alt="" />
-              <span><a href="{{presale.tokenOur.address | addressLink}}" target="_blank">{{presale.tokenOur.symbol}}</a></span>
-              <app-add-token-to-wallet [token]=this.presale.tokenOur></app-add-token-to-wallet>
-              for
-              <img src="{{presale.tokenTheir.icon}}" alt="" />
-              <span><a href="{{presale.tokenTheir.address | addressLink}}" target="_blank">{{presale.tokenTheir.symbol}}</a></span>
-              <app-add-token-to-wallet [token]=this.presale.tokenTheir></app-add-token-to-wallet>
+            <div *ngIf="presale.tokenOur.isReady() && presale.tokenTheir.isReady()">
+              <div class="token-flex">
+                <img src="{{presale.tokenOur.icon}}" alt="" />
+                <span><a href="{{presale.tokenOur.address | addressLink}}" target="_blank">{{presale.tokenOur.symbol}}</a></span>
+                <app-add-token-to-wallet [token]=this.presale.tokenOur></app-add-token-to-wallet>
+              </div>
+              <div class="token-for">
+                for
+              </div>
+              <div class="token-flex">
+                <img src="{{presale.tokenTheir.icon}}" alt="" />
+                <span><a href="{{presale.tokenTheir.address | addressLink}}" target="_blank">{{presale.tokenTheir.symbol}}</a></span>
+                <app-add-token-to-wallet [token]=this.presale.tokenTheir></app-add-token-to-wallet>
+              </div>
             </div>
         </td> 
     </tr>

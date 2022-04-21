@@ -274,7 +274,7 @@
         .bg{
             text-align: center;
             background: url("/assets/img/footer.jpg");
-            background-size: cover;
+            background-size: contain;
             box-sizing: border-box;
             height: 637px;
             max-height: 37vw;
@@ -283,7 +283,7 @@
                 display: flex;
                 justify-content: center;
                 gap: 14vw;
-                padding: 6vw 0 0 14vw;
+                padding: 6vw 0 0 2vw;
                 a{
                     position: relative;
                     display: inline-block;

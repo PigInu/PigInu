@@ -1,6 +1,10 @@
 :host{
     text-align: center;
     display: block;
+    .token-for{
+        color: #fff;
+        padding: 5px 20px 5px 55px;
+    }
     .grid{
         max-width: 100%;
         display: inline-grid;

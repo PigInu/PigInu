@@ -22,7 +22,9 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   private isApproved: boolean | null = null;
   private initialized: boolean = false;
   private pendingTokens: number = -1;
-  private addressPoolData: AddressPoolData | number = -1;
+  addressPoolDataLoading: number = 0;
+  private addressPoolData: AddressPoolData | null = null;
+  private multiplier: number = -1;
   approveTransactionHash: string = "";
   approveWaiting: boolean = false;
   subscription: Subscription | null = null;
@@ -44,7 +46,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     .subscribe(() => {
       this.refreshData();
     });
-    
+    this.refreshData();
     this.pool.tokenDeposit.updateTotalSupply();
     this.tokenPriceValueLoaded = null;
   }
@@ -71,6 +73,21 @@ export class PoolElementComponent implements OnInit, OnDestroy {
 
   walletSigned(): boolean{
     return AppState.walletSigned();
+  }
+
+  getMultiplier(): string{
+    //if(!this.pool.tokenDeposit.isReady() || !this.pool.tokenEarn.isReady())
+    //  return "";
+    if(this.multiplier == -1){
+      this.multiplier = -2;
+      this.poolService.getMultiplier(this.pool.tokenEarn.address, this.pool.tokenDeposit.address).then(val => {
+        console.log(val.toString());
+        //this.multiplier = val.toNumber();
+      });
+    }
+    if(this.multiplier < 0)
+      return "";
+    return this.multiplier.toLocaleString();
   }
 
   getPendingTokens() : number {
@@ -102,27 +119,26 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   }
 
   refreshData(){
-    this.addressPoolData = -1;
+    this.addressPoolDataLoading = -1;
     this.getAddressPoolData();
   }
 
   getAddressPoolData() : AddressPoolData | null{
     if(this.isApproved != true)
       return null;
-    if(this.addressPoolData == -1){
-      this.addressPoolData  = -2;
+    if(this.addressPoolDataLoading == -1){
+      this.addressPoolDataLoading = -2;
       const that = this;
       this.pool.tokenDeposit.updateBalance();
       this.pool.addressPoolData().then(value => {
         if(value != null){
           that.addressPoolData = value;
           this.tokenPriceValueLoaded = null;
+          this.addressPoolDataLoading = 0;
         }
       })
     }
-    if(this.addressPoolData < 0)
-      return null;
-    return this.addressPoolData as AddressPoolData; 
+    return this.addressPoolData; 
   }
 
   share(): number{
@@ -135,6 +151,18 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     if(this.getAddressPoolData() == null)
       return 0;
     return this.pool.tokenDeposit.reduceDecimals(this.getAddressPoolData()?.amount as ethers.BigNumber);
+  }
+
+  maxBallance(): string{
+    if(this.pool.tokenDeposit.balance < 0)
+      return "";
+    return this.pool.tokenDeposit.balance.toLocaleString("en-US",  {useGrouping: false, maximumFractionDigits: 20});
+  }
+
+  maxAmount(): string{
+    if(this.getAddressPoolData() == null)
+      return "";
+    return this.pool.tokenDeposit.reduceDecimals(this.getAddressPoolData()?.amount as ethers.BigNumber).toLocaleString("en-US",  {useGrouping: false, maximumFractionDigits: 20});
   }
 
   rewardDebt(): number{
@@ -180,6 +208,10 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     if(reloadBalance)
       this.pool.tokenDeposit.updateBalance();
     this.depositModal = !this.depositModal;
+  }
+
+  getNumberValue(value: string) : number{
+    return Number(value);
   }
 
   depositModal: boolean = false;

@@ -9,6 +9,13 @@ export class StateToken {
     symbol: string = "";
     decimals: number = -1;
     icon: string = "";
+
+    totalSupplyLoading: number = -1;
+    balanceLoading: number = -1;
+    burnedLoading: number = -1;
+    priceLoading: number = -1;
+
+
     totalSupply: number = -1;
     balance: number = -1;
     burned: number = -1;
@@ -23,6 +30,7 @@ export class StateToken {
             if(t.address == address){
                 this.icon = t.icon;
                 this.name = t.name;
+                this.symbol = t.symbol;
             }
         }
         if(address != "")
@@ -36,7 +44,8 @@ export class StateToken {
             const that = this
             if(that.name == "")
                 contract.name().then((value: string) => { that.name = value; });
-            contract.symbol().then((value: string) => { that.symbol = value; });
+            if(that.symbol == "")
+                contract.symbol().then((value: string) => { that.symbol = value; });
             contract.decimals().then((value: BigNumber) => { that.decimals = value.toNumber(); });
         }
     }
@@ -57,27 +66,28 @@ export class StateToken {
         return AppState.selectedAddress + contractAddress;
     }
     updateTotalSupply(){
-        if(this.totalSupply == -2)
+        if(this.totalSupplyLoading == -2)
             return;
         const c= this.getContract(false);
         if(c){
             const that = this;
-            that.totalSupply = -2;
+            that.totalSupplyLoading = -2;
             c.totalSupply().then((value: BigNumber) => {
                 that.totalSupply = that.reduceDecimals(value);
+                that.totalSupplyLoading = -1;
             }, (reject: any) => {
-                that.totalSupply = -1;
+                that.totalSupplyLoading = -1;
             });
         } else{
-            this.totalSupply = -1;
+            this.totalSupplyLoading = -1;
         }
     }
 
     async updatePrice(){
-        if(this.price == -2)
+        if(this.priceLoading == -2)
             return;
         if(Web3ModalService.instance){
-            this.price = -2;
+            this.priceLoading = -2;
             const c = this.getContract(false);
             const usdc = new ethers.Contract(Config.main.addressUSDToken, Config.main.tokenContractInterface, Web3ModalService.instance.notLoggedProvider);
             if(c && usdc){
@@ -86,43 +96,46 @@ export class StateToken {
                 //console.log(price);
                 //console.log(priceUsd);
                 this.price = priceUsd / price;
+                this.priceLoading = -1;
             }
         }
     }
 
     updateBalance(){
-        if(AppState.selectedAddress == null || this.balance == -2)
+        if(AppState.selectedAddress == null || this.balanceLoading == -2)
             return;
         if(Web3ModalService.instance && Web3ModalService.instance.signer){
             const that = this;
-            that.balance = -2;
+            that.balanceLoading = -2;
             const c= this.getContract(false);
             if(c){
                 c.balanceOf(AppState.selectedAddress).then((value: BigNumber) => {
                     that.balance = that.reduceDecimals(value);
+                    that.balanceLoading = -1;
                 }, (reject: any) => {
-                    that.balance = -1;
+                    that.balanceLoading = -1;
                 });
             } else{
-                that.balance = -1;
+                that.balanceLoading = -1;
             }
         }
     }
 
     updateBurned(){
-        if(this.burned == -2)
+        if(this.burnedLoading == -2)
             return;
         const c = this.getContract(false);
         if(c){
             const that = this;
-            that.burned = -2;
+            that.burnedLoading = -2;
             c.balanceOf("0x000000000000000000000000000000000000dEaD").then((value: BigNumber) => {
                 that.burned = that.reduceDecimals(value);
+                that.burnedLoading = -1;
             }, (reject: any) => {
-                that.burned = -1;
+                that.burnedLoading = -1;
             });
         }else{
-            this.burned = -1;
+            this.burnedLoading = -1;
         }
     }    
 

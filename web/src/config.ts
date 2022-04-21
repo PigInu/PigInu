@@ -3,7 +3,7 @@ export class Config {
     public static main = {
         project: 'Pig Inu - The cutest Token in The world',
         description: 'Claim your PIG tokens!',
-        updateInterval: 30,
+        updateInterval: 10, 
         poolUpdateInterval: 10,
        
         // network: 'https://rpc-mainnet.matic.quiknode.pro', // Polygon (MATIC) - Mainnet
@@ -46,16 +46,19 @@ export class Config {
         tokenAlias: [
             {
                 name: 'PIG',
+                symbol: 'PIG',
                 icon: "/assets/icons/PIG.png",
                 address: '0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3',
             }, 
             {
                 name: 'PIG-DAI LP',
+                symbol: 'PIG-DAI LP',
                 icon: "/assets/icons/PIG-DAI.png",
                 address: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
             }, 
             {
                 name: 'DAI',
+                symbol: 'DAI',
                 icon: "/assets/icons/DAI.png",
                 address: '0xF42a4429F107bD120C5E42E069FDad0AC625F615',
             },             
@@ -68,7 +71,7 @@ export class Config {
         addressToken: '0x6411f12168f6ed7375dDD38Dd68A9130a9De7f91',
         addressAirdrop: '0x86541beBa4888f306fb47bc7064314d638Cb4B14',
         addressPresale: '0x409f4779c09a76d23c63d2F6aBd819EACA8D801C',
-        addressPool: '0xF4FA5157DCE134E5c3768238BC01efD087c153D3',
+        addressPool: '0x903A155A7B3601B63dC42b476c6f8AE463eA4204',
         addressUSDToken: '0xf42a4429f107bd120c5e42e069fdad0ac625f615',
         addressLPToken: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
         airdropContractInterface: [] = [
