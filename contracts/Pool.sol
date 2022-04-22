@@ -66,11 +66,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function getMultiplier(uint256 _from, uint256 _to) public pure returns (uint256) {
-        uint multiplier = _to.sub(_from);
-        if(multiplier == 0) {
-            return 1;
-        }
-		return multiplier;
+        return _to.sub(_from);
 	}
 
 	function getRewardBlockNumber() public view returns (uint256) {
