@@ -16,4 +16,39 @@
             word-break: break-all;
         }
     }
+
+    .data{
+        font-size: min(18px, 4vw);
+        line-height: 20px;
+        display: flex;
+        margin: 20px 0 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        > div{
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            strong{
+                display:block;
+                text-transform: uppercase;
+                color: #519BE8;
+            }
+            img{
+                margin-right: 10px;
+            }
+            div{
+                text-align: left;
+            }
+            span{
+                margin-top: 5px;
+                font-size: 1.4em;
+                display: block;
+                font-weight: bold;
+            }
+            app-loader{
+                font-size: 0.05em;
+            }
+        }
+    }
 }

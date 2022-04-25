@@ -17,22 +17,28 @@ export class StateToken {
 
 
     totalSupply: number = -1;
+    totalSupplyBigNumber: BigNumber | null = null;
     balance: number = -1;
+    balanceBigNumber: BigNumber | null = null;
     burned: number = -1;
     price: number = -1;
+    lpAdresses: Array<string> | null = null;
 
     private approvedAddreses: Array<string> = new Array<string>();
     constructor(icon: string = "", address: string = ""){
-        if(icon != "")
-            this.icon  = location.protocol + "//" + location.host + icon;
         for(let i = 0; i < Config.main.tokenAlias.length; i++){
             const t = Config.main.tokenAlias[i];
             if(t.address == address){
-                this.icon = t.icon;
+                icon = t.icon;
                 this.name = t.name;
                 this.symbol = t.symbol;
+                if(t.lpAdresses)
+                    this.lpAdresses = t.lpAdresses;
+                break;
             }
         }
+        if(icon != "")
+            this.icon  = location.protocol + "//" + location.host + icon;
         if(address != "")
             this.initialize(address);
     }
@@ -74,6 +80,7 @@ export class StateToken {
             that.totalSupplyLoading = -2;
             c.totalSupply().then((value: BigNumber) => {
                 that.totalSupply = that.reduceDecimals(value);
+                this.totalSupplyBigNumber = value;
                 that.totalSupplyLoading = -1;
             }, (reject: any) => {
                 that.totalSupplyLoading = -1;
@@ -90,12 +97,55 @@ export class StateToken {
             this.priceLoading = -2;
             const c = this.getContract(false);
             const usdc = new ethers.Contract(Config.main.addressUSDToken, Config.main.tokenContractInterface, Web3ModalService.instance.notLoggedProvider);
-            if(c && usdc){
-                const price = this.reduceDecimals(await c.balanceOf(Config.main.addressLPToken) as BigNumber);
-                const priceUsd = this.reduceDecimals(await usdc.balanceOf(Config.main.addressLPToken) as BigNumber);
-                //console.log(price);
-                //console.log(priceUsd);
-                this.price = priceUsd / price;
+            if(this.lpAdresses == null){
+                if(c && usdc){
+                    const price = this.reduceDecimals(await c.balanceOf(Config.main.addressLPToken) as BigNumber);
+                    const priceUsd = this.reduceDecimals(await usdc.balanceOf(Config.main.addressLPToken) as BigNumber);
+                    //console.log(price);
+                    //console.log(priceUsd);
+                    this.price = priceUsd / price;
+                    this.priceLoading = -1;
+                }
+            } else {
+                if(this.totalSupplyBigNumber == null){
+                    this.updateTotalSupply();
+                    this.priceLoading = -1;
+                    return;
+                }
+
+                const contractA = new ethers.Contract(this.lpAdresses[0], Config.main.tokenContractInterface, Web3ModalService.instance.notLoggedProvider);
+                const contractB = new ethers.Contract(this.lpAdresses[1], Config.main.tokenContractInterface, Web3ModalService.instance.notLoggedProvider);
+
+
+
+                let balTOK1: BigNumber = BigNumber.from(1);
+                let balTOK2: BigNumber = BigNumber.from(1);
+                let balUsd: BigNumber = BigNumber.from(1);
+
+                let promises = [];
+                promises.push(contractA.balanceOf(this.address).then((res: BigNumber) => balTOK1 = res));
+                promises.push(contractB.balanceOf(this.address).then((res: BigNumber) => balTOK2 = res));
+                promises.push(usdc.balanceOf(this.address).then((res: BigNumber) => balUsd = res));
+
+                //promises.push(c.totalSupply().call().then(res => totalSupplyLP = res));
+                for (let i = 0; i < promises.length; i++) 
+                    await promises[i];
+
+                let priceTOK1: number = this.reduceDecimals(balUsd) / this.reduceDecimals(balTOK1);
+                let priceTOK2: number =  this.reduceDecimals(balUsd) / this.reduceDecimals(balTOK2);
+
+                const balTOK1mul = balTOK1.mul(this.decimals);//this.calcBN(balTOK1, decimalDiv, 'mul');
+                const balTOK2mul = balTOK2.mul(this.decimals);// = this.calcBN(balTOK2, decimalDiv, 'mul');
+
+                
+                const lpTOK1 = balTOK1mul.div(this.totalSupplyBigNumber);//this.calcBN(balTOK1mul, totalSupplyLP, 'div');
+                const lpTOK2 =  balTOK2mul.div(this.totalSupplyBigNumber);//this.calcBN(balTOK2mul, totalSupplyLP, 'div');
+
+
+                const lpTOK1USD = Number(ethers.utils.formatEther(lpTOK1)) * priceTOK1;
+                const lpTOK2USD = Number(ethers.utils.formatEther(lpTOK2)) * priceTOK2;
+                this.price = lpTOK1USD + lpTOK2USD;
+
                 this.priceLoading = -1;
             }
         }
@@ -110,6 +160,7 @@ export class StateToken {
             const c= this.getContract(false);
             if(c){
                 c.balanceOf(AppState.selectedAddress).then((value: BigNumber) => {
+                    that.balanceBigNumber = value;
                     that.balance = that.reduceDecimals(value);
                     that.balanceLoading = -1;
                 }, (reject: any) => {
@@ -129,6 +180,7 @@ export class StateToken {
             const that = this;
             that.burnedLoading = -2;
             c.balanceOf("0x000000000000000000000000000000000000dEaD").then((value: BigNumber) => {
+                
                 that.burned = that.reduceDecimals(value);
                 that.burnedLoading = -1;
             }, (reject: any) => {

@@ -12,6 +12,7 @@ import { PoolComponent } from 'src/pages/pool/pool.component';
 import { PresaleComponent } from 'src/pages/presale/presale.component';
 import { WhitepaperComponent } from 'src/pages/whitepaper/whitepaper.component';
 import { AddressLinkPipe } from 'src/pipe/addressLink.pipe';
+import { BigNumberLocalePipe } from 'src/pipe/BigNumberLocale.pipe';
 import { DateTimeLocalePipe } from 'src/pipe/dateTimeLocale.pipe';
 import { NumberLocalePipe } from 'src/pipe/numberLocale.pipe';
 import { TransactionLinkPipe } from 'src/pipe/transactionLink.pipe';
@@ -35,6 +36,7 @@ import { AppComponent } from './app.component';
     AddressLinkPipe,
     NumberLocalePipe,
     DateTimeLocalePipe,
+    BigNumberLocalePipe,
     OnlyNumbers
    ],
   imports: [

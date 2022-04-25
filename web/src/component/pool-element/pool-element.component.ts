@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { AppState } from 'src/appState';
 import { Config } from 'src/config';
+import { BigNumberLocalePipe } from 'src/pipe/BigNumberLocale.pipe';
 import { NumberLocalePipe } from 'src/pipe/numberLocale.pipe';
 import { AddressPoolData, PoolService, PoolState } from 'src/services/pool.service';
 import { Web3ModalService } from 'src/services/web3-modal.service';
@@ -31,10 +32,13 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   tokenPriceValue: number = -1;
   tokenPriceValueLoaded: boolean | null = false;
   numberPipe: NumberLocalePipe;
+  bigNumberPipe: BigNumberLocalePipe;
 
   constructor(private web3ModalSevice: Web3ModalService, private poolService: PoolService) {
     this.numberPipe = new NumberLocalePipe();
-   }
+    this.bigNumberPipe = new BigNumberLocalePipe();
+  }
+
   ngOnDestroy(): void {
     this.initialized = false;
   }
@@ -78,10 +82,11 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   getMultiplier(): string{
     //if(!this.pool.tokenDeposit.isReady() || !this.pool.tokenEarn.isReady())
     //  return "";
+    return "";
     if(this.multiplier == -1){
       this.multiplier = -2;
       this.poolService.getMultiplier(this.pool.tokenEarn.address, this.pool.tokenDeposit.address).then(val => {
-        console.log(val.toString());
+        //console.log(val.toString());
         //this.multiplier = val.toNumber();
       });
     }
@@ -153,16 +158,13 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     return this.pool.tokenDeposit.reduceDecimals(this.getAddressPoolData()?.amount as ethers.BigNumber);
   }
 
-  maxBallance(): string{
-    if(this.pool.tokenDeposit.balance < 0)
-      return "";
-    return this.pool.tokenDeposit.balance.toLocaleString("en-US",  {useGrouping: false, maximumFractionDigits: 20});
+  getBigNumberValue(value: BigNumber | null, decimals: number){
+    return this.bigNumberPipe.transform(value, decimals, false);
   }
 
-  maxAmount(): string{
-    if(this.getAddressPoolData() == null)
-      return "";
-    return this.pool.tokenDeposit.reduceDecimals(this.getAddressPoolData()?.amount as ethers.BigNumber).toLocaleString("en-US",  {useGrouping: false, maximumFractionDigits: 20});
+  amountBigNumber(): BigNumber | null{
+    const ret = this.getAddressPoolData()?.amount;
+    return ret ? ret : null;
   }
 
   rewardDebt(): number{

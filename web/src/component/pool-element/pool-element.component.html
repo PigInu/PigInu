@@ -128,10 +128,10 @@
       <span class="close" (click)="toogleDepositModal()">⨯</span>
     </div>
     <div class="modal-body">
-      <div class="avaliable" *ngIf="walletSigned() && pool.tokenDeposit.balance >= 0">Avaliable: <strong>{{pool.tokenDeposit.balance | numberLocale}}</strong> {{pool.tokenDeposit.name}}</div>
+      <div class="avaliable" *ngIf="walletSigned() && pool.tokenDeposit.balance >= 0">Avaliable: <strong>{{pool.tokenDeposit.balanceBigNumber | BigNumberLocale : pool.tokenDeposit.decimals : true : false}}</strong> {{pool.tokenDeposit.name}}</div>
       <span class="inputWrap inputWrapMax">
         <input onlyNumbers #depositInput [allowDecimals]="true"  value="" /> 
-        <div class="max" (click)="depositInput.value = maxBallance();">MAX</div>
+        <div class="max" (click)="depositInput.value = getBigNumberValue(pool.tokenDeposit.balanceBigNumber,  pool.tokenDeposit.decimals);">MAX</div>
         <span>{{pool.tokenDeposit.name}}</span>
       </span> 
     </div>
@@ -152,10 +152,10 @@
       <span class="close" (click)="toogleWithdrawModal()">⨯</span>
     </div>
     <div class="modal-body">
-      <div class="avaliable" *ngIf="walletSigned()">Avaliable: <strong>{{amount() | numberLocale}}</strong> {{pool.tokenDeposit.name}}</div>
+      <div class="avaliable" *ngIf="walletSigned()">Avaliable: <strong>{{amountBigNumber() | BigNumberLocale : pool.tokenDeposit.decimals : true : false}}</strong> {{pool.tokenDeposit.name}}</div>
       <span class="inputWrap inputWrapMax">
         <input onlyNumbers #withdrawInput [allowDecimals]="true"  value="" /> 
-        <div class="max" (click)="withdrawInput.value =  maxAmount();">MAX</div>
+        <div class="max" (click)="withdrawInput.value =  getBigNumberValue(amountBigNumber(),  pool.tokenDeposit.decimals);">MAX</div>
         <span>{{pool.tokenEarn.name}}</span>
       </span> 
     </div>

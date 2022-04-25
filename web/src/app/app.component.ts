@@ -68,15 +68,11 @@ export class AppComponent implements OnInit {
   }
 
   public buyTokenLink(): string{
-    if(Config.main.mainMenu.length >= 2 && Config.main.mainMenu[1].items)
-      return Config.main.mainMenu[1].items[0].href;
-    return "";
+    return Config.main.headerLinks.buyToken;
   }
 
   public buyLiguidLink(): string{
-    if(Config.main.mainMenu.length >= 2 && Config.main.mainMenu[1].items)
-      return Config.main.mainMenu[1].items[1].href;
-    return "";
+    return Config.main.headerLinks.buyLiguidity;
   }
 
   public tokenPrice() : string{

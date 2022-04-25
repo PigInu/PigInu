@@ -1,5 +1,39 @@
 
 <h1>Staking pools</h1>
+<div class="data">
+  <div>
+      <img src="/assets/img/graph.png" />
+      <div>
+          <strong>Distributed Tokens</strong>
+          <div>
+              <span *ngIf="!distributedTokens || !tokenInstance().isReady()"><app-loader></app-loader></span>
+              <span *ngIf="distributedTokens && tokenInstance().isReady()">{{distributedTokens | BigNumberLocale : tokenInstance().decimals}} {{tokenInstance().symbol}}</span>
+          </div>
+      </div>
+  </div>
+  <div>
+    <img src="/assets/img/circulating.png" />
+    <div>
+        <strong>Tokens To Be Distributed</strong>
+        <div>
+            <span *ngIf="!tokensToBeDistributed || !tokenInstance().isReady()"><app-loader></app-loader></span>
+            <span *ngIf="tokensToBeDistributed && tokenInstance().isReady()">{{tokensToBeDistributed | BigNumberLocale : tokenInstance().decimals}} {{tokenInstance().symbol}}</span>
+        </div>
+    </div>
+</div>
+  <div>
+      <img src="/assets/img/burn.png" />
+      <div>
+          <strong>Tokens To Be Burned</strong>
+          <div>
+              <span *ngIf="!tokensToBeBurned || !tokenInstance().isReady()"><app-loader></app-loader></span>
+              <span *ngIf="tokensToBeBurned && tokenInstance().isReady()">{{tokensToBeBurned | BigNumberLocale : tokenInstance().decimals}} {{tokenInstance().symbol}}</span>
+          </div>
+      </div>
+  </div>
+</div>
+
+
 <div class="bluebox">
   <table>
     <tr>
@@ -11,6 +45,8 @@
     </tr>
   </table>
 </div>
+
+
 <div *ngIf="transactionHash != ''">
   <div class="result">Transaction ID: <a href="{{transactionHash | transactionLink}}" target="_blank">{{transactionHash}}</a></div>
 </div>
