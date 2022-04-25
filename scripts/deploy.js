@@ -34,7 +34,7 @@ async function main() {
  const poolStartBlockInMinutes = 5; 
 
  // POOL SETTINGS - TEST:
- const poolTokens = '10000000000000000000'; // 10 tokens
+ const poolTokens = '200000000000000000000'; // 200 tokens
 
  // POOL SETTINGS - RELELASE:
  // const poolTokens = '2000000000000000000000000'; // 2 000 000 tokens
