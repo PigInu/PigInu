@@ -76,7 +76,7 @@ export class Config {
         addressToken: '0x6411f12168f6ed7375dDD38Dd68A9130a9De7f91',
         addressAirdrop: '0x86541beBa4888f306fb47bc7064314d638Cb4B14',
         addressPresale: '0x409f4779c09a76d23c63d2F6aBd819EACA8D801C',
-        addressPool: '0xb2D5a29a7DC79e8DB63b5aa2aBCB925d774480aa', // '0x903A155A7B3601B63dC42b476c6f8AE463eA4204'
+        addressPool: '0x49ef5424dBe9A16A6F2A60965567cfFa331C3c0a',
         addressUSDToken: '0xf42a4429f107bd120c5e42e069fdad0ac625f615',
         addressLPToken: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
         airdropContractInterface: [] = [
