@@ -23,8 +23,8 @@ contract Pool is Ownable, ReentrancyGuard {
 	uint256 public rewardTokensLeft;
 	uint256 public poolRewardAmount;
     uint256 public tokensToBurn = 0;
-	uint256 public endRewardBlockNumber;
-	uint256 public startBlock;
+	uint256 public endRewardBlockNumber = 1;
+	uint256 public startBlock = 1;
 	uint256 public totalAllocPoint = 0;
 
 	event eventDeposit(address indexed user, uint256 indexed poolID, uint256 amount);
@@ -50,7 +50,6 @@ contract Pool is Ownable, ReentrancyGuard {
 		address _burnAddress,
 		address _devFeeAddress,
 		uint256 _tokenPerBlock,
-		uint256 _startBlock,
 		uint256 _poolRewardAmount
 	) {
 		tokenEarn = _tokenEarn;
@@ -58,11 +57,7 @@ contract Pool is Ownable, ReentrancyGuard {
 		setDevFeeAddress(_devFeeAddress);
 		poolRewardAmount = _poolRewardAmount;
 		rewardTokensLeft = poolRewardAmount;
-
 		tokenPerBlock = _tokenPerBlock;
-		startBlock = _startBlock;
-		uint256 blocks = poolRewardAmount.div(_tokenPerBlock);
-		endRewardBlockNumber = _startBlock.add(blocks);
 	}
 
 	function getMultiplier(uint256 _from, uint256 _to) public pure returns (uint256) {
@@ -114,7 +109,7 @@ contract Pool is Ownable, ReentrancyGuard {
     }
 
 	function getPoolSupply(uint256 _poolID) public view returns (uint256) {
-		PoolInfo storage pool = pools[_poolID];
+		PoolInfo memory pool = pools[_poolID];
 		if (address(tokenEarn) == address(pool.tokenDeposit)) {
 			return pool.tokenDeposit.balanceOf(address(this)).sub(rewardTokensLeft);
 		}
@@ -137,7 +132,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function updateAllPools() public {
-		if (finished) {
+		if (!started || finished) {
 			return;
 		}
 		for (uint256 poolID = 0; poolID < pools.length; poolID++) {
@@ -150,8 +145,11 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function updatePool(uint256 _poolID) internal {
+		if(!started || finished) {
+			return;
+		}
 		PoolInfo storage pool = pools[_poolID];
-		if (block.number <= pool.lastRewardBlock || finished) {
+		if (block.number <= pool.lastRewardBlock) {
 			return;
 		}
         
@@ -237,7 +235,14 @@ contract Pool is Ownable, ReentrancyGuard {
 		pools.push(PoolInfo({ tokenDeposit: _lpToken, allocPoint: _allocPoint, lastRewardBlock: lastRewardBlock, accTokenPerShare: 0, feeDeposit: _depositFeeBP }));
 	}
 
-	function start() public onlyOwner {
+	function start(uint256 _offsetInBlockNumber) public onlyOwner {
+		require(!finished, "start: already started");
+		startBlock = block.number.add(_offsetInBlockNumber);
+		uint256 blocks = poolRewardAmount.div(tokenPerBlock);
+		endRewardBlockNumber = startBlock.add(blocks);
+		for (uint256 poolID = 0; poolID < pools.length; poolID++) {
+			pools[poolID].lastRewardBlock = startBlock;
+		}
 		updateAllPools();
 		started = true;
 	}

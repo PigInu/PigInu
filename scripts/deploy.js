@@ -31,7 +31,7 @@ async function main() {
  const poolTokenOurAllocPoint = 1;
  const poolTokenUSDAllocPoint = 2;
  const poolTokenOurUSDLPAllocPoint = 5;
- const poolStartBlockInMinutes = 5; 
+ const poolStartOffsetBlockNumber = 100; 
 
  // POOL SETTINGS - TEST:
  const poolTokens = '200000000000000000000'; // 200 tokens
@@ -74,8 +74,7 @@ async function main() {
  //var liquidityManager = await deploy('LiquidityManager');
  //var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, devAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
  //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
- const poolStartBlock = (await ethers.provider.getBlockNumber()) + (poolStartBlockInMinutes * 60);
- var pool = await deploy('Pool', tokenOur.address, burnAddress, devAddress, poolTokensPerBlock, poolStartBlock, poolTokens);
+ var pool = await deploy('Pool', tokenOur.address, burnAddress, devAddress, poolTokensPerBlock, poolTokens);
 
  createVerifyScript();
  getTotalCost();
@@ -128,6 +127,9 @@ async function main() {
  await runFunction(pool, 'createPool', poolTokenOurUSDLPAllocPoint, tokenOurUSDLPAddress,  0); // Our-BUSD -> Our
  console.log('TokenOur - transfer:');
  await runFunction(tokenOur, 'transfer', pool.address, poolTokens);
+ console.log('Pool - start:');
+ await runFunction(pool, 'start', poolStartOffsetBlockNumber);
+
 
  // SUMMARY:
  getTotalCost();
