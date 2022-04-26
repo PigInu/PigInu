@@ -236,7 +236,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function start(uint256 _offsetInBlockNumber) public onlyOwner {
-		require(!finished, "start: already started");
+		require(!started, "start: already started");
 		startBlock = block.number.add(_offsetInBlockNumber);
 		uint256 blocks = poolRewardAmount.div(tokenPerBlock);
 		endRewardBlockNumber = startBlock.add(blocks);
