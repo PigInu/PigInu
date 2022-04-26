@@ -424,8 +424,7 @@ describe("Pool tests", function () {
 		_pairAddress = await _liquidityManagerContract.callStatic.createPair(_uniswapV2RouterMockContract.address, _tokenContract.address, _stablecoinContract.address);
 
 		const Pool = await ethers.getContractFactory("Pool");
-		var block = (await ethers.provider.getBlockNumber()) + 6;
-		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, _developer.address, poolTokensOPerBlock, block, poolTokens);
+		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, _developer.address, poolTokensOPerBlock, poolTokens);
 		await _poolContract.deployed();
 		await _tokenContract.transfer(_poolContract.address, poolTokens);
 
@@ -436,7 +435,7 @@ describe("Pool tests", function () {
 		await ethers.provider.send("evm_mine", []);
 		await ethers.provider.send("evm_setAutomine", [true]);
 
-		await _poolContract.start();
+		await _poolContract.start(2);
 
 		tokenOwnerStartBalance = await _tokenContract.balanceOf(_owner.address);
 		stableOwnerStartBalance = await _stablecoinContract.balanceOf(_owner.address);
@@ -655,6 +654,7 @@ describe("Pool tests", function () {
 
 	it("Should return tokens to burn", async function () {
 		await ethers.provider.send("evm_mine", []);
+		await ethers.provider.send("evm_mine", []);
 		let tokensToBurn = await _poolContract.getTokensToBeBurned();
 		expect(tokensToBurn).to.be.equal(0);
 
@@ -665,6 +665,7 @@ describe("Pool tests", function () {
 
 	it("Should return distributed tokens", async function () {
 		await ethers.provider.send("evm_mine", []);
+		await ethers.provider.send("evm_mine", []);
 		let distributedTokens = await _poolContract.getDistributedTokens();
 		expect(distributedTokens).to.be.equal(0);
 
@@ -673,7 +674,8 @@ describe("Pool tests", function () {
 		expect(distributedTokens).to.be.equal(poolTokensOPerBlock);
 	});
 
-	it("Should return tokens to be distributed", async function () {
+	it("Should return tokens to be distribute", async function () {
+		await ethers.provider.send("evm_mine", []);
 		await ethers.provider.send("evm_mine", []);
 		let tokensToBeDistributed = await _poolContract.getTokensToBeDistributed();
 		expect(tokensToBeDistributed).to.be.equal(poolTokens);
