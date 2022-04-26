@@ -31,7 +31,7 @@ async function main() {
  const poolTokenOurAllocPoint = 1;
  const poolTokenUSDAllocPoint = 2;
  const poolTokenOurUSDLPAllocPoint = 5;
- const poolStartOffsetBlockNumber = 100; 
+ //const poolStartOffsetBlockNumber = 100; 
 
  // POOL SETTINGS - TEST:
  const poolTokens = '200000000000000000000'; // 200 tokens
@@ -128,7 +128,7 @@ async function main() {
  console.log('TokenOur - transfer:');
  await runFunction(tokenOur, 'transfer', pool.address, poolTokens);
  console.log('Pool - start:');
- await runFunction(pool, 'start', poolStartOffsetBlockNumber);
+ //await runFunction(pool, 'start', poolStartOffsetBlockNumber);
 
 
  // SUMMARY:
