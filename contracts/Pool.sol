@@ -72,7 +72,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
     function getTokensToBeBurned() public view returns (uint256) {
-        if (startBlock > block.number) {
+        if (!started || startBlock > block.number) {
             return 0;
         }
         uint rewardBlockNumber = getRewardBlockNumber();
@@ -92,7 +92,7 @@ contract Pool is Ownable, ReentrancyGuard {
     }
 
     function getDistributedTokens() public view returns (uint256) {
-        if (startBlock > block.number) {
+        if (!started || startBlock > block.number) {
             return 0;
         }
         uint rewardBlockNumber = getRewardBlockNumber();
