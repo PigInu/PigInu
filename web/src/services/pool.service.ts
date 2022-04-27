@@ -166,4 +166,5 @@ interface PoolData {
   lastRewardBlock: BigNumber, //   uint256 :  0
   accTokenPerShare: BigNumber, //   uint256 :  0
   fee: BigNumber, //   uint256 :  400
+  allocPoint: BigNumber
 }

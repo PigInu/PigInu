@@ -22,7 +22,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
 
   private isApproved: boolean | null = null;
   private initialized: boolean = false;
-  private pendingTokens: number = -1;
+  pendingTokens: number = -1;
   addressPoolDataLoading: number = 0;
   private addressPoolData: AddressPoolData | null = null;
   private multiplier: number = -1;
@@ -94,17 +94,6 @@ export class PoolElementComponent implements OnInit, OnDestroy {
       return "";
     return this.multiplier.toLocaleString();
   }
-
-  getPendingTokens() : number {
-    if(this.pendingTokens == -1)
-    {
-      this.pendingTokens = -2;
-      this.pool.pendingTokens().then(val => {
-        this.pendingTokens = val;
-      });
-    }
-    return this.pendingTokens;
-  }
   
   public tokenPrice() : string{
     if(!this.pool.tokenDeposit.isReady())
@@ -126,6 +115,9 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   refreshData(){
     this.addressPoolDataLoading = -1;
     this.getAddressPoolData();
+    this.pool.pendingTokens().then(val => {
+      this.pendingTokens = val;
+    });
   }
 
   getAddressPoolData() : AddressPoolData | null{
@@ -222,7 +214,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   depositLoading: boolean = false;
   deposit(amountString: string | number){
     const amount = Number(amountString);
-    if(amount <= 0)
+    if(amount < 0)
       return;
     this.depositLoading = true;
     this.depositTransactionHash = undefined;
@@ -258,7 +250,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   }
 
   harvest(){
-    this.deposit(0);
+    this.deposit('0');
 }
 
   withdraw(amountString: string){

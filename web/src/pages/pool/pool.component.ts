@@ -20,13 +20,15 @@ export class PoolComponent implements OnInit, OnDestroy {
   public poolServiceState: PoolServiceState;
 
   subscription: Subscription | null = null;
+  public totalEmision: BigNumber | null = null;
   public tokensToBeBurned: BigNumber | null = null;
   public distributedTokens: BigNumber | null = null;
+  public distributedTokensValue: BigNumber | null = null;
+
   public tokensToBeDistributed: BigNumber | null = null;
 
   constructor(private poolService: PoolService) { 
     this.poolServiceState = this.poolService.getState();
-    console.log(this.poolServiceState.token.decimals);
   }
 
   ngOnInit() {
@@ -48,14 +50,28 @@ export class PoolComponent implements OnInit, OnDestroy {
   refreshData(){
     this.poolService.getDistributedTokens().then(value => {
       this.distributedTokens = value;
+      this.calcValues();
     });
     this.poolService.getTokensToBeDistributed().then(value => {
       this.tokensToBeDistributed = value;
+      this.calcValues();
     });
     this.poolService.getTokensToBeBurned().then(value => {
       this.tokensToBeBurned = value;
+      this.calcValues();
     });
   }
+
+  calcValues(){
+    if(this.distributedTokens == null || this.tokensToBeBurned == null)
+      return;
+    this.distributedTokensValue = this.distributedTokens.sub(this.tokensToBeBurned);
+    
+    if(this.tokensToBeDistributed == null)
+      return;
+    this.totalEmision = this.distributedTokens.add(this.tokensToBeBurned).add(this.tokensToBeDistributed);
+  }
+
   tokenInstance(): StateToken{
     return AppState.token;
   }

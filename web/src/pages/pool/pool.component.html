@@ -2,12 +2,22 @@
 <h1>Staking pools</h1>
 <div class="data">
   <div>
+    <img src="/assets/img/graph.png" />
+    <div>
+        <strong>Total Emision</strong>
+        <div>
+            <span *ngIf="!totalEmision || !tokenInstance().isReady()"><app-loader></app-loader></span>
+            <span *ngIf="totalEmision && tokenInstance().isReady()">{{totalEmision | BigNumberLocale : tokenInstance().decimals}} {{tokenInstance().symbol}}</span>
+        </div>
+    </div>
+  </div>
+  <div>
       <img src="/assets/img/graph.png" />
       <div>
           <strong>Distributed Tokens</strong>
           <div>
-              <span *ngIf="!distributedTokens || !tokenInstance().isReady()"><app-loader></app-loader></span>
-              <span *ngIf="distributedTokens && tokenInstance().isReady()">{{distributedTokens | BigNumberLocale : tokenInstance().decimals}} {{tokenInstance().symbol}}</span>
+              <span *ngIf="!distributedTokensValue || !tokenInstance().isReady()"><app-loader></app-loader></span>
+              <span *ngIf="distributedTokensValue && tokenInstance().isReady()">{{distributedTokensValue | BigNumberLocale : tokenInstance().decimals}} {{tokenInstance().symbol}}</span>
           </div>
       </div>
   </div>

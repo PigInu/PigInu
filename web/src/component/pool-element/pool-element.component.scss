@@ -33,6 +33,14 @@
             width: min(60px, 15vw);
             height: min(60px, 15vw);
         }
+        .allocpoint{
+            background-color: #FDF5F6;
+            border: 1px solid rgba(242,132,131,1);
+            color: rgba(242,132,131,1);
+            font-size: 19px;
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
     }
     .data{
         overflow: hidden;
