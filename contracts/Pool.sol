@@ -117,6 +117,9 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function pendingTokens(uint256 _poolID, address _user) external view returns (uint256) {
+		if(!started) {
+			return 0;
+		}
 		PoolInfo storage pool = pools[_poolID];
 		UserInfo storage user = users[_poolID][_user];
 		uint256 accTokenPerShare = pool.accTokenPerShare;
