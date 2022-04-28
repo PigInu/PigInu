@@ -8,36 +8,45 @@ const confirmNum = 1;
 
 async function main() {
  // TOKEN SETTINGS:
- const tokenOurName = 'Test token';
- const tokenOurSymbol = 'TEST';
+ const tokenOurName = 'Pig Inu Token';
+ const tokenOurSymbol = 'PIG';
  const tokenOurSupply = 10000000; // 10 000 000 tokens
  const tokenOurDecimals = 18;
  const tokenOurBurnFee = 2;
  const tokenOurDevFee = 3;
- 
+
  // AIRDROP SETTINGS:
  const airdropAmount = '1000000000000000000'; // 1 token
- const airdropMinBaseCoinBalance = '1000000000000000000' // 0.1 BNB / MATIC / etc...
+ const airdropMinBaseCoinBalance = '1000000000000000000' // 1 MATIC
  const airdropTime = 900; // 15 minutes
- 
+
  // PRESALE SETTINGS:
  const presalePricePresale = '1000000000000000000'; // 1 USD
  const presalePriceLiquidity = '2000000000000000000'; // 2 USD
+
+ // PRESALE SETTINGS - TEST:
  const presaleDepositTime = '300'; // 5 minutes
  const presaleClaimTime = '300'; // 5 minutes
- 
+
+ // PRESALE SETTINGS - TEST:
+ //const presaleDepositTime = '2592000'; // 30 days
+ //const presaleClaimTime = '2592000'; // 30 days
+
  // POOL SETTINGS:
  const poolTokensPerBlock = '100000000000000000'; // 0.1 tokens / block
+
+ // POOL SETTINGS - TEST:
+ const poolTokens = '10000000000000000000'; // 10 tokens
  const poolTokenOurAllocPoint = 1;
  const poolTokenUSDAllocPoint = 2;
  const poolTokenOurUSDLPAllocPoint = 5;
- //const poolStartOffsetBlockNumber = 100; 
-
- // POOL SETTINGS - TEST:
- const poolTokens = '200000000000000000000'; // 200 tokens
+ //const poolStartOffsetBlockNumber = 100;
 
  // POOL SETTINGS - RELELASE:
- // const poolTokens = '2000000000000000000000000'; // 2 000 000 tokens
+ //const poolTokens = '2000000000000000000000000'; // 2 000 000 tokens
+ //const poolTokenOurAllocPoint = 1;
+ //const poolTokenUSDAllocPoint = 1;
+ //const poolTokenOurUSDLPAllocPoint = 1;
 
  // OTHER SETTINGS:
  const maxint = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
@@ -47,7 +56,7 @@ async function main() {
  // const routerAddress = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'; // quickswap.exchange (Polygon Mainnet)
  // const routerAddress = '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3'; // pancake.kiemtienonline360.com (BSC Testnet)
  // const routerAddress = '0x10ED43C718714eb63d5aA57B78B54704E256024E'; // pancakeswap.finance (BSC Mainnet)
- 
+
  getWelcomeMessage('Pig Inu');
  netInfo = await getNetworkInfo();
  getNetworkMessage();
@@ -92,10 +101,10 @@ async function main() {
  console.log('LiquidityManager - createPair:');
  await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
 
- // PRESALE FUNCTIONS- RELEASE:
+ // PRESALE FUNCTIONS - RELEASE:
  //console.log('Presale - depositOwn:');
  //await runFunction(presale, 'depositOwn', '7500000000000000000000000'); // 7 500 000 tokens
- 
+
  // PRESALE FUNCTIONS - TEST:
  console.log('Presale - depositOwn:');
  await runFunction(presale, 'depositOwn', '20000000000000000000'); // 20 tokens
@@ -103,11 +112,11 @@ async function main() {
  await runFunction(tokenTheir, 'approve', presale.address, maxint);
  console.log('Presale - deposit:');
  await runFunction(presale, 'deposit', '10000000000000000000'); // 10 USD
- 
+
  // AIRDROP FUNCTIONS - RELEASE:
  //console.log('TokenOur - transfer:');
  //await runFunction(tokenOur, 'transfer', airdrop.address, '500000000000000000000000'); // 500 000 tokens
- 
+
  // AIRDROP FUNCTIONS - TEST:
  console.log('TokenOur - transfer:');
  await runFunction(tokenOur, 'transfer', airdrop.address, '2000000000000000000'); // 2 tokens
@@ -127,9 +136,8 @@ async function main() {
  await runFunction(pool, 'createPool', poolTokenOurUSDLPAllocPoint, tokenOurUSDLPAddress,  0); // Our-BUSD -> Our
  console.log('TokenOur - transfer:');
  await runFunction(tokenOur, 'transfer', pool.address, poolTokens);
- console.log('Pool - start:');
+ //console.log('Pool - start:');
  //await runFunction(pool, 'start', poolStartOffsetBlockNumber);
-
 
  // SUMMARY:
  getTotalCost();
