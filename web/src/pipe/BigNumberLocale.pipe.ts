@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { BigNumber, ethers } from 'ethers';
+import { Settings } from 'http2';
 import { NumberLocalePipe } from './numberLocale.pipe';
 
 @Pipe({
@@ -42,6 +43,15 @@ export class BigNumberLocalePipe implements PipeTransform {
   {
     const input = value.toString();
     return (Math.pow(10, decimals - input.length) + input).substring(1).replace(/0+$/, "");
+  }
+
+  public static getBigNumberFromString(value: string, decimal: number): BigNumber{
+    let v = value.replace(",", ".").split(".");
+    if(v.length == 1)
+      v[1] = "";
+    v[1] += "000000000000000000000000000000000000000000000000000000000000";
+    const val = v[0] + v[1].substring(0, decimal);
+    return BigNumber.from(val);
   }
 
 }

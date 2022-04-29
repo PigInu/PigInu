@@ -41,9 +41,9 @@
     <tr>
       <th>Earned:</th><td>
         <div *ngIf="!walletSigned()">Wallet not connected</div>
-        <div class="green" *ngIf="walletSigned() && pendingTokens >= 0">
-          {{pendingTokens | numberLocale}} {{this.pool.tokenEarn.symbol}}
-          <span class="small" *ngIf="tokenPriceValue > 0">({{(pendingTokens * this.tokenPriceValue) | numberLocale}} USD)</span>
+        <div class="green" *ngIf="walletSigned() && this.pool.tokenEarn.isReady()">
+          {{pendingTokens | BigNumberLocale : this.pool.tokenEarn.decimals}} {{this.pool.tokenEarn.symbol}}
+          <span class="small" *ngIf="tokenPriceValue > 0">({{pendingTokensUsd() | numberLocale}} USD)</span>
         </div>
       </td>
     </tr>
@@ -101,7 +101,7 @@
 
           <div class="calc" *ngIf="isTokenDepositApproved() && pool.tokenDeposit.address == pool.tokenEarn.address">
             <span class="buttonWrap">
-              <button  [disabled]="pendingTokens <= 0"  (click)="compound()">
+              <button  [disabled]="!hasPendingTokens()"  (click)="compound()">
                 <span>Compound</span>
               </button>
             </span>
@@ -109,7 +109,7 @@
 
           <div class="calc" *ngIf="isTokenDepositApproved()">
             <span class="buttonWrap">
-              <button  [disabled]="pendingTokens <= 0" (click)="harvest()">
+              <button  [disabled]="!hasPendingTokens()" (click)="harvest()">
                 <span>Harvest</span>
               </button>
             </span>

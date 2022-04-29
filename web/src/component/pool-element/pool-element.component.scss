@@ -111,6 +111,13 @@
             cursor: default;
             pointer-events: none;
         }
+        app-loader{
+            ::ng-deep {
+                .bubble, .sat{
+                    background-color: #fff!important;
+                }
+            }
+        }
     }
     app-loader{
         font-size: 0.08em;

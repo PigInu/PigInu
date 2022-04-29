@@ -22,7 +22,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
 
   private isApproved: boolean | null = null;
   private initialized: boolean = false;
-  pendingTokens: number = -1;
+  pendingTokens: BigNumber | null = null;
   addressPoolDataLoading: number = 0;
   private addressPoolData: AddressPoolData | null = null;
   private multiplier: number = -1;
@@ -212,7 +212,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   depositTransactionHash: string | undefined;
   depositError: string | null = null;
   depositLoading: boolean = false;
-  deposit(amountString: string | number){
+  deposit(amountString: string){
     const amount = Number(amountString);
     if(amount < 0)
       return;
@@ -220,7 +220,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     this.depositTransactionHash = undefined;
     this.depositError = null;
     this.transactionError.emit("");
-    this.pool.deposit(amount).then(tr => {
+    this.pool.deposit(amountString).then(tr => {
       this.depositLoading = false;
       this.depositTransactionHash = tr.hash;
       this.transactionHash.emit(tr.hash);
@@ -246,12 +246,26 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   }
 
   compound(){
-      this.deposit(this.pendingTokens);
+    this.deposit(this.bigNumberPipe.transform(this.pendingTokens, this.pool.tokenDeposit.decimals));
+  }
+
+  hasPendingTokens(): boolean{
+    if(this.pendingTokens == null || this.pendingTokens == BigNumber.from(0))
+      return false;
+    return true;
+  }
+
+  pendingTokensUsd() : Number | null
+  {
+    if(!this.pendingTokens || !this.tokenPriceValueLoaded || !this.pool.tokenEarn.isReady())
+      return null;
+    const pendingTokens = Number(this.bigNumberPipe.transform(this.pendingTokens, this.pool.tokenEarn.decimals, false));
+    return pendingTokens * this.tokenPriceValue;
   }
 
   harvest(){
     this.deposit('0');
-}
+  }
 
   withdraw(amountString: string){
     const amount = Number(amountString);
@@ -262,7 +276,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     this.withdrawError = null;
     this.transactionError.emit("");
     this.withdrawModal = false;
-    this.pool.withdraw(amount).then(tr => {
+    this.pool.withdraw(amountString).then(tr => {
       this.withdrawLoading = false;
       this.withdrawTransactionHash = tr.hash;
       this.transactionHash.emit(tr.hash);

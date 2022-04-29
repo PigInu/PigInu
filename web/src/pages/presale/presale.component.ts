@@ -167,11 +167,10 @@ export class PresaleComponent implements OnInit, OnDestroy  {
   depositError: string | null = null;
   depositLoading: boolean = false;
   deposit(amountString: string){
-    const amount = Number(amountString);
     this.depositLoading = true;
     this.depositTransactionHash = undefined;
     this.depositError = null;
-    this.web3ModalSevice.presaleDeposit(amount).then(tr => {
+    this.web3ModalSevice.presaleDeposit(amountString).then(tr => {
       this.depositLoading = false;
       this.depositTransactionHash = tr.hash;
     }, (reject) => {

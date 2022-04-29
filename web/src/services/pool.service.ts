@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BigNumber, ethers } from 'ethers';
 import { AppState, StateToken } from 'src/appState';
 import { Config } from 'src/config';
+import { BigNumberLocalePipe } from 'src/pipe/BigNumberLocale.pipe';
 import { Web3ModalService } from './web3-modal.service';
 
 @Injectable({
@@ -122,24 +123,22 @@ export class PoolState {
     return this.data.fee.toNumber() / 100;
   }
 
-  deposit(amount: number): Promise<ethers.Transaction> {
-    const b = BigInt(amount * (10 ** this.tokenDeposit.decimals));
-    return this.service.deposit(this.poolId, BigNumber.from(b));
+  deposit(amount: string): Promise<ethers.Transaction> {
+    return this.service.deposit(this.poolId, BigNumberLocalePipe.getBigNumberFromString(amount, this.tokenDeposit.decimals));
   }
 
-  withdraw(amount: number): Promise<ethers.Transaction> {
-    const b = BigInt(amount * (10 ** this.tokenDeposit.decimals));
-    return this.service.withdraw(this.poolId, BigNumber.from(b));
+  withdraw(amount: string): Promise<ethers.Transaction> {
+    return this.service.withdraw(this.poolId, BigNumberLocalePipe.getBigNumberFromString(amount, this.tokenDeposit.decimals));
   }
 
-  async pendingTokens() : Promise<number>{
+  async pendingTokens() : Promise<BigNumber | null>{
     return new Promise(async (resolve) => {
       if(AppState.walletSigned() && AppState.selectedAddress != null){
         //console.log(this.poolId + "," + AppState.selectedAddress);
         const ret: BigNumber = await this.service.pendingTokens(this.poolId, AppState.selectedAddress);
-        resolve(this.tokenDeposit.reduceDecimals(ret));
+        resolve(ret);
       }
-      resolve(-1);
+      resolve(null);
     });
    }
 

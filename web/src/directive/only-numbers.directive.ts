@@ -4,6 +4,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 export class OnlyNumbers { 
 
     @Input() allowDecimals: boolean = true;
+    @Input() maxDecimals: number = 18;
     @Input() allowSign: boolean = false;
     private decimalSeparators = [",","."];
 
@@ -36,14 +37,17 @@ export class OnlyNumbers {
      * @param e
      */
     @HostListener('paste', ['$event']) onPaste(e: any) {
-
         // get and validate data from clipboard
         let value = e.clipboardData.getData('text/plain');
         this.validateValue(value);
         e.preventDefault();
     }
     @HostListener('keyup', ['$event']) OnKeyUp(e: any) {
-        this.hostElement.nativeElement.value = this.hostElement.nativeElement.value.replace(",", ".");
+        let value = this.hostElement.nativeElement.value.replace(",", ".");
+        const parts = value.split(".");
+        if(parts[1] && parts[1].length > this.maxDecimals)
+            value = parts[0] + "." + parts[1].substring(0, this.maxDecimals);
+        this.hostElement.nativeElement.value = value;
     }
     /**
      * Event handler for host's keydown event
@@ -121,13 +125,16 @@ export class OnlyNumbers {
         let firstCharacter = value.charAt(0);
         if (this.decimalSeparators.includes(firstCharacter))
             value = 0 + value;
-
+        value = value.replace(",", ".").trim();
         // when a numbers ends with a decimal separator,
         // fix it adding a zero in the end
         let lastCharacter = value.charAt(value.length-1);
         if (this.decimalSeparators.includes(lastCharacter))
             value = value + 0;
 
+        const parts = value.split(".");
+        if(parts[1] && parts[1].length > this.maxDecimals)
+            value = parts[0] + "." + parts[1].substring(0, this.maxDecimals);
         // test number with regular expression, when
         // number is invalid, replace it with a zero
         let valid: boolean = (new RegExp(regex)).test(value);

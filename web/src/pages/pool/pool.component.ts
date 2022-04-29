@@ -67,9 +67,9 @@ export class PoolComponent implements OnInit, OnDestroy {
       return;
     this.distributedTokensValue = this.distributedTokens.sub(this.tokensToBeBurned);
     
-    if(this.tokensToBeDistributed == null)
+    if(this.totalEmision != null || this.tokensToBeDistributed == null)
       return;
-    this.totalEmision = this.distributedTokens.add(this.tokensToBeBurned).add(this.tokensToBeDistributed);
+    this.totalEmision = this.distributedTokensValue.add(this.tokensToBeBurned).add(this.tokensToBeDistributed);
   }
 
   tokenInstance(): StateToken{

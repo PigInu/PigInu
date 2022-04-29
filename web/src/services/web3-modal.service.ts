@@ -5,6 +5,7 @@ import { BigNumber, Contract, ethers, providers, Signer } from 'ethers'
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { AppState } from 'src/appState';
 import { Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
+import { BigNumberLocalePipe } from 'src/pipe/BigNumberLocale.pipe';
 
 @Injectable({
   providedIn: 'root'
@@ -336,10 +337,8 @@ export class Web3ModalService {
     });
   }
 
-  presaleDeposit(amount: number): Promise<ethers.Transaction> {
-    const b = BigInt(amount * (10 ** AppState.presale.tokenTheir.decimals));
-    const bn = BigNumber.from(b);
-    console.log("deposit(" + bn.toString() + ")");
+  presaleDeposit(amountString: string): Promise<ethers.Transaction> {
+    const bn = BigNumberLocalePipe.getBigNumberFromString(amountString,  AppState.presale.tokenTheir.decimals);
     return this.presaleContract?.deposit(bn);
   }
 

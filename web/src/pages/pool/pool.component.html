@@ -4,7 +4,7 @@
   <div>
     <img src="/assets/img/graph.png" />
     <div>
-        <strong>Total Emision</strong>
+        <strong>Total Emission</strong>
         <div>
             <span *ngIf="!totalEmision || !tokenInstance().isReady()"><app-loader></app-loader></span>
             <span *ngIf="totalEmision && tokenInstance().isReady()">{{totalEmision | BigNumberLocale : tokenInstance().decimals}} {{tokenInstance().symbol}}</span>
