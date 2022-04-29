@@ -17,8 +17,13 @@ async function main() {
 
  // AIRDROP SETTINGS:
  const airdropAmount = '1000000000000000000'; // 1 token
- const airdropMinBaseCoinBalance = '1000000000000000000' // 1 MATIC
- const airdropTime = 900; // 15 minutes
+ const airdropMinBaseCoinBalance = '10000000000000000000' // 10 MATIC
+
+ // AIRDROP SETTINGS - TEST:
+ const airdropTime = '900'; // 15 minutes
+
+ // AIRDROP SETTINGS - RELEASE:
+ //const airdropTime = '2592000'; // 30 days
 
  // PRESALE SETTINGS:
  const presalePricePresale = '1000000000000000000'; // 1 USD
