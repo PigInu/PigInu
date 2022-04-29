@@ -53,6 +53,15 @@
         <span><a href="{{poolAddress() | addressLink}}" target="_blank">{{poolAddress()}}</a></span>
       </td> 
     </tr>
+    <tr>
+      <th>
+        Started: 
+      </th><td>
+        <span *ngIf="started == null || (started == true && startDate == null)"><app-loader></app-loader></span>
+        <span *ngIf="started == false">Not started</span>
+        <span *ngIf="startDate">{{startDate | dateTimeLocale}}</span>
+      </td> 
+    </tr>
   </table>
 </div>
 

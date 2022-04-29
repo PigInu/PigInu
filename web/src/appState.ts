@@ -191,6 +191,13 @@ export class StateToken {
         }
     }    
 
+    balanceOf(address: string) : Promise<BigNumber> | null{
+        const c = this.getContract(false)
+        if(c)
+            return c.balanceOf(address);
+        return null;
+    }
+
     isReady(): boolean{
         return this.address != "" && this.name != "" && this.symbol != "" && this.decimals != -1;
     };

@@ -27,6 +27,22 @@
       </td>
     </tr>
     <tr>
+      <th>APR:</th><td>
+        <app-loader *ngIf="apr() == ''" class="center"></app-loader>
+        <div *ngIf="apr() != ''"  class="green">
+          {{apr()| numberLocale}} %
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>APY:</th><td>
+        <app-loader *ngIf="apr() == ''" class="center"></app-loader>
+        <div *ngIf="apr() != ''"  class="green">
+          {{apy()| numberLocale}} %
+        </div>
+      </td>
+    </tr>
+    <tr>
       <th>Deposit fee:</th><td><div class="green">{{pool.feePercent() | numberLocale}} %</div></td>
     </tr> 
     <tr>
@@ -50,6 +66,14 @@
     <tr>
       <th>Token price:</th><td>
         <div class="green">{{tokenPrice() | numberLocale}} USD / {{this.pool.tokenDeposit.symbol}}</div>
+      </td>
+    </tr>
+    <tr>
+      <th>Total value:</th><td>
+        <div class="green" *ngIf="totalValue">
+          {{totalValue | BigNumberLocale : this.pool.tokenEarn.decimals}} {{this.pool.tokenEarn.symbol}}
+          <!-- <span class="small" *ngIf="tokenPriceValue > 0">({{pendingTokensUsd() | numberLocale}} USD)</span> -->
+        </div>
       </td>
     </tr>
     <tr class="noborder">

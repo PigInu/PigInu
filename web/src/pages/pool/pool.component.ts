@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core';
 import { BigNumber } from 'ethers';
 import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
@@ -26,6 +26,10 @@ export class PoolComponent implements OnInit, OnDestroy {
   public distributedTokensValue: BigNumber | null = null;
 
   public tokensToBeDistributed: BigNumber | null = null;
+
+  public started: Boolean | null = null;
+  public startBlock: BigNumber | null = null;
+  public startDate: number | null = null;
 
   constructor(private poolService: PoolService) { 
     this.poolServiceState = this.poolService.getState();
@@ -60,6 +64,19 @@ export class PoolComponent implements OnInit, OnDestroy {
       this.tokensToBeBurned = value;
       this.calcValues();
     });
+    if(this.started != true){
+      this.poolService.started().then(value => {
+        this.started = value;
+        if(this.started){
+          this.poolService.startBlock().then(value => {
+            this.startBlock = value;
+            this.poolService.getBlock( this.startBlock.toNumber() ).then(value => {
+              this.startDate = value.timestamp * 1000;
+            });
+          });
+        }
+      });
+    }
   }
 
   calcValues(){

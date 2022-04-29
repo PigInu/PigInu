@@ -16,7 +16,8 @@ export class PoolService {
     "function token () view returns (uint)",
     "function userInfo(address)",
     "function tokensPerBlock () view returns (uint)",
-    "function startBlock () view returns (uint)",
+    "function started () view returns (bool)",
+    "function startBlock () view returns (uint256)",
     "function tokenEarn() view returns (address)",
     "function deposit (uint256, uint256)",
     "function withdraw  (uint256, uint256)",
@@ -64,6 +65,14 @@ export class PoolService {
       });
     }
   }
+
+  started(): Promise<Boolean> {
+    return this.getSignedContract().started();
+  }
+
+  startBlock(): Promise<BigNumber> {
+    return this.getSignedContract().startBlock();
+  }
   
   deposit(poolId: number, amount: BigNumber): Promise<ethers.Transaction> {
     return this.getSignedContract().deposit(poolId, amount);
@@ -98,6 +107,9 @@ export class PoolService {
     return this.getSignedContract().getMultiplier(from, to);
   }
 
+  getBlock(blockNumber: any): Promise<any>{
+    return this.getSignedContract().provider.getBlock(blockNumber);
+  }
 }
 
 export interface PoolServiceState {

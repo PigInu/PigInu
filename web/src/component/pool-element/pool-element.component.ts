@@ -33,6 +33,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   tokenPriceValueLoaded: boolean | null = false;
   numberPipe: NumberLocalePipe;
   bigNumberPipe: BigNumberLocalePipe;
+  public totalValue: BigNumber | null = null;
 
   constructor(private web3ModalSevice: Web3ModalService, private poolService: PoolService) {
     this.numberPipe = new NumberLocalePipe();
@@ -55,6 +56,13 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     this.tokenPriceValueLoaded = null;
   }
 
+  apr(){
+    return "";
+  }
+
+  apy(){
+    return "";
+  }
   
   getAPR(totalAllocPoint: number, blockTime: number, tokensPerBlock: number, tokenPrice: number, poolAllocPoint: number, totalValue: number, days: number) {
     if(typeof days == "undefined")
@@ -118,6 +126,12 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     this.pool.pendingTokens().then(val => {
       this.pendingTokens = val;
     });
+    this.pool.pendingTokens().then(val => {
+      this.pendingTokens = val;
+    });
+    this.pool.tokenDeposit.balanceOf(this.contractAddress)?.then(value => {
+      this.totalValue = value;
+    });
   }
 
   getAddressPoolData() : AddressPoolData | null{
@@ -139,9 +153,9 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   }
 
   share(): number{
-    if(this.getAddressPoolData() == null || this.pool.tokenDeposit.balance < 0 || this.amount() <= 0)
+    if(this.getAddressPoolData() == null || this.totalValue == null || this.amount() <= 0)
       return 0;
-    return this.amount() / this.pool.tokenDeposit.balance * 100;
+    return this.amount() / this.pool.tokenDeposit.reduceDecimals(this.totalValue) * 100;
   }
 
   amount(): number{
