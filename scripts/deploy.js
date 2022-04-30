@@ -90,6 +90,7 @@ async function main() {
  //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
  var pool = await deploy('Pool', tokenOur.address, burnAddress, devAddress, poolTokensPerBlock, poolTokens);
 
+ // SUMMARY - BEFORE FUNCTIONS:
  createVerifyScript();
  getTotalCost();
 
@@ -144,7 +145,7 @@ async function main() {
  //console.log('Pool - start:');
  //await runFunction(pool, 'start', poolStartOffsetBlockNumber);
 
- // SUMMARY:
+ // SUMMARY - AFTER FUNCTIONS:
  getTotalCost();
  await getSummary();
 }
