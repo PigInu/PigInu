@@ -186,7 +186,6 @@ describe('Presale tests', function () {
 			_tokenContract.address,
 			_stablecoinContract.address,
 			_uniswapV2RouterMockContract.address,
-			_developer.address,
 			_burn.address,
 			presalePricePresale,
 			presalePriceLiquidity,
@@ -333,7 +332,7 @@ describe('Pool tests', function () {
 		await _liquidityManagerContract.deployed();
 		_pairAddress = await _liquidityManagerContract.callStatic.createPair(_uniswapV2RouterMockContract.address, _tokenContract.address, _stablecoinContract.address);
 		const Pool = await ethers.getContractFactory('Pool');
-		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, _developer.address, poolTokensOPerBlock, poolTokens);
+		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, poolTokensOPerBlock, poolTokens);
 		await _poolContract.deployed();
 		await _tokenContract.transfer(_poolContract.address, poolTokens);
 		await ethers.provider.send('evm_setAutomine', [false]);
