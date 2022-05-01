@@ -32,14 +32,14 @@ contract Presale is Ownable, ReentrancyGuard {
  mapping(address => uint) public deposited;
  mapping(address => uint) public claimed;
  mapping(address => uint) public claimable;
- event eventDeposited(address sender, uint amount);
- event eventClaimed(address sender, uint amount);
- event eventSetTokenOurAddress(address tokenAddress);
- event eventSetTokenTheirAddress(address tokenAddress);
- event eventSetTokenPricePresale(uint price);
- event eventSetTokenPriceLiquidity(uint price);
- event eventAddDevAddress(address devAddress, uint sharePercent);
- event eventBurnRemainingTokens(uint amount);
+ event eventDeposited(address indexed sender, uint indexed amount);
+ event eventClaimed(address indexed sender, uint indexed amount);
+ event eventSetTokenOurAddress(address indexed tokenAddress);
+ event eventSetTokenTheirAddress(address indexed tokenAddress);
+ event eventSetTokenPricePresale(uint indexed price);
+ event eventSetTokenPriceLiquidity(uint indexed price);
+ event eventAddDevAddress(address indexed devAddress, uint indexed sharePercent);
+ event eventBurnRemainingTokens(uint indexed amount);
  uint MAX_INT = 2**256 - 1;
  bool liquidityCreated = false;
 
@@ -151,7 +151,7 @@ contract Presale is Ownable, ReentrancyGuard {
   uint totalShare;
   for (uint i = 0; i < devWallets.length; i++) totalShare += devWallets[i].sharePercent;
   require(totalShare + _sharePercent <= 10000, 'addDevAddress: Share exceeds 100 percent');
-  devWallets.push(Wallet(_devAddress, _sharePercent));
+  devWallets.push(DevWallet(_devAddress, _sharePercent));
   emit eventAddDevAddress(_devAddress, _sharePercent);
  }
 }

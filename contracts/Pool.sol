@@ -13,13 +13,13 @@ contract Pool is Ownable, ReentrancyGuard {
 	using SafeERC20 for IERC20;
 	mapping(uint => mapping(address => UserInfo)) public users; // Info of each user that stakes tokens.
 	PoolInfo[] public pools; // Info of each user that stakes tokens.
-	IERC20 public tokenEarn;
-	uint public tokenPerBlock;
-	address public devFeeAddress;
+	DevWallet[] public devWallets;
+ IERC20 public tokenEarn;
 	address public burnAddress;
 	bool public started = false;
 	bool public finished = false;
-	uint public rewardTokensLeft;
+	uint public tokenPerBlock;
+ uint public rewardTokensLeft;
 	uint public poolRewardAmount;
  uint public tokensToBurn = 0;
 	uint public endRewardBlockNumber = 1;
@@ -28,7 +28,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	event eventDeposit(address indexed user, uint indexed poolID, uint amount);
 	event eventWithdraw(address indexed user, uint indexed poolID, uint amount);
 	event eventEmergencyWithdraw(address indexed user, uint indexed poolID, uint amount);
-	event eventSetDevFeeAddress(address indexed user, address indexed devFeeAddress);
+ event eventAddDevAddress(address indexed devAddress, uint indexed sharePercent);
 
 	struct UserInfo {
 		uint amount;
@@ -43,10 +43,14 @@ contract Pool is Ownable, ReentrancyGuard {
 		uint feeDeposit;
 	}
 
-	constructor(IERC20 _tokenEarn, address _burnAddress,	address _devFeeAddress,	uint _tokenPerBlock,	uint _poolRewardAmount) {
+ struct DevWallet {
+  address devAddress;
+  uint sharePercent;
+ }
+
+	constructor(IERC20 _tokenEarn, address _burnAddress,	uint _tokenPerBlock,	uint _poolRewardAmount) {
 		tokenEarn = _tokenEarn;
 		burnAddress = _burnAddress;
-		setDevFeeAddress(_devFeeAddress);
 		poolRewardAmount = _poolRewardAmount;
 		rewardTokensLeft = poolRewardAmount;
 		tokenPerBlock = _tokenPerBlock;
@@ -151,8 +155,9 @@ contract Pool is Ownable, ReentrancyGuard {
 			pool.tokenDeposit.safeTransferFrom(msg.sender, address(this), _amount);
 			if (pool.feeDeposit > 0) {
 				uint depositFee = _amount.mul(pool.feeDeposit).div(10000);
-				pool.tokenDeposit.safeTransfer(devFeeAddress, depositFee);
-				user.amount = user.amount.add(_amount).sub(depositFee);
+    for (uint i = 0; i < devWallets; i++)
+    require(pool.tokenDeposit.safeTransfer(devWallets[i].devAddress, depositFee * devWallets[i].sharePercent / 10000);
+    user.amount = user.amount.add(_amount).sub(depositFee);
 			} else user.amount = user.amount.add(_amount);
 		}
 		user.rewardDebt = user.amount.mul(pool.accTokenPerShare).div(1e12);
@@ -214,8 +219,11 @@ contract Pool is Ownable, ReentrancyGuard {
 		tokenEarn.safeTransfer(burnAddress, tokensToBurn);
 	}
 
-	function setDevFeeAddress(address _devFeeAddress) public onlyOwner {
-		devFeeAddress = _devFeeAddress;
-		emit eventSetDevFeeAddress(msg.sender, _devFeeAddress);
-	}
+ function addDevAddress(address _devAddress, uint _sharePercent) public onlyOwner {
+  uint totalShare;
+  for (uint i = 0; i < devWallets.length; i++) totalShare += devWallets[i].sharePercent;
+  require(totalShare + _sharePercent <= 10000, 'addDevAddress: Share exceeds 100 percent');
+  devWallets.push(DevWallet(_devAddress, _sharePercent));
+  emit eventAddDevAddress(_devAddress, _sharePercent);
+ }
 }
