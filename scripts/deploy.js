@@ -32,12 +32,22 @@ async function main() {
  // PRESALE SETTINGS - TEST:
  const presaleDepositTime = '300'; // 5 minutes
  const presaleClaimTime = '300'; // 5 minutes
+ const presaleDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const presaleDevAddress1Share = '4500';
+ const presaleDevAddress2 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
+ const presaleDevAddress2Share = '4500';
+ const presaleDevAddress3 = '0xF3E0B0b7A57C70CB2876Aa6C763eB2668fC8BF20';
+ const presaleDevAddress3Share = '1000';
 
  // PRESALE SETTINGS - TEST:
  //const presaleDepositTime = '2592000'; // 30 days
  //const presaleClaimTime = '2592000'; // 30 days
 
  // POOL SETTINGS:
+ const poolDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const poolDevAddress1Share = '5000';
+ const poolDevAddress2 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
+ const poolDevAddress2Share = '5000';
  const poolTokensPerBlock = '100000000000000000'; // 0.1 tokens / block
 
  // POOL SETTINGS - TEST:
@@ -56,12 +66,6 @@ async function main() {
  // OTHER SETTINGS:
  const maxint = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
  const burnAddress = '0x000000000000000000000000000000000000dEaD';
- const devAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
- const devAddress1Share = '4500';
- const devAddress2 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
- const devAddress2Share = '4500';
- const devAddress3 = '0xF3E0B0b7A57C70CB2876Aa6C763eB2668fC8BF20';
- const devAddress3Share = '1000';
  const routerAddress = '0x8954AfA98594b838bda56FE4C12a09D7739D179b'; // quickswap.exchange (Polygon Testnet)
  // const routerAddress = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'; // quickswap.exchange (Polygon Mainnet)
  // const routerAddress = '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3'; // pancake.kiemtienonline360.com (BSC Testnet)
@@ -93,7 +97,7 @@ async function main() {
  //var liquidityManager = await deploy('LiquidityManager');
  var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
  //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
- var pool = await deploy('Pool', tokenOur.address, burnAddress, devAddress1, poolTokensPerBlock, poolTokens);
+ var pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
 
  // SUMMARY - BEFORE FUNCTIONS:
  createVerifyScript();
@@ -115,11 +119,11 @@ async function main() {
 
 // PRESALE FUNCTIONS:
  console.log('Presale - addDevAddress:');
- await runFunction(presale, 'addDevAddress', devAddress1, devAddress1Share);
+ await runFunction(presale, 'addDevAddress', presaleDevAddress1, presaleDevAddress1Share);
  console.log('Presale - addDevAddress:');
- await runFunction(presale, 'addDevAddress', devAddress2, devAddress2Share);
+ await runFunction(presale, 'addDevAddress', presaleDevAddress2, presaleDevAddress2Share);
  console.log('Presale - addDevAddress:');
- await runFunction(presale, 'addDevAddress', devAddress3, devAddress3Share);
+ await runFunction(presale, 'addDevAddress', presaleDevAddress3, presaleDevAddress3Share);
 
  // PRESALE FUNCTIONS - RELEASE:
  //console.log('Presale - depositOwn:');
@@ -148,6 +152,10 @@ async function main() {
  // POOL FUNCTIONS:
  console.log('LiquidityManager - getPairAddress:');
  var tokenOurUSDLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
+ console.log('Pool - addDevAddress:');
+ await runFunction(pool, 'addDevAddress', poolDevAddress1, poolDevAddress1Share);
+ console.log('Pool - addDevAddress:');
+ await runFunction(pool, 'addDevAddress', poolDevAddress2, poolDevAddress2Share);
  console.log('Pair address: ' + tokenOurUSDLPAddress);
  console.log('Pool - createPool - tokenOur:');
  await runFunction(pool, 'createPool', poolTokenOurAllocPoint, tokenOur.address,  0); // Our -> Our
