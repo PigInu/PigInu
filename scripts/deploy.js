@@ -56,7 +56,12 @@ async function main() {
  // OTHER SETTINGS:
  const maxint = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
  const burnAddress = '0x000000000000000000000000000000000000dEaD';
- const devAddress = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const devAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const devAddress1Share = '4500';
+ const devAddress2 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
+ const devAddress2Share = '4500';
+ const devAddress3 = '0xF3E0B0b7A57C70CB2876Aa6C763eB2668fC8BF20';
+ const devAddress3Share = '1000';
  const routerAddress = '0x8954AfA98594b838bda56FE4C12a09D7739D179b'; // quickswap.exchange (Polygon Testnet)
  // const routerAddress = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'; // quickswap.exchange (Polygon Mainnet)
  // const routerAddress = '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3'; // pancake.kiemtienonline360.com (BSC Testnet)
@@ -86,9 +91,9 @@ async function main() {
  // CONTRACT DEPLOY - RELEASE:
  //var tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
  //var liquidityManager = await deploy('LiquidityManager');
- //var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, devAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
+ var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
  //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
- var pool = await deploy('Pool', tokenOur.address, burnAddress, devAddress, poolTokensPerBlock, poolTokens);
+ var pool = await deploy('Pool', tokenOur.address, burnAddress, devAddress1, poolTokensPerBlock, poolTokens);
 
  // SUMMARY - BEFORE FUNCTIONS:
  createVerifyScript();
@@ -106,6 +111,15 @@ async function main() {
  // LIQUIDITY MANAGER FUNCTIONS:
  console.log('LiquidityManager - createPair:');
  await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
+*/
+
+// PRESALE FUNCTIONS:
+ console.log('Presale - addDevAddress:');
+ await runFunction(presale, 'addDevAddress', devAddress1, devAddress1Share);
+ console.log('Presale - addDevAddress:');
+ await runFunction(presale, 'addDevAddress', devAddress2, devAddress2Share);
+ console.log('Presale - addDevAddress:');
+ await runFunction(presale, 'addDevAddress', devAddress3, devAddress3Share);
 
  // PRESALE FUNCTIONS - RELEASE:
  //console.log('Presale - depositOwn:');
@@ -119,6 +133,7 @@ async function main() {
  console.log('Presale - deposit:');
  await runFunction(presale, 'deposit', '10000000000000000000'); // 10 USD
 
+/*
  // AIRDROP FUNCTIONS - RELEASE:
  //console.log('TokenOur - transfer:');
  //await runFunction(tokenOur, 'transfer', airdrop.address, '500000000000000000000000'); // 500 000 tokens
@@ -300,9 +315,4 @@ async function runFunction() {
  } else return res;
 }
 
-main()
- .then(() => process.exit(0))
- .catch((error) => {
-  console.error(error);
-  process.exit(1);
- });
+main().then(() => process.exit(0)).catch((error) => { console.error(error); process.exit(1); });

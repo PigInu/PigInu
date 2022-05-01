@@ -69,8 +69,6 @@ contract Presale is Ownable, ReentrancyGuard {
   uint toClaim = (_amount * 10**tokenTheir.decimals()) / tokenPricePresale;
   require(totalClaimable + toClaim <= getBalanceTokenOur(), 'deposit: Not enough tokens in this contract');
   require(tokenTheir.transferFrom(msg.sender, address(this), _amount));
-  
-  // todo - cyklus adres
   for (uint i = 0; i < devWallets; i++) require(tokenTheir.transfer(devWallets[i].devAddress, ((_amount * devsFeePercent) / 100)) * devWallets[i].sharePercent / 10000); // devsFeePercent% of tokenTheir deposited here goes to devWallets, the rest stays in this contract
   deposited[msg.sender] += _amount;
   claimable[msg.sender] += toClaim;

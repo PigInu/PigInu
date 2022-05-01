@@ -22,7 +22,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	bool public finished = false;
 	uint256 public rewardTokensLeft;
 	uint256 public poolRewardAmount;
-    uint256 public tokensToBurn = 0;
+ uint256 public tokensToBurn = 0;
 	uint256 public endRewardBlockNumber = 1;
 	uint256 public startBlock = 1;
 	uint256 public totalAllocPoint = 0;
@@ -61,58 +61,46 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function getMultiplier(uint256 _from, uint256 _to) public pure returns (uint256) {
-        return _to.sub(_from);
+  return _to.sub(_from);
 	}
 
 	function getRewardBlockNumber() public view returns (uint256) {
-		if (block.number > endRewardBlockNumber) {
-			return endRewardBlockNumber;
-		}
+		if (block.number > endRewardBlockNumber) return endRewardBlockNumber;
 		return block.number;
 	}
 
-    function getTokensToBeBurned() public view returns (uint256) {
-        if (!started || startBlock > block.number) {
-            return 0;
-        }
-        uint rewardBlockNumber = getRewardBlockNumber();
-        if (block.number > rewardBlockNumber) {
-            return tokensToBurn;
-        }
-        uint tokensToBurnTemp = tokensToBurn;
-        for (uint256 poolID = 0; poolID < pools.length; poolID++) {
-            PoolInfo memory pool = pools[poolID];
-			if(getPoolSupply(poolID) == 0) {
-                uint multiplier = getMultiplier(pool.lastRewardBlock, rewardBlockNumber);
-                uint256 tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-                tokensToBurnTemp = tokensToBurnTemp.add(tokenReward);
-            }
+ function getTokensToBeBurned() public view returns (uint256) {
+  if (!started || startBlock > block.number) return 0;
+  uint rewardBlockNumber = getRewardBlockNumber();
+  if (block.number > rewardBlockNumber) return tokensToBurn;
+  uint tokensToBurnTemp = tokensToBurn;
+  for (uint256 poolID = 0; poolID < pools.length; poolID++) {
+   PoolInfo memory pool = pools[poolID];
+	 	if(getPoolSupply(poolID) == 0) {
+    uint multiplier = getMultiplier(pool.lastRewardBlock, rewardBlockNumber);
+    uint256 tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
+    tokensToBurnTemp = tokensToBurnTemp.add(tokenReward);
+   }
 		}
-        return tokensToBurnTemp;
-    }
+  return tokensToBurnTemp;
+ }
 
-    function getDistributedTokens() public view returns (uint256) {
-        if (!started || startBlock > block.number) {
-            return 0;
-        }
-        uint rewardBlockNumber = getRewardBlockNumber();
-        if (block.number > rewardBlockNumber) {
-            return poolRewardAmount;
-        }
-        uint multiplier = getMultiplier(startBlock, rewardBlockNumber);
-        return tokenPerBlock.mul(multiplier);
-    }
+ function getDistributedTokens() public view returns (uint256) {
+  if (!started || startBlock > block.number) return 0;
+  uint rewardBlockNumber = getRewardBlockNumber();
+  if (block.number > rewardBlockNumber) return poolRewardAmount;
+  uint multiplier = getMultiplier(startBlock, rewardBlockNumber);
+  return tokenPerBlock.mul(multiplier);
+ }
 
-    function getTokensToBeDistributed() public view returns (uint256) {
-        uint distributedTokens = getDistributedTokens();
-        return poolRewardAmount.sub(distributedTokens);
-    }
+ function getTokensToBeDistributed() public view returns (uint256) {
+  uint distributedTokens = getDistributedTokens();
+  return poolRewardAmount.sub(distributedTokens);
+ }
 
 	function getPoolSupply(uint256 _poolID) public view returns (uint256) {
 		PoolInfo memory pool = pools[_poolID];
-		if (address(tokenEarn) == address(pool.tokenDeposit)) {
-			return pool.tokenDeposit.balanceOf(address(this)).sub(rewardTokensLeft);
-		}
+		if (address(tokenEarn) == address(pool.tokenDeposit)) return pool.tokenDeposit.balanceOf(address(this)).sub(rewardTokensLeft);
 		return pool.tokenDeposit.balanceOf(address(this));
 	}
 
@@ -122,8 +110,7 @@ contract Pool is Ownable, ReentrancyGuard {
 		uint256 accTokenPerShare = pool.accTokenPerShare;
 		uint256 blockNumber = getRewardBlockNumber();
 		uint256 lpSupply = getPoolSupply(_poolID);
-
-		if (block.number > pool.lastRewardBlock && lpSupply != 0) {
+ 	if (block.number > pool.lastRewardBlock && lpSupply != 0) {
 			uint256 multiplier = getMultiplier(pool.lastRewardBlock, blockNumber);
 			uint256 tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
 			accTokenPerShare = accTokenPerShare.add(tokenReward.mul(1e12).div(lpSupply));
@@ -132,41 +119,30 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function updateAllPools() public {
-		if (!started || finished) {
-			return;
-		}
-		for (uint256 poolID = 0; poolID < pools.length; poolID++) {
-			updatePool(poolID);
-		}
+		if (!started || finished) return;
+		for (uint256 poolID = 0; poolID < pools.length; poolID++) updatePool(poolID);
 		uint256 blockNumber = getRewardBlockNumber();
-		if (block.number > blockNumber) {
-			finished = true;
-		}
+		if (block.number > blockNumber) finished = true;
 	}
 
 	function updatePool(uint256 _poolID) internal {
-		if(!started || finished) {
-			return;
-		}
+		if(!started || finished) return;
 		PoolInfo storage pool = pools[_poolID];
-		if (block.number <= pool.lastRewardBlock) {
-			return;
-		}
-        
+		if (block.number <= pool.lastRewardBlock)	return;
 		uint256 blockNumber = getRewardBlockNumber();
-        if (pool.allocPoint == 0) {
+  if (pool.allocPoint == 0) {
 			pool.lastRewardBlock = blockNumber;
 			return;
 		}
 		uint256 lpSupply = getPoolSupply(_poolID);
-        uint256 multiplier = getMultiplier(pool.lastRewardBlock, blockNumber);
+  uint256 multiplier = getMultiplier(pool.lastRewardBlock, blockNumber);
 		uint256 tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-        if (lpSupply == 0) {
-            tokensToBurn = tokensToBurn.add(tokenReward);
-            pool.lastRewardBlock = blockNumber;
-			return;
-        }
-        rewardTokensLeft = rewardTokensLeft.sub(tokenReward);
+  if (lpSupply == 0) {
+   tokensToBurn = tokensToBurn.add(tokenReward);
+   pool.lastRewardBlock = blockNumber;
+   return;
+  }
+  rewardTokensLeft = rewardTokensLeft.sub(tokenReward);
 		pool.accTokenPerShare = pool.accTokenPerShare.add(tokenReward.mul(1e12).div(lpSupply));
 		pool.lastRewardBlock = blockNumber;
 	}
@@ -185,9 +161,7 @@ contract Pool is Ownable, ReentrancyGuard {
 				uint256 depositFee = _amount.mul(pool.feeDeposit).div(10000);
 				pool.tokenDeposit.safeTransfer(devFeeAddress, depositFee);
 				user.amount = user.amount.add(_amount).sub(depositFee);
-			} else {
-				user.amount = user.amount.add(_amount);
-			}
+			} else user.amount = user.amount.add(_amount);
 		}
 		user.rewardDebt = user.amount.mul(pool.accTokenPerShare).div(1e12);
 		emit eventDeposit(msg.sender, _poolID, _amount);
@@ -219,15 +193,12 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function safeTokenTransfer(address _to, uint256 _amount) internal {
-        uint256 tokenBal = tokenEarn.balanceOf(address(this));
-        bool transferSuccess = false;
-        if (_amount > tokenBal) {
-            transferSuccess = tokenEarn.transfer(_to, tokenBal);
-        } else {
-            transferSuccess = tokenEarn.transfer(_to, _amount);
-        }
-        require(transferSuccess, "safeTokenTransfer: transfer failed");
-    }
+  uint256 tokenBal = tokenEarn.balanceOf(address(this));
+  bool transferSuccess = false;
+  if (_amount > tokenBal) transferSuccess = tokenEarn.transfer(_to, tokenBal);
+  else transferSuccess = tokenEarn.transfer(_to, _amount);
+  require(transferSuccess, "safeTokenTransfer: transfer failed");
+ }
 
 	function createPool(uint256 _allocPoint, IERC20 _lpToken, uint16 _depositFeeBP) public onlyOwner {
 		uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
@@ -240,9 +211,7 @@ contract Pool is Ownable, ReentrancyGuard {
 		startBlock = block.number.add(_offsetInBlockNumber);
 		uint256 blocks = poolRewardAmount.div(tokenPerBlock);
 		endRewardBlockNumber = startBlock.add(blocks);
-		for (uint256 poolID = 0; poolID < pools.length; poolID++) {
-			pools[poolID].lastRewardBlock = startBlock;
-		}
+		for (uint256 poolID = 0; poolID < pools.length; poolID++) pools[poolID].lastRewardBlock = startBlock;
 		updateAllPools();
 		started = true;
 	}
