@@ -112,10 +112,10 @@ async function main() {
  await runFunction(tokenOur, 'approve', presale.address, maxint);
  console.log('TokenOur - setTaxExclusion - Presale:');
  await runFunction(tokenOur, 'setTaxExclusion', presale.address, true);
+/*
  console.log('TokenOur - setTaxExclusion - Airdrop:');
  await runFunction(tokenOur, 'setTaxExclusion', airdrop.address, true);
 
-/*
  // LIQUIDITY MANAGER FUNCTIONS:
  console.log('LiquidityManager - createPair:');
  await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
