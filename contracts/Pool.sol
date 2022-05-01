@@ -155,8 +155,7 @@ contract Pool is Ownable, ReentrancyGuard {
 			pool.tokenDeposit.safeTransferFrom(msg.sender, address(this), _amount);
 			if (pool.feeDeposit > 0) {
 				uint depositFee = _amount.mul(pool.feeDeposit).div(10000);
-    for (uint i = 0; i < devWallets; i++)
-    require(pool.tokenDeposit.safeTransfer(devWallets[i].devAddress, depositFee * devWallets[i].sharePercent / 10000);
+    for (uint i = 0; i < devWallets.length; i++) require(pool.tokenDeposit.safeTransfer(devWallets[i].devAddress, depositFee * devWallets[i].sharePercent / 10000));
     user.amount = user.amount.add(_amount).sub(depositFee);
 			} else user.amount = user.amount.add(_amount);
 		}

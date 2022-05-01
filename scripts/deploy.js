@@ -16,20 +16,28 @@ async function main() {
  const tokenOurDevFee = 3;
 
  // AIRDROP SETTINGS:
- const airdropAmount = '1000000000000000000'; // 1 token
+ const airdropDrop = '1000000000000000000'; // 1 token
  const airdropMinBaseCoinBalance = '10000000000000000000' // 10 MATIC
 
- // AIRDROP SETTINGS - TEST:
- const airdropTime = '900'; // 15 minutes
-
  // AIRDROP SETTINGS - RELEASE:
+ //const airdropAmount = '500000000000000000000000' // 500 000 tokens
  //const airdropTime = '2592000'; // 30 days
+
+ // AIRDROP SETTINGS - TEST:
+ const airdropAmount = '2000000000000000000' // 2 tokens
+ const airdropTime = '900'; // 15 minutes
 
  // PRESALE SETTINGS:
  const presalePricePresale = '1000000000000000000'; // 1 USD
  const presalePriceLiquidity = '2000000000000000000'; // 2 USD
+ 
+ // PRESALE SETTINGS - RELEASE:
+ //const presaleAmount = '7500000000000000000000000' // 7 500 000 tokens
+ //const presaleDepositTime = '2592000'; // 30 days
+ //const presaleClaimTime = '2592000'; // 30 days
 
  // PRESALE SETTINGS - TEST:
+ const presaleAmount = '20000000000000000000' // 20 tokens
  const presaleDepositTime = '300'; // 5 minutes
  const presaleClaimTime = '300'; // 5 minutes
  const presaleDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
@@ -39,10 +47,6 @@ async function main() {
  const presaleDevAddress3 = '0xF3E0B0b7A57C70CB2876Aa6C763eB2668fC8BF20';
  const presaleDevAddress3Share = '1000';
 
- // PRESALE SETTINGS - TEST:
- //const presaleDepositTime = '2592000'; // 30 days
- //const presaleClaimTime = '2592000'; // 30 days
-
  // POOL SETTINGS:
  const poolDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
  const poolDevAddress1Share = '5000';
@@ -50,18 +54,18 @@ async function main() {
  const poolDevAddress2Share = '5000';
  const poolTokensPerBlock = '100000000000000000'; // 0.1 tokens / block
 
- // POOL SETTINGS - TEST:
- const poolTokens = '10000000000000000000'; // 10 tokens
- const poolTokenOurAllocPoint = 1;
- const poolTokenUSDAllocPoint = 2;
- const poolTokenOurUSDLPAllocPoint = 5;
- //const poolStartOffsetBlockNumber = 100;
-
  // POOL SETTINGS - RELELASE:
  //const poolTokens = '2000000000000000000000000'; // 2 000 000 tokens
  //const poolTokenOurAllocPoint = 1;
  //const poolTokenUSDAllocPoint = 1;
  //const poolTokenOurUSDLPAllocPoint = 1;
+
+ // POOL SETTINGS - TEST:
+ const poolTokens = '10000000000000000000'; // 10 tokens
+ const poolTokenOurAllocPoint = 1;
+ const poolTokenUSDAllocPoint = 2;
+ const poolTokenOurUSDLPAllocPoint = 5;
+ const poolStartOffsetBlockNumber = 10;
 
  // OTHER SETTINGS:
  const maxint = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
@@ -96,7 +100,7 @@ async function main() {
  //var tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
  //var liquidityManager = await deploy('LiquidityManager');
  var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
- //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropAmount, airdropMinBaseCoinBalance);
+ //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
  var pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
 
  // SUMMARY - BEFORE FUNCTIONS:
@@ -118,33 +122,27 @@ async function main() {
 */
 
 // PRESALE FUNCTIONS:
+ console.log('Presale - depositOwn:');
+ await runFunction(presale, 'depositOwn', presaleAmount); 
  console.log('Presale - addDevAddress:');
  await runFunction(presale, 'addDevAddress', presaleDevAddress1, presaleDevAddress1Share);
  console.log('Presale - addDevAddress:');
  await runFunction(presale, 'addDevAddress', presaleDevAddress2, presaleDevAddress2Share);
  console.log('Presale - addDevAddress:');
  await runFunction(presale, 'addDevAddress', presaleDevAddress3, presaleDevAddress3Share);
-
- // PRESALE FUNCTIONS - RELEASE:
- //console.log('Presale - depositOwn:');
- //await runFunction(presale, 'depositOwn', '7500000000000000000000000'); // 7 500 000 tokens
-
+ 
  // PRESALE FUNCTIONS - TEST:
- console.log('Presale - depositOwn:');
- await runFunction(presale, 'depositOwn', '20000000000000000000'); // 20 tokens
  console.log('TokenTheir - approve:');
  await runFunction(tokenTheir, 'approve', presale.address, maxint);
  console.log('Presale - deposit:');
  await runFunction(presale, 'deposit', '10000000000000000000'); // 10 USD
 
 /*
- // AIRDROP FUNCTIONS - RELEASE:
- //console.log('TokenOur - transfer:');
- //await runFunction(tokenOur, 'transfer', airdrop.address, '500000000000000000000000'); // 500 000 tokens
+ // AIRDROP FUNCTIONS:
+ console.log('TokenOur - transfer:');
+ await runFunction(tokenOur, 'transfer', airdrop.address, airdropAmount);
 
  // AIRDROP FUNCTIONS - TEST:
- console.log('TokenOur - transfer:');
- await runFunction(tokenOur, 'transfer', airdrop.address, '2000000000000000000'); // 2 tokens
  console.log('Airdrop - start:');
  await runFunction(airdrop, 'start', airdropTime);
 */
@@ -165,8 +163,10 @@ async function main() {
  await runFunction(pool, 'createPool', poolTokenOurUSDLPAllocPoint, tokenOurUSDLPAddress,  0); // Our-BUSD -> Our
  console.log('TokenOur - transfer:');
  await runFunction(tokenOur, 'transfer', pool.address, poolTokens);
- //console.log('Pool - start:');
- //await runFunction(pool, 'start', poolStartOffsetBlockNumber);
+ 
+ // POOL FUNCTIONS - TEST:
+ console.log('Pool - start:');
+ await runFunction(pool, 'start', poolStartOffsetBlockNumber);
 
  // SUMMARY - AFTER FUNCTIONS:
  getTotalCost();
