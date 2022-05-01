@@ -295,292 +295,292 @@ describe("Presale tests", function () {
 	});
 });
 
-// describe("Pool tests", function () {
-// 	let _owner: SignerWithAddress;
-// 	let _developer: SignerWithAddress;
-// 	let _burn: SignerWithAddress;
-// 	let _pairAddress: string;
-// 	let _poolContract: Pool;
-// 	let _tokenContract: Token;
-// 	let _stablecoinContract: Stablecoin;
-// 	let _lpTokenContract: Stablecoin;
-// 	let _liquidityManagerContract: LiquidityManager;
-// 	let _uniswapV2RouterMockContract: UniswapV2RouterMock;
-// 	let _uniswapV2FactoryMockContract: UniswapV2FactoryMock;
-// 	const tokenOurName = "Test token";
-// 	const tokenOurSymbol = "TEST";
-// 	const tokenOurSupply = 10000000; // 10 000 000 tokens
-// 	const tokenOurDecimals = 18;
-// 	const tokenOurBurnFee = 2;
-// 	const tokenOurDevFee = 3;
-// 	let tokenOwnerStartBalance: BigNumber;
-// 	let stableOwnerStartBalance: BigNumber;
-// 	const poolTokens = "2000000000000000000000000"; // 2 000 000 tokens
-// 	const poolTokenStartDeposit = "10000000000000000000"; // 10 tokens
-// 	const poolTokensDeposit = "1000000000000000000"; // 1 token
-// 	const poolTokensOPerBlock = "100000000000000000"; // 0.1 tokens / block
-// 	const poolTokensOurAllocPoint = 100;
-// 	const poolTokensUSDAllocPoint = 900;
-// 	const poolTokensOurLPAllocPoint = 0;
-// 	let _poolDevAddress1: SignerWithAddress;
-// 	let _poolDevAddress2: SignerWithAddress;
+describe("Pool tests", function () {
+	let _owner: SignerWithAddress;
+	let _developer: SignerWithAddress;
+	let _burn: SignerWithAddress;
+	let _pairAddress: string;
+	let _poolContract: Pool;
+	let _tokenContract: Token;
+	let _stablecoinContract: Stablecoin;
+	let _lpTokenContract: Stablecoin;
+	let _liquidityManagerContract: LiquidityManager;
+	let _uniswapV2RouterMockContract: UniswapV2RouterMock;
+	let _uniswapV2FactoryMockContract: UniswapV2FactoryMock;
+	const tokenOurName = "Test token";
+	const tokenOurSymbol = "TEST";
+	const tokenOurSupply = 10000000; // 10 000 000 tokens
+	const tokenOurDecimals = 18;
+	const tokenOurBurnFee = 2;
+	const tokenOurDevFee = 3;
+	let tokenOwnerStartBalance: BigNumber;
+	let stableOwnerStartBalance: BigNumber;
+	const poolTokens = "2000000000000000000000000"; // 2 000 000 tokens
+	const poolTokenStartDeposit = "10000000000000000000"; // 10 tokens
+	const poolTokensDeposit = "1000000000000000000"; // 1 token
+	const poolTokensOPerBlock = "100000000000000000"; // 0.1 tokens / block
+	const poolTokensOurAllocPoint = 100;
+	const poolTokensUSDAllocPoint = 900;
+	const poolTokensOurLPAllocPoint = 0;
+	let _poolDevAddress1: SignerWithAddress;
+	let _poolDevAddress2: SignerWithAddress;
 
-// 	const poolTokensAllocPoints = [poolTokensOurAllocPoint, poolTokensUSDAllocPoint, poolTokensOurLPAllocPoint];
-// 	const poolOurId = 0;
-// 	const poolUSDId = 1;
-// 	const poolLPId = 2;
-// 	const poolIds = [poolOurId, poolUSDId, poolLPId];
-// 	const poolUSDDepositFee = 400;
-// 	const stablecoinAmount = "2000000000000000000"; // 2 USD
-// 	beforeEach(async function () {
-// 		await ethers.provider.send("hardhat_reset", []);
-// 		await ethers.provider.send("evm_setAutomine", [true]);
-// 		[_owner, _developer, _burn, _poolDevAddress1, _poolDevAddress2] = await ethers.getSigners();
-// 		const LpToken = await ethers.getContractFactory("Stablecoin");
-// 		_lpTokenContract = await LpToken.deploy();
-// 		await _lpTokenContract.deployed();
-// 		await _lpTokenContract.mint(_owner.address, stablecoinAmount);
-// 		const UniswapV2FactoryMock = await ethers.getContractFactory("UniswapV2FactoryMock");
-// 		_uniswapV2FactoryMockContract = await UniswapV2FactoryMock.deploy(_lpTokenContract.address);
-// 		await _uniswapV2FactoryMockContract.deployed();
-// 		const UniswapV2RouterMock = await ethers.getContractFactory("UniswapV2RouterMock");
-// 		_uniswapV2RouterMockContract = await UniswapV2RouterMock.deploy(_uniswapV2FactoryMockContract.address);
-// 		await _uniswapV2RouterMockContract.deployed();
-// 		const Stablecoin = await ethers.getContractFactory("Stablecoin");
-// 		_stablecoinContract = await Stablecoin.deploy();
-// 		await _stablecoinContract.deployed();
-// 		await _stablecoinContract.mint(_owner.address, stablecoinAmount);
-// 		const Token = await ethers.getContractFactory("Token");
-// 		_tokenContract = await Token.deploy(tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, _burn.address);
-// 		await _tokenContract.deployed();
-// 		await _tokenContract.setDevAddress(_developer.address);
-// 		await _tokenContract.setTaxExclusion(_owner.address, true);
-// 		const LiquidityManager = await ethers.getContractFactory("LiquidityManager");
-// 		_liquidityManagerContract = await LiquidityManager.deploy();
-// 		await _liquidityManagerContract.deployed();
-// 		_pairAddress = await _liquidityManagerContract.callStatic.createPair(_uniswapV2RouterMockContract.address, _tokenContract.address, _stablecoinContract.address);
-// 		const Pool = await ethers.getContractFactory("Pool");
-// 		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, poolTokensOPerBlock, poolTokens);
-// 		await _poolContract.deployed();
-// 		await _poolContract.addDevAddress(_poolDevAddress1.address, "5000");
-// 		await _poolContract.addDevAddress(_poolDevAddress2.address, "5000");
-// 		await _tokenContract.transfer(_poolContract.address, poolTokens);
-// 		await ethers.provider.send("evm_setAutomine", [false]);
-// 		await _poolContract.createPool(poolTokensOurAllocPoint, _tokenContract.address, 0);
-// 		await _poolContract.createPool(poolTokensUSDAllocPoint, _stablecoinContract.address, poolUSDDepositFee);
-// 		await _poolContract.createPool(poolTokensOurLPAllocPoint, _pairAddress, 0);
-// 		await ethers.provider.send("evm_mine", []);
-// 		await ethers.provider.send("evm_setAutomine", [true]);
-// 		await _poolContract.start(2);
-// 		tokenOwnerStartBalance = await _tokenContract.balanceOf(_owner.address);
-// 		stableOwnerStartBalance = await _stablecoinContract.balanceOf(_owner.address);
-// 	});
+	const poolTokensAllocPoints = [poolTokensOurAllocPoint, poolTokensUSDAllocPoint, poolTokensOurLPAllocPoint];
+	const poolOurId = 0;
+	const poolUSDId = 1;
+	const poolLPId = 2;
+	const poolIds = [poolOurId, poolUSDId, poolLPId];
+	const poolUSDDepositFee = 400;
+	const stablecoinAmount = "2000000000000000000"; // 2 USD
+	beforeEach(async function () {
+		await ethers.provider.send("hardhat_reset", []);
+		await ethers.provider.send("evm_setAutomine", [true]);
+		[_owner, _developer, _burn, _poolDevAddress1, _poolDevAddress2] = await ethers.getSigners();
+		const LpToken = await ethers.getContractFactory("Stablecoin");
+		_lpTokenContract = await LpToken.deploy();
+		await _lpTokenContract.deployed();
+		await _lpTokenContract.mint(_owner.address, stablecoinAmount);
+		const UniswapV2FactoryMock = await ethers.getContractFactory("UniswapV2FactoryMock");
+		_uniswapV2FactoryMockContract = await UniswapV2FactoryMock.deploy(_lpTokenContract.address);
+		await _uniswapV2FactoryMockContract.deployed();
+		const UniswapV2RouterMock = await ethers.getContractFactory("UniswapV2RouterMock");
+		_uniswapV2RouterMockContract = await UniswapV2RouterMock.deploy(_uniswapV2FactoryMockContract.address);
+		await _uniswapV2RouterMockContract.deployed();
+		const Stablecoin = await ethers.getContractFactory("Stablecoin");
+		_stablecoinContract = await Stablecoin.deploy();
+		await _stablecoinContract.deployed();
+		await _stablecoinContract.mint(_owner.address, stablecoinAmount);
+		const Token = await ethers.getContractFactory("Token");
+		_tokenContract = await Token.deploy(tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, _burn.address);
+		await _tokenContract.deployed();
+		await _tokenContract.setDevAddress(_developer.address);
+		await _tokenContract.setTaxExclusion(_owner.address, true);
+		const LiquidityManager = await ethers.getContractFactory("LiquidityManager");
+		_liquidityManagerContract = await LiquidityManager.deploy();
+		await _liquidityManagerContract.deployed();
+		_pairAddress = await _liquidityManagerContract.callStatic.createPair(_uniswapV2RouterMockContract.address, _tokenContract.address, _stablecoinContract.address);
+		const Pool = await ethers.getContractFactory("Pool");
+		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, poolTokensOPerBlock, poolTokens);
+		await _poolContract.deployed();
+		await _poolContract.addDevAddress(_poolDevAddress1.address, "5000");
+		await _poolContract.addDevAddress(_poolDevAddress2.address, "5000");
+		await _tokenContract.transfer(_poolContract.address, poolTokens);
+		await ethers.provider.send("evm_setAutomine", [false]);
+		await _poolContract.createPool(poolTokensOurAllocPoint, _tokenContract.address, 0);
+		await _poolContract.createPool(poolTokensUSDAllocPoint, _stablecoinContract.address, poolUSDDepositFee);
+		await _poolContract.createPool(poolTokensOurLPAllocPoint, _pairAddress, 0);
+		await ethers.provider.send("evm_mine", []);
+		await ethers.provider.send("evm_setAutomine", [true]);
+		await _poolContract.start(2);
+		tokenOwnerStartBalance = await _tokenContract.balanceOf(_owner.address);
+		stableOwnerStartBalance = await _stablecoinContract.balanceOf(_owner.address);
+	});
 
-// 	it("Should deposit with no fee", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		expect(await _poolContract.deposit(poolOurId, poolTokensDeposit))
-// 			.to.emit(_poolContract, "eventDeposit")
-// 			.withArgs(_owner.address, poolOurId, poolTokensDeposit);
-// 		expect((await _poolContract.users(poolOurId, _owner.address)).amount).to.be.equal(poolTokensDeposit);
-// 		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(tokenOwnerStartBalance.sub(poolTokensDeposit));
-// 		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokens).add(poolTokensDeposit));
-// 	});
+	it("Should deposit with no fee", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		expect(await _poolContract.deposit(poolOurId, poolTokensDeposit))
+			.to.emit(_poolContract, "eventDeposit")
+			.withArgs(_owner.address, poolOurId, poolTokensDeposit);
+		expect((await _poolContract.users(poolOurId, _owner.address)).amount).to.be.equal(poolTokensDeposit);
+		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(tokenOwnerStartBalance.sub(poolTokensDeposit));
+		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokens).add(poolTokensDeposit));
+	});
 
-// 	it("Should deposit with fee", async function () {
-// 		await _stablecoinContract.approve(_poolContract.address, poolTokensDeposit);
-// 		expect(await _poolContract.deposit(poolUSDId, poolTokensDeposit))
-// 			.to.emit(_poolContract, "eventDeposit")
-// 			.withArgs(_owner.address, poolUSDId, poolTokensDeposit);
-// 		const depositFee = BigNumber.from(poolTokensDeposit).mul(poolUSDDepositFee).div(10000);
-// 		expect((await _poolContract.users(poolUSDId, _owner.address)).amount).to.be.equal(BigNumber.from(poolTokensDeposit).sub(depositFee));
-// 		expect(await _stablecoinContract.balanceOf(_owner.address)).to.be.equal(BigNumber.from(stablecoinAmount).sub(poolTokensDeposit));
-// 		expect(await _stablecoinContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokensDeposit).sub(depositFee));
-// 		expect(await _stablecoinContract.balanceOf(_poolDevAddress1.address)).to.be.equal(BigNumber.from(depositFee).div(2));
-// 		expect(await _stablecoinContract.balanceOf(_poolDevAddress2.address)).to.be.equal(BigNumber.from(depositFee).div(2));
-// 	});
+	it("Should deposit with fee", async function () {
+		await _stablecoinContract.approve(_poolContract.address, poolTokensDeposit);
+		expect(await _poolContract.deposit(poolUSDId, poolTokensDeposit))
+			.to.emit(_poolContract, "eventDeposit")
+			.withArgs(_owner.address, poolUSDId, poolTokensDeposit);
+		const depositFee = BigNumber.from(poolTokensDeposit).mul(poolUSDDepositFee).div(10000);
+		expect((await _poolContract.users(poolUSDId, _owner.address)).amount).to.be.equal(BigNumber.from(poolTokensDeposit).sub(depositFee));
+		expect(await _stablecoinContract.balanceOf(_owner.address)).to.be.equal(BigNumber.from(stablecoinAmount).sub(poolTokensDeposit));
+		expect(await _stablecoinContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokensDeposit).sub(depositFee));
+		expect(await _stablecoinContract.balanceOf(_poolDevAddress1.address)).to.be.equal(BigNumber.from(depositFee).div(2));
+		expect(await _stablecoinContract.balanceOf(_poolDevAddress2.address)).to.be.equal(BigNumber.from(depositFee).div(2));
+	});
 
-// 	it("Should return pending tokens", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		await _poolContract.deposit(poolOurId, poolTokensDeposit);
-// 		await ethers.provider.send("evm_mine", []);
-// 		const sumPoolsAllocPoints = poolTokensAllocPoints.reduce(function (a, b) {
-// 			return a + b;
-// 		}, 0);
-// 		const tokenReward = BigNumber.from(poolTokensOPerBlock).mul(poolTokensOurAllocPoint).div(sumPoolsAllocPoints);
-// 		const accTokenPerShare = tokenReward.mul(1e12).div(BigNumber.from(poolTokensDeposit));
-// 		const pendingTokens = BigNumber.from(poolTokensDeposit).mul(accTokenPerShare).div(1e12);
-// 		await expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(pendingTokens);
-// 		await ethers.provider.send("evm_mine", []);
-// 		await expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(pendingTokens.mul(2));
-// 	});
+	it("Should return pending tokens", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		await _poolContract.deposit(poolOurId, poolTokensDeposit);
+		await ethers.provider.send("evm_mine", []);
+		const sumPoolsAllocPoints = poolTokensAllocPoints.reduce(function (a, b) {
+			return a + b;
+		}, 0);
+		const tokenReward = BigNumber.from(poolTokensOPerBlock).mul(poolTokensOurAllocPoint).div(sumPoolsAllocPoints);
+		const accTokenPerShare = tokenReward.mul(1e12).div(BigNumber.from(poolTokensDeposit));
+		const pendingTokens = BigNumber.from(poolTokensDeposit).mul(accTokenPerShare).div(1e12);
+		await expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(pendingTokens);
+		await ethers.provider.send("evm_mine", []);
+		await expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(pendingTokens.mul(2));
+	});
 
-// 	it("Should withdraw with 0 amount", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		await _poolContract.deposit(poolOurId, poolTokensDeposit);
-// 		const preBlockNumber = await ethers.provider.getBlockNumber();
-// 		await ethers.provider.send("evm_mine", []);
-// 		const amountToWithdraw = await _poolContract.pendingTokens(poolOurId, _owner.address);
-// 		expect(await _poolContract.withdraw(poolOurId, 0))
-// 			.to.emit(_poolContract, "eventWithdraw")
-// 			.withArgs(_owner.address, poolOurId, amountToWithdraw);
-// 		const postBlockNumber = await ethers.provider.getBlockNumber();
-// 		const multiplier = postBlockNumber - preBlockNumber;
-// 		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(tokenOwnerStartBalance.sub(poolTokensDeposit).add(amountToWithdraw.mul(multiplier)));
-// 		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokens).add(poolTokensDeposit).sub(amountToWithdraw.mul(multiplier)));
-// 	});
+	it("Should withdraw with 0 amount", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		await _poolContract.deposit(poolOurId, poolTokensDeposit);
+		const preBlockNumber = await ethers.provider.getBlockNumber();
+		await ethers.provider.send("evm_mine", []);
+		const amountToWithdraw = await _poolContract.pendingTokens(poolOurId, _owner.address);
+		expect(await _poolContract.withdraw(poolOurId, 0))
+			.to.emit(_poolContract, "eventWithdraw")
+			.withArgs(_owner.address, poolOurId, amountToWithdraw);
+		const postBlockNumber = await ethers.provider.getBlockNumber();
+		const multiplier = postBlockNumber - preBlockNumber;
+		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(tokenOwnerStartBalance.sub(poolTokensDeposit).add(amountToWithdraw.mul(multiplier)));
+		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokens).add(poolTokensDeposit).sub(amountToWithdraw.mul(multiplier)));
+	});
 
-// 	it("Should withdraw with deposit amount", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		await _poolContract.deposit(poolOurId, poolTokensDeposit);
-// 		const preBlockNumber = await ethers.provider.getBlockNumber();
-// 		await ethers.provider.send("evm_mine", []);
-// 		const amountToWithdraw = await _poolContract.pendingTokens(poolOurId, _owner.address);
-// 		expect(await _poolContract.withdraw(poolOurId, poolTokensDeposit))
-// 			.to.emit(_poolContract, "eventWithdraw")
-// 			.withArgs(_owner.address, poolOurId, amountToWithdraw);
-// 		const postBlockNumber = await ethers.provider.getBlockNumber();
-// 		const multiplier = postBlockNumber - preBlockNumber;
-// 		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(tokenOwnerStartBalance.add(amountToWithdraw.mul(multiplier)));
-// 		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokens).sub(amountToWithdraw.mul(multiplier)));
-// 	});
+	it("Should withdraw with deposit amount", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		await _poolContract.deposit(poolOurId, poolTokensDeposit);
+		const preBlockNumber = await ethers.provider.getBlockNumber();
+		await ethers.provider.send("evm_mine", []);
+		const amountToWithdraw = await _poolContract.pendingTokens(poolOurId, _owner.address);
+		expect(await _poolContract.withdraw(poolOurId, poolTokensDeposit))
+			.to.emit(_poolContract, "eventWithdraw")
+			.withArgs(_owner.address, poolOurId, amountToWithdraw);
+		const postBlockNumber = await ethers.provider.getBlockNumber();
+		const multiplier = postBlockNumber - preBlockNumber;
+		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(tokenOwnerStartBalance.add(amountToWithdraw.mul(multiplier)));
+		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokens).sub(amountToWithdraw.mul(multiplier)));
+	});
 
-// 	it("Should emergency withdraw", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		await _poolContract.deposit(poolOurId, poolTokensDeposit);
-// 		await ethers.provider.send("evm_mine", []);
-// 		expect(await _poolContract.emergencyWithdraw(0))
-// 			.to.emit(_poolContract, "eventEmergencyWithdraw")
-// 			.withArgs(_owner.address, poolOurId, poolTokensDeposit);
-// 		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(tokenOwnerStartBalance);
-// 		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokens).add(poolTokensDeposit).sub(poolTokensDeposit));
-// 		const user = await _poolContract.users(poolOurId, _owner.address);
-// 		expect(user.amount).to.be.equal(0);
-// 		expect(user.rewardDebt).to.be.equal(0);
-// 	});
+	it("Should emergency withdraw", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		await _poolContract.deposit(poolOurId, poolTokensDeposit);
+		await ethers.provider.send("evm_mine", []);
+		expect(await _poolContract.emergencyWithdraw(0))
+			.to.emit(_poolContract, "eventEmergencyWithdraw")
+			.withArgs(_owner.address, poolOurId, poolTokensDeposit);
+		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(tokenOwnerStartBalance);
+		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokens).add(poolTokensDeposit).sub(poolTokensDeposit));
+		const user = await _poolContract.users(poolOurId, _owner.address);
+		expect(user.amount).to.be.equal(0);
+		expect(user.rewardDebt).to.be.equal(0);
+	});
 
-// 	it("Should withdraw reward from two pools", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		await _stablecoinContract.approve(_poolContract.address, poolTokensDeposit);
-// 		const deposit = BigNumber.from(poolTokensDeposit).div(2);
-// 		await ethers.provider.send("evm_setAutomine", [false]);
-// 		await _poolContract.deposit(poolOurId, deposit);
-// 		await _poolContract.deposit(poolUSDId, deposit);
-// 		await ethers.provider.send("evm_mine", []);
-// 		const preBlockNumber = await ethers.provider.getBlockNumber();
-// 		await ethers.provider.send("evm_mine", []);
-// 		const pendingTokensOurs = await _poolContract.pendingTokens(poolOurId, _owner.address);
-// 		const pendingTokensUSDs = await _poolContract.pendingTokens(poolUSDId, _owner.address);
-// 		await _poolContract.withdraw(poolOurId, 0);
-// 		await _poolContract.withdraw(poolUSDId, 0);
-// 		await ethers.provider.send("evm_mine", []);
-// 		const postBlockNumber = await ethers.provider.getBlockNumber();
-// 		const multiplier = postBlockNumber - preBlockNumber;
-// 		const expectedTokenBalance = tokenOwnerStartBalance.sub(deposit).add(pendingTokensOurs.add(pendingTokensUSDs).mul(multiplier));
-// 		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(expectedTokenBalance);
-// 	});
+	it("Should withdraw reward from two pools", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		await _stablecoinContract.approve(_poolContract.address, poolTokensDeposit);
+		const deposit = BigNumber.from(poolTokensDeposit).div(2);
+		await ethers.provider.send("evm_setAutomine", [false]);
+		await _poolContract.deposit(poolOurId, deposit);
+		await _poolContract.deposit(poolUSDId, deposit);
+		await ethers.provider.send("evm_mine", []);
+		const preBlockNumber = await ethers.provider.getBlockNumber();
+		await ethers.provider.send("evm_mine", []);
+		const pendingTokensOurs = await _poolContract.pendingTokens(poolOurId, _owner.address);
+		const pendingTokensUSDs = await _poolContract.pendingTokens(poolUSDId, _owner.address);
+		await _poolContract.withdraw(poolOurId, 0);
+		await _poolContract.withdraw(poolUSDId, 0);
+		await ethers.provider.send("evm_mine", []);
+		const postBlockNumber = await ethers.provider.getBlockNumber();
+		const multiplier = postBlockNumber - preBlockNumber;
+		const expectedTokenBalance = tokenOwnerStartBalance.sub(deposit).add(pendingTokensOurs.add(pendingTokensUSDs).mul(multiplier));
+		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(expectedTokenBalance);
+	});
 
-// 	it("Should withdraw from two pools", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		await _stablecoinContract.approve(_poolContract.address, poolTokensDeposit);
-// 		const deposit = BigNumber.from(poolTokensDeposit).div(2);
-// 		const depositOur = deposit;
-// 		const depositUSD = deposit.sub(deposit.mul(poolUSDDepositFee).div(10000));
-// 		await ethers.provider.send("evm_setAutomine", [false]);
-// 		await _poolContract.deposit(poolOurId, deposit);
-// 		await _poolContract.deposit(poolUSDId, deposit);
-// 		await ethers.provider.send("evm_mine", []);
-// 		const preBlockNumber = await ethers.provider.getBlockNumber();
-// 		await ethers.provider.send("evm_mine", []);
-// 		const pendingTokensOurs = await _poolContract.pendingTokens(poolOurId, _owner.address);
-// 		const pendingTokensUSDs = await _poolContract.pendingTokens(poolUSDId, _owner.address);
-// 		await _poolContract.withdraw(poolOurId, depositOur);
-// 		await _poolContract.withdraw(poolUSDId, depositUSD);
-// 		await ethers.provider.send("evm_mine", []);
-// 		const postBlockNumber = await ethers.provider.getBlockNumber();
-// 		const multiplier = postBlockNumber - preBlockNumber;
-// 		const expectedTokenBalance = tokenOwnerStartBalance.add(pendingTokensOurs.add(pendingTokensUSDs).mul(multiplier));
-// 		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(expectedTokenBalance);
-// 		const expectedStableBalance = stableOwnerStartBalance.sub(deposit).add(depositUSD);
-// 		expect(await _stablecoinContract.balanceOf(_owner.address)).to.be.equal(expectedStableBalance);
-// 	});
+	it("Should withdraw from two pools", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		await _stablecoinContract.approve(_poolContract.address, poolTokensDeposit);
+		const deposit = BigNumber.from(poolTokensDeposit).div(2);
+		const depositOur = deposit;
+		const depositUSD = deposit.sub(deposit.mul(poolUSDDepositFee).div(10000));
+		await ethers.provider.send("evm_setAutomine", [false]);
+		await _poolContract.deposit(poolOurId, deposit);
+		await _poolContract.deposit(poolUSDId, deposit);
+		await ethers.provider.send("evm_mine", []);
+		const preBlockNumber = await ethers.provider.getBlockNumber();
+		await ethers.provider.send("evm_mine", []);
+		const pendingTokensOurs = await _poolContract.pendingTokens(poolOurId, _owner.address);
+		const pendingTokensUSDs = await _poolContract.pendingTokens(poolUSDId, _owner.address);
+		await _poolContract.withdraw(poolOurId, depositOur);
+		await _poolContract.withdraw(poolUSDId, depositUSD);
+		await ethers.provider.send("evm_mine", []);
+		const postBlockNumber = await ethers.provider.getBlockNumber();
+		const multiplier = postBlockNumber - preBlockNumber;
+		const expectedTokenBalance = tokenOwnerStartBalance.add(pendingTokensOurs.add(pendingTokensUSDs).mul(multiplier));
+		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(expectedTokenBalance);
+		const expectedStableBalance = stableOwnerStartBalance.sub(deposit).add(depositUSD);
+		expect(await _stablecoinContract.balanceOf(_owner.address)).to.be.equal(expectedStableBalance);
+	});
 
-// 	it("Should get maximum available pool reward", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		await ethers.provider.send("evm_setAutomine", [false]);
-// 		await _poolContract.deposit(poolOurId, poolTokensDeposit);
-// 		await ethers.provider.send("evm_mine", []);
-// 		const preBlockNumber = await ethers.provider.getBlockNumber();
-// 		const endRewardBlockNumber = await _poolContract.endRewardBlockNumber.call({});
-// 		const timeInBlocks = BigNumber.from(endRewardBlockNumber).sub(preBlockNumber);
-// 		const timeInBlocksHex = timeInBlocks.toHexString().replace(/0x0+/, "0x");
-// 		const sumPoolsAllocPoints = poolTokensAllocPoints.reduce(function (a, b) {
-// 			return a + b;
-// 		}, 0);
-// 		const tokenRewardPerBlock = BigNumber.from(poolTokensOPerBlock).mul(poolTokensOurAllocPoint).div(sumPoolsAllocPoints);
-// 		const totalReward = tokenRewardPerBlock.mul(timeInBlocks);
-// 		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
-// 		expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(totalReward);
-// 		await ethers.provider.send("evm_setAutomine", [true]);
-// 		await ethers.provider.send("evm_mine", []);
-// 		expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(totalReward);
-// 		await _poolContract.withdraw(poolOurId, poolTokensDeposit);
-// 		await ethers.provider.send("evm_mine", []);
-// 		const expectedTokenBalance = tokenOwnerStartBalance.add(totalReward);
-// 		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(expectedTokenBalance);
-// 		const rewardTokensLeft = await _poolContract.rewardTokensLeft.call({});
-// 		const expectedRewardTokensLeft = BigNumber.from(poolTokens).sub(totalReward);
-// 		expect(rewardTokensLeft).to.be.equal(expectedRewardTokensLeft);
-// 		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(rewardTokensLeft);
-// 	});
+	it("Should get maximum available pool reward", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		await ethers.provider.send("evm_setAutomine", [false]);
+		await _poolContract.deposit(poolOurId, poolTokensDeposit);
+		await ethers.provider.send("evm_mine", []);
+		const preBlockNumber = await ethers.provider.getBlockNumber();
+		const endRewardBlockNumber = await _poolContract.endRewardBlockNumber.call({});
+		const timeInBlocks = BigNumber.from(endRewardBlockNumber).sub(preBlockNumber);
+		const timeInBlocksHex = timeInBlocks.toHexString().replace(/0x0+/, "0x");
+		const sumPoolsAllocPoints = poolTokensAllocPoints.reduce(function (a, b) {
+			return a + b;
+		}, 0);
+		const tokenRewardPerBlock = BigNumber.from(poolTokensOPerBlock).mul(poolTokensOurAllocPoint).div(sumPoolsAllocPoints);
+		const totalReward = tokenRewardPerBlock.mul(timeInBlocks);
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
+		expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(totalReward);
+		await ethers.provider.send("evm_setAutomine", [true]);
+		await ethers.provider.send("evm_mine", []);
+		expect(await _poolContract.pendingTokens(poolOurId, _owner.address)).to.be.equal(totalReward);
+		await _poolContract.withdraw(poolOurId, poolTokensDeposit);
+		await ethers.provider.send("evm_mine", []);
+		const expectedTokenBalance = tokenOwnerStartBalance.add(totalReward);
+		expect(await _tokenContract.balanceOf(_owner.address)).to.be.equal(expectedTokenBalance);
+		const rewardTokensLeft = await _poolContract.rewardTokensLeft.call({});
+		const expectedRewardTokensLeft = BigNumber.from(poolTokens).sub(totalReward);
+		expect(rewardTokensLeft).to.be.equal(expectedRewardTokensLeft);
+		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(rewardTokensLeft);
+	});
 
-// 	it("Should burn remaining tokens", async function () {
-// 		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
-// 		await ethers.provider.send("evm_setAutomine", [true]);
-// 		await _poolContract.deposit(poolOurId, poolTokensDeposit);
-// 		const preBlockNumber = await ethers.provider.getBlockNumber();
-// 		const endRewardBlockNumber = await _poolContract.endRewardBlockNumber.call({});
-// 		const timeInBlocks = BigNumber.from(endRewardBlockNumber).sub(preBlockNumber);
-// 		const timeInBlocksHex = timeInBlocks.toHexString().replace(/0x0+/, "0x");
-// 		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
-// 		await _poolContract.withdraw(poolOurId, poolTokensDeposit);
-// 		const tokensToBurn = await _poolContract.tokensToBurn.call({});
-// 		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(0);
-// 		await _poolContract.burnRemainingTokens();
-// 		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(tokensToBurn);
-// 		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(0);
-// 	});
+	it("Should burn remaining tokens", async function () {
+		await _tokenContract.approve(_poolContract.address, poolTokensDeposit);
+		await ethers.provider.send("evm_setAutomine", [true]);
+		await _poolContract.deposit(poolOurId, poolTokensDeposit);
+		const preBlockNumber = await ethers.provider.getBlockNumber();
+		const endRewardBlockNumber = await _poolContract.endRewardBlockNumber.call({});
+		const timeInBlocks = BigNumber.from(endRewardBlockNumber).sub(preBlockNumber);
+		const timeInBlocksHex = timeInBlocks.toHexString().replace(/0x0+/, "0x");
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
+		await _poolContract.withdraw(poolOurId, poolTokensDeposit);
+		const tokensToBurn = await _poolContract.tokensToBurn.call({});
+		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(0);
+		await _poolContract.burnRemainingTokens();
+		expect(await _tokenContract.balanceOf(_burn.address)).to.be.equal(tokensToBurn);
+		expect(await _tokenContract.balanceOf(_poolContract.address)).to.be.equal(0);
+	});
 
-// 	it("Should revert burning token - not finished", async function () {
-// 		await expect(_poolContract.burnRemainingTokens()).to.be.revertedWith("burnRemainingTokens: not yet finished");
-// 	});
+	it("Should revert burning token - not finished", async function () {
+		await expect(_poolContract.burnRemainingTokens()).to.be.revertedWith("burnRemainingTokens: not yet finished");
+	});
 
-// 	it("Should return tokens to burn", async function () {
-// 		await ethers.provider.send("evm_mine", []);
-// 		await ethers.provider.send("evm_mine", []);
-// 		let tokensToBurn = await _poolContract.getTokensToBeBurned();
-// 		expect(tokensToBurn).to.be.equal(0);
-// 		await ethers.provider.send("evm_mine", []);
-// 		tokensToBurn = await _poolContract.getTokensToBeBurned();
-// 		expect(tokensToBurn).to.be.equal(poolTokensOPerBlock);
-// 	});
+	it("Should return tokens to burn", async function () {
+		await ethers.provider.send("evm_mine", []);
+		await ethers.provider.send("evm_mine", []);
+		let tokensToBurn = await _poolContract.getTokensToBeBurned();
+		expect(tokensToBurn).to.be.equal(0);
+		await ethers.provider.send("evm_mine", []);
+		tokensToBurn = await _poolContract.getTokensToBeBurned();
+		expect(tokensToBurn).to.be.equal(poolTokensOPerBlock);
+	});
 
-// 	it("Should return distributed tokens", async function () {
-// 		await ethers.provider.send("evm_mine", []);
-// 		await ethers.provider.send("evm_mine", []);
-// 		let distributedTokens = await _poolContract.getDistributedTokens();
-// 		expect(distributedTokens).to.be.equal(0);
-// 		await ethers.provider.send("evm_mine", []);
-// 		distributedTokens = await _poolContract.getDistributedTokens();
-// 		expect(distributedTokens).to.be.equal(poolTokensOPerBlock);
-// 	});
+	it("Should return distributed tokens", async function () {
+		await ethers.provider.send("evm_mine", []);
+		await ethers.provider.send("evm_mine", []);
+		let distributedTokens = await _poolContract.getDistributedTokens();
+		expect(distributedTokens).to.be.equal(0);
+		await ethers.provider.send("evm_mine", []);
+		distributedTokens = await _poolContract.getDistributedTokens();
+		expect(distributedTokens).to.be.equal(poolTokensOPerBlock);
+	});
 
-// 	it("Should return tokens to be distribute", async function () {
-// 		await ethers.provider.send("evm_mine", []);
-// 		await ethers.provider.send("evm_mine", []);
-// 		let tokensToBeDistributed = await _poolContract.getTokensToBeDistributed();
-// 		expect(tokensToBeDistributed).to.be.equal(poolTokens);
-// 		await ethers.provider.send("evm_mine", []);
-// 		tokensToBeDistributed = await _poolContract.getTokensToBeDistributed();
-// 		expect(tokensToBeDistributed).to.be.equal(BigNumber.from(poolTokens).sub(poolTokensOPerBlock));
-// 	});
-// });
+	it("Should return tokens to be distribute", async function () {
+		await ethers.provider.send("evm_mine", []);
+		await ethers.provider.send("evm_mine", []);
+		let tokensToBeDistributed = await _poolContract.getTokensToBeDistributed();
+		expect(tokensToBeDistributed).to.be.equal(poolTokens);
+		await ethers.provider.send("evm_mine", []);
+		tokensToBeDistributed = await _poolContract.getTokensToBeDistributed();
+		expect(tokensToBeDistributed).to.be.equal(BigNumber.from(poolTokens).sub(poolTokensOPerBlock));
+	});
+});
