@@ -7,9 +7,9 @@ import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
-import './MultiWallet.sol';
+import './DevsWallet.sol';
 
-contract Pool is Ownable, ReentrancyGuard, MultiWallet {
+contract Pool is Ownable, ReentrancyGuard, DevsWallet {
 	using SafeMath for uint;
 	using SafeERC20 for IERC20;
 	mapping(uint => mapping(address => UserInfo)) public users; // Info of each user that stakes tokens.
@@ -150,7 +150,7 @@ contract Pool is Ownable, ReentrancyGuard, MultiWallet {
 			pool.tokenDeposit.safeTransferFrom(msg.sender, address(this), _amount);
 			if (pool.feeDeposit > 0) {
 				uint depositFee = _amount.mul(pool.feeDeposit).div(10000);
-				send(address(pool.tokenDeposit), depositFee);
+				distributeFeeToDevelopers(address(pool.tokenDeposit), depositFee);
     			user.amount = user.amount.add(_amount).sub(depositFee);
 			} else user.amount = user.amount.add(_amount);
 		}
