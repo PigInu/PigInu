@@ -355,6 +355,8 @@ describe("Pool tests", function () {
 	let _developer: SignerWithAddress;
 	let _burn: SignerWithAddress;
 	let _pairAddress: string;
+	let _dev1: SignerWithAddress;
+	let _dev2: SignerWithAddress;
 
 	let _poolContract: Pool;
 	let _tokenContract: Token;
@@ -392,7 +394,7 @@ describe("Pool tests", function () {
 	beforeEach(async function () {
 		await ethers.provider.send("hardhat_reset", []);
 		await ethers.provider.send("evm_setAutomine", [true]);
-		[_owner, _developer, _burn] = await ethers.getSigners();
+		[_owner, _developer, _burn, _dev1, _dev2] = await ethers.getSigners();
 
 		const LpToken = await ethers.getContractFactory("Stablecoin");
 		_lpTokenContract = await LpToken.deploy();
@@ -424,9 +426,11 @@ describe("Pool tests", function () {
 		_pairAddress = await _liquidityManagerContract.callStatic.createPair(_uniswapV2RouterMockContract.address, _tokenContract.address, _stablecoinContract.address);
 
 		const Pool = await ethers.getContractFactory("Pool");
-		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, _developer.address, poolTokensOPerBlock, poolTokens);
+		_poolContract = await Pool.deploy(_tokenContract.address, _burn.address, poolTokensOPerBlock, poolTokens);
 		await _poolContract.deployed();
 		await _tokenContract.transfer(_poolContract.address, poolTokens);
+		await _poolContract.addWallet(_dev1.address, "5000");
+		await _poolContract.addWallet(_dev2.address, "5000");
 
 		await ethers.provider.send("evm_setAutomine", [false]);
 		await _poolContract.createPool(poolTokensOurAllocPoint, _tokenContract.address, 0);
@@ -466,6 +470,10 @@ describe("Pool tests", function () {
 		expect(await _stablecoinContract.balanceOf(_owner.address)).to.be.equal(BigNumber.from(stablecoinAmount).sub(poolTokensDeposit));
 
 		expect(await _stablecoinContract.balanceOf(_poolContract.address)).to.be.equal(BigNumber.from(poolTokensDeposit).sub(depositFee));
+
+		expect(await _stablecoinContract.balanceOf(_dev1.address)).to.be.equal(BigNumber.from(depositFee).div(2));
+
+		expect(await _stablecoinContract.balanceOf(_dev2.address)).to.be.equal(BigNumber.from(depositFee).div(2));
 	});
 
 	it("Should return pending tokens", async function () {
