@@ -5,11 +5,13 @@ pragma solidity ^0.8.0;
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import './LiquidityManager.sol';
 import './libs/IUniswapV2Router.sol';
 import './libs/IUniswapV2Factory.sol';
 
 contract Presale is Ownable, ReentrancyGuard {
+ using SafeERC20 for ERC20;
  ERC20 public tokenOur;
  ERC20 public tokenTheir;
  LiquidityManager public liquidityManager;
@@ -68,8 +70,8 @@ contract Presale is Ownable, ReentrancyGuard {
   require(totalDeposited + _amount <= getPresaleTokenTheirMax(), 'deposit: Maximum deposit amount exceeded.');
   uint toClaim = (_amount * 10**tokenTheir.decimals()) / tokenPricePresale;
   require(totalClaimable + toClaim <= getBalanceTokenOur(), 'deposit: Not enough tokens in this contract');
-  require(tokenTheir.transferFrom(msg.sender, address(this), _amount));
-  for (uint i = 0; i < devWallets.length; i++) require(tokenTheir.transfer(devWallets[i].devAddress, ((_amount * devsFeePercent) / 100)) * devWallets[i].sharePercent / 10000); // devsFeePercent% of tokenTheir deposited here goes to devWallets, the rest stays in this contract
+  tokenTheir.safeTransferFrom(msg.sender, address(this), _amount);
+  for (uint i = 0; i < devWallets.length; i++) tokenTheir.safeTransfer(devWallets[i].devAddress, ((_amount * devsFeePercent) / 100) * devWallets[i].sharePercent / 10000); // devsFeePercent% of tokenTheir deposited here goes to devWallets, the rest stays in this contract
   deposited[msg.sender] += _amount;
   claimable[msg.sender] += toClaim;
   totalDeposited += _amount;
@@ -81,7 +83,7 @@ contract Presale is Ownable, ReentrancyGuard {
  function depositOwn(uint _amount) public onlyOwner {
   uint allowance = tokenOur.allowance(msg.sender, address(this));
   require(allowance >= _amount, 'depositOwn: Allowance is too low');
-  require(tokenOur.transferFrom(msg.sender, address(this), _amount));
+  tokenOur.safeTransferFrom(msg.sender, address(this), _amount);
   ownBalance += _amount;
  }
 
@@ -91,7 +93,7 @@ contract Presale is Ownable, ReentrancyGuard {
   if (!liquidityCreated) createLiquidity(); // the first person who runs claim() after depositTimeOut also creates liquidity
   uint amount = claimable[msg.sender];
   require(amount > 0, 'claim: Nothing to claim');
-  require(tokenOur.transfer(msg.sender, amount));
+  tokenOur.safeTransfer(msg.sender, amount);
   claimed[msg.sender] += amount;
   claimable[msg.sender] -= amount;
   totalClaimed += amount;
@@ -120,7 +122,7 @@ contract Presale is Ownable, ReentrancyGuard {
   // to be fair anyone can start it after claimTimeout
   require(block.timestamp > claimTimeOut, 'burnRemainingTokens: Claim period did not timed out yet');
   uint remaining = getBalanceTokenOur();
-  require(tokenOur.transfer(burnAddress, remaining));
+  tokenOur.safeTransfer(burnAddress, remaining);
   emit eventBurnRemainingTokens(remaining);
  }
 

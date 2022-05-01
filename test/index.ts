@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import type { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { Airdrop, LiquidityManager, Pool, Presale, Token, Stablecoin, UniswapV2RouterMock, UniswapV2FactoryMock } from '../typechain';
+import { Airdrop, LiquidityManager, Pool, Presale, Token, Stablecoin, UniswapV2RouterMock, UniswapV2FactoryMock } from '../typechain-types';
 import { BigNumber } from 'ethers';
 
 describe('Token tests', function () {
