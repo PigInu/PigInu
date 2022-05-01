@@ -107,7 +107,6 @@ async function main() {
  createVerifyScript();
  getTotalCost();
 
-/*
  // TOKEN FUNCTIONS:
  console.log('TokenOur - approve:');
  await runFunction(tokenOur, 'approve', presale.address, maxint);
@@ -116,6 +115,7 @@ async function main() {
  console.log('TokenOur - setTaxExclusion - Airdrop:');
  await runFunction(tokenOur, 'setTaxExclusion', airdrop.address, true);
 
+/*
  // LIQUIDITY MANAGER FUNCTIONS:
  console.log('LiquidityManager - createPair:');
  await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
