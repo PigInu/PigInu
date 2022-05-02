@@ -70,7 +70,7 @@ contract Presale is Ownable, ReentrancyGuard {
  function deposit(uint _amount) public nonReentrant {
   uint allowance = tokenTheir.allowance(msg.sender, address(this));
   require(allowance >= _amount, 'deposit: Allowance is too low');
-  require(block.number >= startBlock, 'deposit: Deposit period did not started yet');
+  require(block.number >= startBlock && startBlock > 0, 'deposit: Deposit period did not started yet');
   require(block.number <= depositTimeOutBlock, 'deposit: Deposit period already timed out');
   require(totalDeposited + _amount <= getPresaleTokenTheirMax(), 'deposit: Maximum deposit amount exceeded.');
   uint toClaim = (_amount * 10**tokenTheir.decimals()) / tokenPricePresale;
@@ -93,7 +93,7 @@ contract Presale is Ownable, ReentrancyGuard {
  }
 
  function claim() public nonReentrant {
-  require(block.number > depositTimeOutBlock, 'claim: Deposit period did not timed out yet');
+  require(block.number > depositTimeOutBlock && depositTimeOutBlock > 0, 'claim: Deposit period did not timed out yet');
   require(block.number <= claimTimeOutBlock, 'claim: Claim period already timed out');
   if (!liquidityCreated) createLiquidity(); // the first person who runs claim() after depositTimeOut also creates liquidity
   uint amount = claimable[msg.sender];
@@ -108,7 +108,7 @@ contract Presale is Ownable, ReentrancyGuard {
 
  function createLiquidity() private {
   // the first person who runs claim() after depositTimeOut also creates liquidity
-  require(block.number > depositTimeOutBlock, 'createLiquidity: Deposit period did not timed out yet');
+  require(block.number > depositTimeOutBlock && depositTimeOutBlock > 0, 'createLiquidity: Deposit period did not timed out yet');
   require(!liquidityCreated, 'createLiquidity: Liquidity was created already before');
   address pair = liquidityManager.getPairAddress(routerAddress, address(tokenOur), address(tokenTheir));
   if (pair == address(0)) pair = liquidityManager.createPair(routerAddress, address(tokenOur), address(tokenTheir));
@@ -125,7 +125,7 @@ contract Presale is Ownable, ReentrancyGuard {
 
  function burnRemainingTokens() public {
   // to be fair anyone can start it after claimTimeout
-  require(block.number > claimTimeOutBlock, 'burnRemainingTokens: Claim period did not timed out yet');
+  require(block.number > claimTimeOutBlock && claimTimeOutBlock > 0, 'burnRemainingTokens: Claim period did not timed out yet');
   uint remaining = getBalanceTokenOur();
   tokenOur.safeTransfer(burnAddress, remaining);
   emit eventBurnRemainingTokens(remaining);

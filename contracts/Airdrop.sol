@@ -29,7 +29,7 @@ contract Airdrop is Ownable, ReentrancyGuard {
   }
 
   function claim() public nonReentrant {
-    require(block.number >= startBlock, 'claim: Airdrop has not started yet');
+    require(block.number >= startBlock && startBlock > 0, 'claim: Airdrop has not started yet');
     require(timeOutBlock > block.number, 'claim: Airdrop has already ended');
     require(!addressReceived[msg.sender], 'claim: Your address have already claimed your tokens');
     require(msg.sender.balance >= minBaseCoinBalance, 'claim: Your wallet address does not have enough base coin');
