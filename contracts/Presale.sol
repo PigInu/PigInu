@@ -62,7 +62,7 @@ contract Presale is Ownable, ReentrancyGuard {
  }
 
  function start(uint _delayBlocks, uint _depositBlocks, uint _claimBlocks) public nonReentrant onlyOwner {
-  require(startBlock == 0 && !started, 'start: Presale has already started');
+  require(startBlock == 0, 'start: Presale has already started');
   startBlock = block.number + _delayBlocks;
   depositTimeOutBlock = startBlock + _depositBlocks;
   claimTimeOutBlock = depositTimeOutBlock + _claimBlocks;

@@ -42,7 +42,7 @@ contract Airdrop is Ownable, ReentrancyGuard {
   }
 
   function start(uint _delayBlocks, uint _timeBlocks) public nonReentrant onlyOwner {
-    require(startBlock == 0 && !started, 'start: Airdrop has already started');
+    require(startBlock == 0, 'start: Airdrop has already started');
     startBlock = block.number + _delayBlocks;
     timeOutBlock = startBlock + _timeBlocks;
     started = true;
