@@ -172,6 +172,9 @@ describe("Presale tests", function () {
 	const presaleDev1Fee = "4500";
 	const presaleDev2Fee = "4500";
 	const presaleDev3Fee = "1000";
+	const presaleDelayBlocks = "0";
+	const presaleDepositBlocks = "130";
+	const presaleClaimBlocks = "130";
 	const stablecoinAmount = "2000000000000000000"; // 2 USD
 
 	beforeEach(async function () {
@@ -204,8 +207,6 @@ describe("Presale tests", function () {
 			_burn.address,
 			presalePricePresale,
 			presalePriceLiquidity,
-			presaleDepositTime,
-			presaleClaimTime,
 			_liquidityManagerContract.address
 		);
 		await _presaleContract.deployed();
@@ -230,15 +231,19 @@ describe("Presale tests", function () {
 		await expect(_presaleContract.deposit(presaleDepositAmount)).to.be.revertedWith("deposit: Allowance is too low");
 	});
 	it("Should revert deposit - Deposit period already timed out", async function () {
+		await _presaleContract.start(presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
 		await _stablecoinContract.approve(_presaleContract.address, presaleDepositAmount);
-		await ethers.provider.send("evm_increaseTime", [presaleDepositTimeInMinutes * 60]);
+		const timeInBlocksHex = BigNumber.from(presaleDepositBlocks).toHexString().replace(/0x0+/, "0x");
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
 		await expect(_presaleContract.deposit(presaleDepositAmount)).to.be.revertedWith("deposit: Deposit period already timed out");
 	});
 	it("Should revert deposit - Maximum deposit amount exceeded", async function () {
+		await _presaleContract.start(presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
 		await _stablecoinContract.approve(_presaleContract.address, presaleDepositAmount);
 		await expect(_presaleContract.deposit(presaleDepositAmount)).to.be.revertedWith("deposit: Maximum deposit amount exceeded");
 	});
 	it("Should deposit", async function () {
+		await _presaleContract.start(presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
 		await _tokenContract.approve(_presaleContract.address, presaleDepositOwnAmount);
 		await _presaleContract.depositOwn(presaleDepositOwnAmount);
 		await _stablecoinContract.approve(_presaleContract.address, presaleDepositAmount);
@@ -256,20 +261,25 @@ describe("Presale tests", function () {
 		expect(await _presaleContract.totalClaimableNotDeducted()).to.be.equal(presaleDepositAmount);
 	});
 	it("Should revert burn - Claim period did not timed out yet", async function () {
+		await _presaleContract.start(presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
 		await _tokenContract.approve(_presaleContract.address, presaleDepositOwnAmount);
 		await _presaleContract.depositOwn(presaleDepositOwnAmount);
 		await _stablecoinContract.approve(_presaleContract.address, presaleDepositAmount);
 		await _presaleContract.deposit(presaleDepositAmount);
-		await ethers.provider.send("evm_increaseTime", [presaleDepositTimeInMinutes * 60]);
+		const timeInBlocksHex = BigNumber.from(presaleDepositBlocks).toHexString().replace(/0x0+/, "0x");
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
 		await expect(_presaleContract.burnRemainingTokens()).to.be.revertedWith("burnRemainingTokens: Claim period did not timed out yet");
 	});
 	it("Should burn remaining tokens", async function () {
 		await _tokenContract.approve(_presaleContract.address, presaleDepositOwnAmount);
 		await _presaleContract.depositOwn(presaleDepositOwnAmount);
 		await _stablecoinContract.approve(_presaleContract.address, presaleDepositAmount);
+		await _presaleContract.start(presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
 		await _presaleContract.deposit(presaleDepositAmount);
-		await ethers.provider.send("evm_increaseTime", [presaleDepositTimeInMinutes * 60]);
-		await ethers.provider.send("evm_increaseTime", [presaleClaimTimeInMinutes * 60]);
+		let timeInBlocksHex = BigNumber.from(presaleDepositBlocks).toHexString().replace(/0x0+/, "0x");
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
+		timeInBlocksHex = BigNumber.from(presaleClaimBlocks).toHexString().replace(/0x0+/, "0x");
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
 		expect(await _presaleContract.burnRemainingTokens())
 			.to.emit(_presaleContract, "eventBurnRemainingTokens")
 			.withArgs(presaleDepositOwnAmount);
@@ -279,16 +289,21 @@ describe("Presale tests", function () {
 		await expect(_presaleContract.claim()).to.be.revertedWith("claim: Deposit period did not timed out yet");
 	});
 	it("Should revert claim - Claim period already timed out", async function () {
-		await ethers.provider.send("evm_increaseTime", [presaleDepositTimeInMinutes * 60]);
-		await ethers.provider.send("evm_increaseTime", [presaleClaimTimeInMinutes * 60]);
+		await _presaleContract.start(presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
+		let timeInBlocksHex = BigNumber.from(presaleDepositBlocks).toHexString().replace(/0x0+/, "0x");
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
+		timeInBlocksHex = BigNumber.from(presaleClaimBlocks).toHexString().replace(/0x0+/, "0x");
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
 		await expect(_presaleContract.claim()).to.be.revertedWith("claim: Claim period already timed out");
 	});
 	it("Should claim", async function () {
 		await _tokenContract.approve(_presaleContract.address, presaleDepositOwnAmount);
 		await _presaleContract.depositOwn(presaleDepositOwnAmount);
 		await _stablecoinContract.approve(_presaleContract.address, presaleDepositAmount);
+		await _presaleContract.start(presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
 		await _presaleContract.deposit(presaleDepositAmount);
-		await ethers.provider.send("evm_increaseTime", [presaleDepositTimeInMinutes * 60]);
+		const timeInBlocksHex = BigNumber.from(presaleDepositBlocks).toHexString().replace(/0x0+/, "0x");
+		await ethers.provider.send("hardhat_mine", [timeInBlocksHex]);
 		expect(await _presaleContract.claim())
 			.to.emit(_presaleContract, "eventClaimed")
 			.withArgs(_owner.address, presaleDepositAmount);
