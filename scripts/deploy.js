@@ -134,10 +134,6 @@ async function main() {
  // PRESALE FUNCTIONS - TEST:
  console.log('Presale - start:');
  await runFunction(presale, 'start', presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
- console.log('TokenTheir - approve:');
- await runFunction(tokenTheir, 'approve', presale.address, maxint);
- console.log('Presale - deposit:');
- await runFunction(presale, 'deposit', presaleDepositAmount);
 
  // AIRDROP FUNCTIONS:
  console.log('TokenOur - transfer:');
