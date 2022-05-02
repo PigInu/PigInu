@@ -107,17 +107,13 @@ async function main() {
  createVerifyScript();
  getTotalCost();
 
- // TOKEN OUR FUNCTIONS:
+ // TOKEN FUNCTIONS:
  console.log('TokenOur - approve:');
  await runFunction(tokenOur, 'approve', presale.address, maxint);
  console.log('TokenOur - setTaxExclusion - Presale:');
  await runFunction(tokenOur, 'setTaxExclusion', presale.address, true);
  console.log('TokenOur - setTaxExclusion - Airdrop:');
  await runFunction(tokenOur, 'setTaxExclusion', airdrop.address, true);
-
- // TOKEN THEIR FUNCTIONS - TEST:
- console.log('TokenTheir - approve:');
- await runFunction(tokenTheir, 'approve', presale.address, maxint);
 
 /*
  // LIQUIDITY MANAGER FUNCTIONS:
@@ -136,7 +132,8 @@ async function main() {
  await runFunction(presale, 'addDevAddress', presaleDevAddress3, presaleDevAddress3Share);
  
  // PRESALE FUNCTIONS - TEST:
-
+ console.log('TokenTheir - approve:');
+ await runFunction(tokenTheir, 'approve', presale.address, maxint);
  console.log('Presale - deposit:');
  await runFunction(presale, 'deposit', presaleDepositAmount);
  console.log('Presale - start:');
