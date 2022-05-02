@@ -21,16 +21,22 @@ async function main() {
 
  // AIRDROP SETTINGS - RELEASE:
  //const airdropAmount = '500000000000000000000000' // 500 000 tokens
- //const airdropTime = '2592000'; // 30 days
 
  // AIRDROP SETTINGS - TEST:
  const airdropAmount = '2000000000000000000' // 2 tokens
- const airdropTime = '900'; // 15 minutes
+ const airdropDelayBlocks = '250'; // 250 blocks
+ const airdropTimeSeconds = '900'; // 15 minutes
 
  // PRESALE SETTINGS:
  const presalePricePresale = '1000000000000000000'; // 1 USD
  const presalePriceLiquidity = '2000000000000000000'; // 2 USD
- 
+ const presaleDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const presaleDevAddress1Share = '4500';
+ const presaleDevAddress2 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
+ const presaleDevAddress2Share = '4500';
+ const presaleDevAddress3 = '0xF3E0B0b7A57C70CB2876Aa6C763eB2668fC8BF20';
+ const presaleDevAddress3Share = '1000';
+
  // PRESALE SETTINGS - RELEASE:
  //const presaleAmount = '7500000000000000000000000' // 7 500 000 tokens
  //const presaleDepositTime = '2592000'; // 30 days
@@ -40,13 +46,7 @@ async function main() {
  const presaleAmount = '20000000000000000000' // 20 tokens
  const presaleDepositTime = '300'; // 5 minutes
  const presaleClaimTime = '300'; // 5 minutes
- const presaleDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
- const presaleDevAddress1Share = '4500';
- const presaleDevAddress2 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
- const presaleDevAddress2Share = '4500';
- const presaleDevAddress3 = '0xF3E0B0b7A57C70CB2876Aa6C763eB2668fC8BF20';
- const presaleDevAddress3Share = '1000';
-
+ 
  // POOL SETTINGS:
  const poolDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
  const poolDevAddress1Share = '5000';
@@ -100,7 +100,7 @@ async function main() {
  //var tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
  //var liquidityManager = await deploy('LiquidityManager');
  var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, presaleDepositTime, presaleClaimTime, liquidityManager.address);
- //var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
+ var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
  var pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
 
  // SUMMARY - BEFORE FUNCTIONS:
@@ -112,10 +112,10 @@ async function main() {
  await runFunction(tokenOur, 'approve', presale.address, maxint);
  console.log('TokenOur - setTaxExclusion - Presale:');
  await runFunction(tokenOur, 'setTaxExclusion', presale.address, true);
-/*
  console.log('TokenOur - setTaxExclusion - Airdrop:');
  await runFunction(tokenOur, 'setTaxExclusion', airdrop.address, true);
 
+ /*
  // LIQUIDITY MANAGER FUNCTIONS:
  console.log('LiquidityManager - createPair:');
  await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
@@ -137,15 +137,13 @@ async function main() {
  console.log('Presale - deposit:');
  await runFunction(presale, 'deposit', '10000000000000000000'); // 10 USD
 
-/*
  // AIRDROP FUNCTIONS:
  console.log('TokenOur - transfer:');
  await runFunction(tokenOur, 'transfer', airdrop.address, airdropAmount);
 
  // AIRDROP FUNCTIONS - TEST:
  console.log('Airdrop - start:');
- await runFunction(airdrop, 'start', airdropTime);
-*/
+ await runFunction(airdrop, 'start', airdropDelayBlocks, airdropTimeSeconds);
 
  // POOL FUNCTIONS:
  console.log('LiquidityManager - getPairAddress:');
