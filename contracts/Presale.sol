@@ -70,6 +70,7 @@ contract Presale is Ownable, ReentrancyGuard {
  function deposit(uint _amount) public nonReentrant {
   uint allowance = tokenTheir.allowance(msg.sender, address(this));
   require(allowance >= _amount, 'deposit: Allowance is too low');
+  require(block.number >= startBlock, 'deposit: Deposit period did not started yet');
   require(block.number <= depositTimeOutBlock, 'deposit: Deposit period already timed out');
   require(totalDeposited + _amount <= getPresaleTokenTheirMax(), 'deposit: Maximum deposit amount exceeded.');
   uint toClaim = (_amount * 10**tokenTheir.decimals()) / tokenPricePresale;

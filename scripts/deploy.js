@@ -132,12 +132,12 @@ async function main() {
  await runFunction(presale, 'addDevAddress', presaleDevAddress3, presaleDevAddress3Share);
  
  // PRESALE FUNCTIONS - TEST:
+ console.log('Presale - start:');
+ await runFunction(presale, 'start', presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
  console.log('TokenTheir - approve:');
  await runFunction(tokenTheir, 'approve', presale.address, maxint);
  console.log('Presale - deposit:');
  await runFunction(presale, 'deposit', presaleDepositAmount);
- console.log('Presale - start:');
- await runFunction(presale, 'start', presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
 
  // AIRDROP FUNCTIONS:
  console.log('TokenOur - transfer:');
