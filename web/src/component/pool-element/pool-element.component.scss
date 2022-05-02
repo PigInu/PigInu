@@ -79,6 +79,13 @@
                         color: rgba(42,182,55,1);
                         font-weight: bold;
                     }
+                    .asLink{
+                        text-decoration: underline;
+                        cursor: pointer;
+                        &:hover{
+                            text-decoration: none;
+                        }
+                    }
                 }
                 th{
                     text-align: right;
@@ -92,6 +99,17 @@
             }
             .actions{
                 text-align: center;
+            }
+        }
+
+        &-apr-apy{
+            margin:0;
+            height: auto;
+            width: 100%;
+            border-radius: 0 0 20px 20px;
+            padding: 10px 20px;
+            table tr th{
+                text-align: left;
             }
         }
     }

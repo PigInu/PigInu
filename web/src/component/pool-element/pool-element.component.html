@@ -28,17 +28,19 @@
     </tr>
     <tr>
       <th>APR:</th><td>
-        <app-loader *ngIf="apr() == ''" class="center"></app-loader>
-        <div *ngIf="apr() != ''"  class="green">
-          {{apr()| numberLocale}} %
+        <app-loader *ngIf="aprValue == null" class="center"></app-loader>
+        <div *ngIf="aprValue != null && aprValue == -1"  class="green">-</div>
+        <div *ngIf="aprValue != null && aprValue != -1"  class="green asLink" (click)="toogleAprApyModal()">
+          {{aprValue| numberLocale}} %
         </div>
       </td>
     </tr>
     <tr>
       <th>APY:</th><td>
-        <app-loader *ngIf="apr() == ''" class="center"></app-loader>
-        <div *ngIf="apr() != ''"  class="green">
-          {{apy()| numberLocale}} %
+        <app-loader *ngIf="apyValue == null" class="center"></app-loader>
+        <div *ngIf="aprValue != null && aprValue == -1"  class="green">-</div>
+        <div *ngIf="aprValue != null && aprValue != -1"  class="green asLink" (click)="toogleAprApyModal()">
+          {{apyValue| numberLocale}} %
         </div>
       </td>
     </tr>
@@ -192,3 +194,47 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal" *ngIf="aprApyModal">
+  <div class="modal-data">
+    <div class="modal-header">
+      APR/APY {{pool.tokenDeposit.name}}
+      <span class="close" (click)="toogleAprApyModal()">⨯</span>
+    </div>
+    <div class="modal-body">
+      <div class="data data-apr-apy">
+        <table>
+          <tbody>
+            <tr>
+              <th>TIME</th>
+              <th>APR</th>
+              <th>APY</th>
+            </tr>
+            <tr>
+                <th>DAY</th>
+                <td>{{apr(1)| numberLocale}}%</td>
+                <td>{{apy(1)| numberLocale}}%</td>
+            </tr>
+            <tr>
+                <th>WEEK</th>
+                <td>{{apr(7)| numberLocale}}%</td>
+                <td>{{apy(7)| numberLocale}}%</td>
+            </tr>
+            <tr>
+                <th>MONTH</th>
+                <td>{{apr(30)| numberLocale}}%</td>
+                <td>{{apy(30)| numberLocale}}%</td>
+            </tr>
+            <tr class="noborder">
+                <th>YEAR</th>
+                <td>{{aprValue| numberLocale}}%</td>
+                <td>{{apyValue| numberLocale}}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+

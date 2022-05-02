@@ -17,6 +17,9 @@ import { Web3ModalService } from 'src/services/web3-modal.service';
 export class PoolElementComponent implements OnInit, OnDestroy {
   @Input() pool!: PoolState;
   @Input() contractAddress!: string;
+  @Input() tokenPerBlock: BigNumber | null = null;
+  @Input() totalAllocPoint: number | null = null;
+
   @Output() transactionHash = new EventEmitter<string>();
   @Output() transactionError = new EventEmitter<string>();
 
@@ -34,6 +37,11 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   numberPipe: NumberLocalePipe;
   bigNumberPipe: BigNumberLocalePipe;
   public totalValue: BigNumber | null = null;
+  public totalValueNumber: number | null = null;
+  private blockTime: number | null = null
+  public aprValue: number | null = null;
+  public apyValue: number | null = null;
+  public aprApyModal: boolean = false;
 
   constructor(private web3ModalSevice: Web3ModalService, private poolService: PoolService) {
     this.numberPipe = new NumberLocalePipe();
@@ -56,27 +64,47 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     this.tokenPriceValueLoaded = null;
   }
 
-  apr(){
-    return "";
-  }
-
-  apy(){
-    return "";
+  apy(days: number = 365): number | null{
+      const apr = this.apr();
+      if(apr == null || apr == -1)
+        return apr;
+      return (((1 + apr / 100 / 365) ** days) - 1) * 100;
   }
   
-  getAPR(totalAllocPoint: number, blockTime: number, tokensPerBlock: number, tokenPrice: number, poolAllocPoint: number, totalValue: number, days: number) {
-    if(typeof days == "undefined")
-      days = 365;
-    var poolWeight = poolAllocPoint / totalAllocPoint;
-    var blocksPerYear = this.getBlocksPerDays(days, blockTime);
-    var tokenRewardPerBlock = this.toEth(tokensPerBlock) * poolWeight;
-    var tokenRewardPerYear = blocksPerYear * tokenRewardPerBlock;
-    var apr = (tokenPrice * tokenRewardPerYear / totalValue) * 100;
+  apr(days: number = 365) : null | number {
+    let apr: number | null = null;
+    if(this.totalValue != null && 
+      this.blockTime != null &&
+      this.totalAllocPoint != null && 
+      this.totalAllocPoint != 0 &&
+      this.tokenPerBlock != null &&
+      this.totalValueNumber != null && 
+      this.tokenPriceValue != -1
+    ) {
+      if(this.totalValueNumber == 0)
+        return -1;
+      const tokenPrice = this.tokenPriceValue;
+      const poolAllocPoint = this.pool.data.allocPoint.toNumber();
+      var poolWeight = poolAllocPoint / this.totalAllocPoint;
+      var blocksPerYear = this.getBlocksPerDays(days, this.blockTime);
+      var tokenRewardPerBlock = this.toEth(this.tokenPerBlock) * poolWeight;
+      var tokenRewardPerYear = blocksPerYear * tokenRewardPerBlock;
+      apr = (tokenPrice * tokenRewardPerYear / this.totalValueNumber) * 100;
+
+    } /* else{
+      console.log("POOL")
+      console.log(this.totalValue );
+      console.log(this.blockTime );
+      console.log(this.totalAllocPoint );
+      console.log(this.tokenPerBlock );
+      console.log(this.totalValueNumber );
+      console.log(this.tokenPriceValue);
+    } */
     return apr;
   }
 
-  toEth(tokens: number){
-    return tokens;
+  toEth(tokens: BigNumber){
+    return Number(ethers.utils.formatEther(tokens));
   }
 
   getBlocksPerDays(days: number, blockTime: number) {
@@ -113,6 +141,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     }
     if(this.tokenPriceValueLoaded == false && this.pool.tokenDeposit.price >= 0){
       this.tokenPriceValue = this.pool.tokenDeposit.price;
+      setTimeout(() => {this.calcAprApy();}, 100);
       this.tokenPriceValueLoaded = true;
     }
     if(this.tokenPriceValue <= 0)
@@ -125,13 +154,24 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     this.getAddressPoolData();
     this.pool.pendingTokens().then(val => {
       this.pendingTokens = val;
-    });
-    this.pool.pendingTokens().then(val => {
-      this.pendingTokens = val;
+      this.calcAprApy();
     });
     this.pool.tokenDeposit.balanceOf(this.contractAddress)?.then(value => {
       this.totalValue = value;
+      this.totalValueNumber = this.toEth(this.totalValue);
+      this.calcAprApy();
     });
+    this.poolService.getBlockNumber().then(blockNumber => {
+      this.poolService.getBlock(blockNumber).then(block => {
+        this.blockTime = block.timestamp;
+        this.calcAprApy();
+      });
+    });
+  }
+
+  calcAprApy(){
+    this.aprValue = this.apr();
+    this.apyValue = this.apy();
   }
 
   getAddressPoolData() : AddressPoolData | null{
@@ -216,6 +256,10 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     if(reloadBalance)
       this.pool.tokenDeposit.updateBalance();
     this.depositModal = !this.depositModal;
+  }
+
+  toogleAprApyModal(){
+    this.aprApyModal = !this.aprApyModal;
   }
 
   getNumberValue(value: string) : number{

@@ -15,7 +15,12 @@ import { isNumber } from 'util';
 })
 export class PresaleComponent implements OnInit, OnDestroy  {
   initialized: boolean = false;
+  claimPeriodOver: boolean | null = null;
+  startPeriodOver: boolean | null = null;
+  depositPeriodOver: boolean | null = null;
+  
   subscription: any;
+  periodInterval: any;
   public presale: IPresale;
 
   constructor(private web3ModalSevice: Web3ModalService) {
@@ -34,6 +39,16 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     .subscribe(() => {
       //console.log("load: " + Date.now());
       this.web3ModalSevice.loadPresaleData();
+    });
+    this.periodInterval = interval(250)
+    .pipe(takeWhile(() => (this.initialized) && !(this.claimPeriodOver == true && this.startPeriodOver == true && this.depositPeriodOver == true)))
+    .subscribe(() => {
+      if(this.presale.claimTimeOut > 0)
+        this.claimPeriodOver = AppState.timestampToTimeout(this.presale.claimTimeOut) <= 0;
+      if(this.presale.startTime > 0)
+        this.startPeriodOver = AppState.timestampToTimeout(this.presale.startTime) <= 0;
+      if(this.presale.depositTimeOut > 0)
+        this.depositPeriodOver = AppState.timestampToTimeout(this.presale.depositTimeOut) <= 0;
     });
   }
 
@@ -153,10 +168,6 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     }).finally(() => {
       this.checkDepositedLoading = false;
     });
-  }
-
-  timestampToTimeout(timestamp: number) : number{
-    return AppState.timestampToTimeout(timestamp);
   }
 
   timeOutConfig(timestamp: number): CountdownConfig {

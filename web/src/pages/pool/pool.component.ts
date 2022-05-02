@@ -30,6 +30,8 @@ export class PoolComponent implements OnInit, OnDestroy {
   public started: Boolean | null = null;
   public startBlock: BigNumber | null = null;
   public startDate: number | null = null;
+  public totalAllocPoint: number | null = null;
+  public tokenPerBlock: BigNumber | null = null;
 
   constructor(private poolService: PoolService) { 
     this.poolServiceState = this.poolService.getState();
@@ -37,14 +39,18 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initialized = true;
-    
     this.refreshData();
     this.subscription = interval(Config.main.poolUpdateInterval * 1000)
     .pipe(takeWhile(() => this.initialized))
     .subscribe(() => {
       this.refreshData();
     });
-    
+    this.poolService.tokenPerBlock().then(value => {
+      this.tokenPerBlock = value;
+    });
+    this.poolService.totalAllocPoint().then(value => {
+      this.totalAllocPoint = value.toNumber();
+    });
   }
 
   ngOnDestroy(): void {

@@ -15,7 +15,6 @@ export class PoolService {
   private contractInterface = [
     "function token () view returns (uint)",
     "function userInfo(address)",
-    "function tokensPerBlock () view returns (uint)",
     "function started () view returns (bool)",
     "function startBlock () view returns (uint256)",
     "function tokenEarn() view returns (address)",
@@ -28,6 +27,8 @@ export class PoolService {
     "function getTokensToBeBurned() view returns (uint256)",
     "function getDistributedTokens() view returns (uint256)",
     "function getTokensToBeDistributed() view returns (uint256)",    
+    "function tokenPerBlock () view returns (uint)",
+    "function totalAllocPoint () view returns (uint)",
   ];
   private state : PoolServiceState = {
     token: new StateToken("/assets/token.png"),
@@ -109,6 +110,18 @@ export class PoolService {
 
   getBlock(blockNumber: any): Promise<any>{
     return this.getSignedContract().provider.getBlock(blockNumber);
+  }
+
+  getBlockNumber(): Promise<any>{
+    return this.getSignedContract().provider.getBlockNumber();
+  }
+
+  tokenPerBlock(): Promise<BigNumber>{
+    return this.getSignedContract().tokenPerBlock();
+  }
+
+  totalAllocPoint(): Promise<BigNumber>{
+    return this.getSignedContract().totalAllocPoint();
   }
 }
 
