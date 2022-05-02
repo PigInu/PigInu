@@ -17,7 +17,7 @@ async function main() {
 
  // AIRDROP SETTINGS:
  const airdropDrop = '1000000000000000000'; // 1 token
- const airdropMinBaseCoinBalance = '10000000000000000000' // 10 MATIC
+ const airdropMinBaseCoinBalance = '100000000000000000000' // 100 MATIC
 
  // AIRDROP SETTINGS - RELEASE:
  //const airdropAmount = '500000000000000000000000' // 500 000 tokens
