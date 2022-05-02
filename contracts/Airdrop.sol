@@ -10,7 +10,7 @@ contract Airdrop is Ownable, ReentrancyGuard {
   uint public totalClaimed;
   uint public amountToClaim;
   uint public claimCount;
-  uint public timeOut;
+  uint public timeOutBlock;
   uint public startBlock;
   address burnAddress;
   uint public minBaseCoinBalance;
@@ -30,7 +30,7 @@ contract Airdrop is Ownable, ReentrancyGuard {
 
   function claim() public nonReentrant {
     require(startBlock >= block.number, 'claim: Airdrop has not started yet');
-    require(timeOut > block.timestamp, 'claim: Airdrop has ended already');
+    require(timeOutBlock > block.number, 'claim: Airdrop has ended already');
     require(!addressReceived[msg.sender], 'claim: Your address have already claimed your tokens');
     require(msg.sender.balance >= minBaseCoinBalance, 'claim: Your wallet address does not have enough base coin');
     require(token.transfer(msg.sender, amountToClaim));
@@ -40,15 +40,15 @@ contract Airdrop is Ownable, ReentrancyGuard {
     emit eventClaimed(msg.sender, amountToClaim);
   }
 
-  function start(uint _delayBlocks, uint _timeSeconds) public nonReentrant onlyOwner {
-    require(timeOut == 0, 'start: Airdrop has already started');
-    timeOut = block.timestamp + _timeSeconds + _delayBlocks;
+  function start(uint _delayBlocks, uint _timeBlocks) public nonReentrant onlyOwner {
+    require(startBlock == 0, 'start: Airdrop has already started');
+    timeOutBlock = block.number + _delayBlocks + _timeBlocks;
   }
 
   function burnRemainingTokens() public {
     // to be fair anyone can burn remaining tokens when airdrop is over
-    require(timeOut != 0, 'burnRemainingTokens: Airdrop has not started yet');
-    require(timeOut < block.timestamp, 'burnRemainingTokens: Airdrop has not ended yet');
+    require(startBlock != 0, 'burnRemainingTokens: Airdrop has not started yet');
+    require(timeOutBlock < block.number, 'burnRemainingTokens: Airdrop has not ended yet');
     uint remaining = getRemainingTokens();
     require(token.transfer(burnAddress, remaining));
     emit eventBurnRemainingTokens(remaining);

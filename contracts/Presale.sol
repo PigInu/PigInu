@@ -16,10 +16,10 @@ contract Presale is Ownable, ReentrancyGuard {
  ERC20 public tokenTheir;
  LiquidityManager public liquidityManager;
  uint public devsFeePercent = 50;
- uint public startTime;
  uint public ownBalance;
- uint public depositTimeOut;
- uint public claimTimeOut;
+ uint public startBlock;
+ uint public depositTimeOutBlock;
+ uint public claimTimeOutBlock;
  uint public depositedCount;
  uint public claimedCount;
  uint public tokenPricePresale;
@@ -50,23 +50,27 @@ contract Presale is Ownable, ReentrancyGuard {
   uint sharePercent;
  }
 
- constructor(address _tokenOurAddress, address _tokenTheirAddress, address _routerAddress, address _burnAddress, uint _tokenPricePresale, uint _tokenPriceLiquidity, uint _depositTime, uint _claimTime, LiquidityManager _liquidityManager) {
+ constructor(address _tokenOurAddress, address _tokenTheirAddress, address _routerAddress, address _burnAddress, uint _tokenPricePresale, uint _tokenPriceLiquidity, LiquidityManager _liquidityManager) {
   tokenOur = ERC20(_tokenOurAddress);
   tokenTheir = ERC20(_tokenTheirAddress);
   routerAddress = _routerAddress;
   tokenPricePresale = _tokenPricePresale;
   tokenPriceLiquidity = _tokenPriceLiquidity;
   burnAddress = _burnAddress;
-  startTime = block.timestamp;
-  depositTimeOut = startTime + _depositTime;
-  claimTimeOut = depositTimeOut + _claimTime;
   liquidityManager = _liquidityManager;
+ }
+
+ function start(uint _delayBlocks, uint _depositBlocks, uint _claimBlocks) public nonReentrant onlyOwner {
+  require(startBlock == 0, 'start: Airdrop has already started');
+  startBlock = block.number + _delayBlocks;
+  depositTimeOutBlock = startBlock + _depositBlocks;
+  claimTimeOutBlock = startBlock + _claimBlocks;
  }
 
  function deposit(uint _amount) public nonReentrant {
   uint allowance = tokenTheir.allowance(msg.sender, address(this));
   require(allowance >= _amount, 'deposit: Allowance is too low');
-  require(block.timestamp <= depositTimeOut, 'deposit: Deposit period already timed out');
+  require(block.number <= depositTimeOutBlock, 'deposit: Deposit period already timed out');
   require(totalDeposited + _amount <= getPresaleTokenTheirMax(), 'deposit: Maximum deposit amount exceeded.');
   uint toClaim = (_amount * 10**tokenTheir.decimals()) / tokenPricePresale;
   require(totalClaimable + toClaim <= getBalanceTokenOur(), 'deposit: Not enough tokens in this contract');
@@ -88,8 +92,8 @@ contract Presale is Ownable, ReentrancyGuard {
  }
 
  function claim() public nonReentrant {
-  require(block.timestamp > depositTimeOut, 'claim: Deposit period did not timed out yet');
-  require(block.timestamp <= claimTimeOut, 'claim: Claim period already timed out');
+  require(block.number > depositTimeOutBlock, 'claim: Deposit period did not timed out yet');
+  require(block.number <= claimTimeOutBlock, 'claim: Claim period already timed out');
   if (!liquidityCreated) createLiquidity(); // the first person who runs claim() after depositTimeOut also creates liquidity
   uint amount = claimable[msg.sender];
   require(amount > 0, 'claim: Nothing to claim');
@@ -103,7 +107,7 @@ contract Presale is Ownable, ReentrancyGuard {
 
  function createLiquidity() private {
   // the first person who runs claim() after depositTimeOut also creates liquidity
-  require(block.timestamp > depositTimeOut, 'createLiquidity: Deposit period did not timed out yet');
+  require(block.number > depositTimeOutBlock, 'createLiquidity: Deposit period did not timed out yet');
   require(!liquidityCreated, 'createLiquidity: Liquidity was created already before');
   address pair = liquidityManager.getPairAddress(routerAddress, address(tokenOur), address(tokenTheir));
   if (pair == address(0)) pair = liquidityManager.createPair(routerAddress, address(tokenOur), address(tokenTheir));
@@ -120,7 +124,7 @@ contract Presale is Ownable, ReentrancyGuard {
 
  function burnRemainingTokens() public {
   // to be fair anyone can start it after claimTimeout
-  require(block.timestamp > claimTimeOut, 'burnRemainingTokens: Claim period did not timed out yet');
+  require(block.number > claimTimeOutBlock, 'burnRemainingTokens: Claim period did not timed out yet');
   uint remaining = getBalanceTokenOur();
   tokenOur.safeTransfer(burnAddress, remaining);
   emit eventBurnRemainingTokens(remaining);
