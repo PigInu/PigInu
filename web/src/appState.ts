@@ -287,6 +287,7 @@ export class AppState {
     public static chainId: number | null = null;
     public static airdropRecieved: boolean | null = null;
     public static airDropTimeout: number = -1;
+    public static airDropStartTimeout: number = -1;    
     public static reduceActualTimestamp: number = -1;
      
     public static token : StateToken = new StateToken("/assets/icons/PIG.png");

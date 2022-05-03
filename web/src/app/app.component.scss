@@ -10,6 +10,7 @@
         height: 76px;
         position: absolute;
         cursor: pointer;
+        z-index: 1;
         svg{
             filter: drop-shadow(0px 10px 10px rgba(63, 109, 157, 0.369));
             width: 100%;
@@ -178,6 +179,10 @@
         box-sizing: border-box;
         display: none;
         text-align: left;
+        overflow: auto;
+        @media only screen and (max-width: 950px) {
+            padding: 40px 20px;
+        }
         &.active{
             display: block;
         }

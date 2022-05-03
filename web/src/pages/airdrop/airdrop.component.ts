@@ -16,6 +16,10 @@ export class AirdropComponent implements OnInit, OnDestroy {
 
   initialized: boolean = false;
   subscription: Subscription | null = null;
+  periodInterval: Subscription | null = null;
+  airdropTimeoutOver: boolean | null = null;
+  airdropStarted: boolean | null = null;
+
   amountOfTokens : number = -1;
   remainingTokens: number = -1;
   airdropsCount: number = -1;
@@ -36,9 +40,16 @@ export class AirdropComponent implements OnInit, OnDestroy {
     .subscribe(() => {
       this.loadData();
     });
-  }
 
-  
+    this.periodInterval = interval(250)
+    .pipe(takeWhile(() => (this.initialized) && !(this.airdropTimeoutOver == true && this.airdropStarted == true)))
+    .subscribe(() => {
+      if(AppState.airDropTimeout > 0)
+        this.airdropTimeoutOver = AppState.timestampToTimeout(AppState.airDropTimeout) <= 0;
+      if(AppState.airDropStartTimeout > 0)
+        this.airdropStarted = AppState.timestampToTimeout(AppState.airDropStartTimeout) <= 0;
+    });
+  }
 
   tokenInstance(): StateToken{
     return AppState.token;
@@ -70,6 +81,10 @@ export class AirdropComponent implements OnInit, OnDestroy {
     return AppState.airDropTimeout;
   }
 
+  airdropStartTimeout(): number{
+    return AppState.airDropStartTimeout;
+  }
+
   airdropsTotal(): null | number{
     if(this.remainingTokens == -1 || this.amountOfTokens == -1 || this.airdropsCount == -1)
       return null;
@@ -91,16 +106,12 @@ export class AirdropComponent implements OnInit, OnDestroy {
     return AppState.airdropRecieved;
   }
 
-  isPeriodOver(){
-    return this.timestampToTimeout(this.airdropTimeout()) > 0;
-  }
-
   isAirdropPossible(): boolean{
     if(this.airdropRecieved() || 
       this.airdropsTotal() == null || 
       this.remainingTokens < this.amountOfTokens || 
-      this.timestampToTimeout(this.airdropTimeout()) <= 0 ||
-      this.airdropTimeout() == 0
+      this.airdropTimeoutOver ||
+      this.airdropStarted !== true
     )
       return false;
     return true;
@@ -126,10 +137,6 @@ export class AirdropComponent implements OnInit, OnDestroy {
     }).finally(() => {
       this.airdropLoading = false;
     });
-  }
-
-  timestampToTimeout(timestamp: number) : number{
-    return AppState.timestampToTimeout(timestamp);
   }
 
   timeOutConfig(timestamp: number): CountdownConfig {

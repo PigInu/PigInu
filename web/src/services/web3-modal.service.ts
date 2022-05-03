@@ -110,12 +110,21 @@ export class Web3ModalService {
     });
     this.presaleNotLoggedContract.claimedCount().then((value: BigNumber) => { AppState.presale.claimedCount = Number(value.toString()); });
     this.presaleNotLoggedContract.depositedCount().then((value: BigNumber) => { AppState.presale.depositedCount = Number(value.toString()); });    
-    this.presaleNotLoggedContract.startTime().then((value: BigNumber) => { AppState.presale.startTime = Number(value.toString()); });
-    this.presaleNotLoggedContract.claimTimeOut().then((value: BigNumber) => { 
-      AppState.presale.claimTimeOut = Number(value.toString()); 
+    this.presaleNotLoggedContract.startBlock().then((value: BigNumber) => { 
+      this.presaleNotLoggedContract.provider.getBlock(Number(value.toString())).then(value => {
+        AppState.presale.startTime = Number(value.timestamp);  
+      });
     });
-    this.presaleNotLoggedContract.depositTimeOut().then((value: BigNumber) => { 
-      AppState.presale.depositTimeOut = Number(value.toString()); 
+    this.presaleNotLoggedContract.claimTimeOutBlock().then((value: BigNumber) => { 
+      this.presaleNotLoggedContract.provider.getBlock(Number(value.toString())).then(value => {
+        AppState.presale.claimTimeOut = Number(value.timestamp);  
+      });
+    });
+
+    this.presaleNotLoggedContract.depositTimeOutBlock().then((value: BigNumber) => { 
+      this.presaleNotLoggedContract.provider.getBlock(Number(value.toString())).then(value => {
+        AppState.presale.depositTimeOut = Number(value.timestamp);  
+      });
     });
     this.presaleNotLoggedContract.totalClaimable().then((ret: BigNumber) => { this.reduceNumberDecimals(ret).then(value =>{ AppState.presale.totalClaimable = value; })});
   }
@@ -303,25 +312,36 @@ export class Web3ModalService {
    }
 
    presaleDevFeePercent(){
+     /*
     this.presaleNotLoggedContract.devFeePercent().then((ret: BigNumber) => {
       AppState.presale.devFeePercent = ret.toNumber();
     });
+    */
   }
 
   presaleClaimeable(address: string): Promise<BigNumber>{
     return this.presaleNotLoggedContract.claimable(address);
   }
-
+   
   airdropTimeout(){
-    this.airdropNotLoggedContract.timeOut().then((ret: BigNumber) => {
-      AppState.airDropTimeout = ret.toNumber();
+    this.airdropNotLoggedContract.timeOutBlock().then((ret: BigNumber) => {
+      this.airdropNotLoggedContract.provider.getBlock(Number(ret.toString())).then(value => {
+        AppState.airDropTimeout = Number(value.timestamp);  
+      });
+    });
+    this.airdropNotLoggedContract.startBlock().then((ret: BigNumber) => {
+      this.airdropNotLoggedContract.provider.getBlock(Number(ret.toString())).then(value => {
+        AppState.airDropStartTimeout = Number(value.timestamp);  
+      });
     });
   }
 
   presaleDevAddress(){
+    /*
     this.presaleNotLoggedContract.devAddress().then((ret: any) => {
       AppState.presale.devAddress = ret.toHexString();
     });
+    */
   }
 
    presaleDeposited(address: string) : Promise<number>{

@@ -73,7 +73,7 @@
     <tr>
       <th>Total value:</th><td>
         <div class="green" *ngIf="totalValue">
-          {{totalValue | BigNumberLocale : this.pool.tokenEarn.decimals}} {{this.pool.tokenEarn.symbol}}
+          {{totalValue | BigNumberLocale : this.pool.tokenDeposit.decimals}} {{this.pool.tokenDeposit.symbol}}
           <!-- <span class="small" *ngIf="tokenPriceValue > 0">({{pendingTokensUsd() | numberLocale}} USD)</span> -->
         </div>
       </td>

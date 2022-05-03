@@ -85,10 +85,22 @@ export class PoolElementComponent implements OnInit, OnDestroy {
         return -1;
       const tokenPrice = this.tokenPriceValue;
       const poolAllocPoint = this.pool.data.allocPoint.toNumber();
-      var poolWeight = poolAllocPoint / this.totalAllocPoint;
-      var blocksPerYear = this.getBlocksPerDays(days, this.blockTime);
-      var tokenRewardPerBlock = this.toEth(this.tokenPerBlock) * poolWeight;
-      var tokenRewardPerYear = blocksPerYear * tokenRewardPerBlock;
+      const blocksPerDays = this.getBlocksPerDays(days, this.blockTime);
+      const poolWeight = poolAllocPoint / this.totalAllocPoint;
+      const tokenRewardPerBlock = this.toEth(this.tokenPerBlock) * poolWeight;
+      const tokenRewardPerYear = blocksPerDays * tokenRewardPerBlock;
+      /*
+      console.log("POOL")
+      console.log("days: " + days);
+      console.log("blockTime: " + this.blockTime);      
+      console.log("blocksPerDays: " + blocksPerDays);
+      console.log("poolAllocPoint: " + poolAllocPoint);
+      console.log("totalAllocPoint: " + this.totalAllocPoint);
+      console.log("tokenPrice: " + tokenPrice);
+      console.log("totalValue: " + this.totalValueNumber);
+      console.log("tokenPerBlock: " + this.tokenPerBlock);
+      console.log("this.toEth(tokenPerBlock): " + this.toEth(this.tokenPerBlock));
+      */
       apr = (tokenPrice * tokenRewardPerYear / this.totalValueNumber) * 100;
 
     } /* else{
