@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { CountdownConfig } from 'ngx-countdown';
 import { interval } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
@@ -18,12 +18,13 @@ export class PresaleComponent implements OnInit, OnDestroy  {
   claimPeriodOver: boolean | null = null;
   startPeriodOver: boolean | null = null;
   depositPeriodOver: boolean | null = null;
+  presaleContractOwner: string | null = null;
   
   subscription: any;
   periodInterval: any;
   public presale: IPresale;
 
-  constructor(private web3ModalSevice: Web3ModalService) {
+  constructor(public web3ModalSevice: Web3ModalService) {
     this.presale = AppState.getPresale();
   }
   ngOnDestroy(): void {
@@ -34,6 +35,10 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     this.initialized = true;
     this.web3ModalSevice.presaleDevAddress();
     this.web3ModalSevice.presaleDevFeePercent();
+    this.web3ModalSevice.presaleOwner().then(value => {
+      this.presaleContractOwner = value.toHexString();
+    });
+
     this.subscription = interval(Config.main.updateInterval * 1000)
     .pipe(takeWhile(() => this.initialized))
     .subscribe(() => {
@@ -50,6 +55,15 @@ export class PresaleComponent implements OnInit, OnDestroy  {
       if(this.presale.depositTimeOut > 0)
         this.depositPeriodOver = AppState.timestampToTimeout(this.presale.depositTimeOut) <= 0;
     });
+  }
+
+  isStartButtonVisible(): boolean{
+    if(this.presaleContractOwner != null && 
+      AppState.selectedAddress?.toLocaleLowerCase() == this.presaleContractOwner && 
+      this.startPeriodOver == false
+    )
+      return true;
+    return false;
   }
 
   claimablePercent() : number{

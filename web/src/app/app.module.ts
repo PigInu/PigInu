@@ -5,6 +5,7 @@ import { AddTokenToWalletComponent } from 'src/component/add-token-to-wallet/add
 import { LoaderComponent } from 'src/component/loader/loader.component';
 import { PoolElementComponent } from 'src/component/pool-element/pool-element.component';
 import { ProgressComponent } from 'src/component/progress/progress.component';
+import { StartContractComponent } from 'src/component/start-contract/start-contract.component';
 import { OnlyNumbers } from 'src/directive/only-numbers.directive';
 import { AirdropComponent } from 'src/pages/airdrop/airdrop.component';
 import { HomepageComponent } from 'src/pages/homepage/homepage.component';
@@ -30,6 +31,7 @@ import { AppComponent } from './app.component';
     WhitepaperComponent,
     LoaderComponent,
     AddTokenToWalletComponent,
+    StartContractComponent,
     ProgressComponent,
     PoolElementComponent,
     TransactionLinkPipe,

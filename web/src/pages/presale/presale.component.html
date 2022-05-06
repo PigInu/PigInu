@@ -1,5 +1,7 @@
 
 <h1>Presale</h1>
+<app-start-contract *ngIf="isStartButtonVisible()" [contractService]="web3ModalSevice" [functionName]="'presaleStart'"></app-start-contract>
+
 <div class="grid">
   <div class="bluebox firstbox">
   <table>

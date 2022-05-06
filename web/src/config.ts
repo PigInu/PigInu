@@ -74,9 +74,9 @@ export class Config {
             return "0x" +Config.main.chainID.toString(16);
         },       
         addressToken: '0x6411f12168f6ed7375dDD38Dd68A9130a9De7f91',
-        addressAirdrop: '0x380E477fC6c0deedFB643eD77def90e27E530cB2',
-        addressPresale: '0x08372e62910971956682d7A6e45364F0E16Fe589',
-        addressPool: '0x760eCFeec5177736dDc18DDB4b34f3615d45D406',
+        addressAirdrop: '0x251afC00c3322d62817b015a0886cbD8540b0fa8',
+        addressPresale: '0x42FFb8e60CFB15549f3BFE299f92Bf93f6E65fD3',
+        addressPool: '0xcffD47cde27a546328a00f0e3a9d9c4e1A99b894',
         addressUSDToken: '0xf42a4429f107bd120c5e42e069fdad0ac625f615',
         addressLPToken: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
         airdropContractInterface: [] = [
@@ -90,6 +90,7 @@ export class Config {
             "function token () view returns (uint)",
             "function timeOutBlock () view returns (uint)",
             "function startBlock () view returns (uint)",
+            "function start (uint256, uint256)",
         ],
         presaleContractInterface: [] = [
             "function totalClaimableNotDeducted () view returns (uint)",
@@ -117,6 +118,8 @@ export class Config {
             "function claim()",
             "function devFeePercent() view returns (uint)",
             "function devAddress() view returns (uint)",
+            "function start (uint256, uint256)",
+            "function owner() view returns (uint256)",
         ],
         tokenContractInterface: [] = [
             "function name () view returns (string)",

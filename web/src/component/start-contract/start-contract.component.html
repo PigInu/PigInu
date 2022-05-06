@@ -1,0 +1,27 @@
+<div class="bluebox">
+  <table>
+    <tr>
+      <td>
+        Delay blocks:
+      </td>
+      <td>
+        <input #delayBlocks type="number" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Time Blocks 
+      </td>
+      <td>
+        <input #timeBlocks type="number" /> 
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+        <button (click)="start(delayBlocks.value, timeBlocks.value)">START</button>
+      </td>
+    </tr>
+  </table>  
+</div>

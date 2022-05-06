@@ -29,6 +29,7 @@ export class PoolService {
     "function getTokensToBeDistributed() view returns (uint256)",    
     "function tokenPerBlock () view returns (uint)",
     "function totalAllocPoint () view returns (uint)",
+    "function start (uint256, uint256)",
   ];
   private state : PoolServiceState = {
     token: new StateToken("/assets/token.png"),
@@ -79,6 +80,10 @@ export class PoolService {
     return this.getSignedContract().deposit(poolId, amount);
   }
 
+  start(delayBlocks: number, timeBlocks: number): Promise<ethers.Transaction> {
+    return this.getSignedContract().start(BigNumber.from(delayBlocks), BigNumber.from(timeBlocks));
+  }
+
   withdraw(poolId: number, amount: BigNumber): Promise<ethers.Transaction> {
     return this.getSignedContract().withdraw(poolId, amount);
   }
@@ -114,6 +119,23 @@ export class PoolService {
 
   getBlockNumber(): Promise<any>{
     return this.getSignedContract().provider.getBlockNumber();
+  }
+
+  async getBlockTime(): Promise<number>{
+    const blockNum = 100;
+    let blockCurrent: any;
+    let blockOld: any;
+    let blockNumberCurrent = await this.getSignedContract().provider.getBlockNumber();
+    let promises = [];
+    promises.push(this.getBlock(blockNumberCurrent).then(res => blockCurrent = res));
+    promises.push(this.getBlock(blockNumberCurrent - blockNum).then(res => blockOld = res));
+    var i;
+    for (i = 0; i < promises.length; i++) 
+      await promises[i];
+    if(blockCurrent == null || blockOld == null)
+      return 0;
+    var timeDiff = blockCurrent.timestamp - blockOld.timestamp;
+    return timeDiff / blockNum;
   }
 
   tokenPerBlock(): Promise<BigNumber>{

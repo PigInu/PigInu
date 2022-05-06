@@ -173,11 +173,9 @@ export class PoolElementComponent implements OnInit, OnDestroy {
       this.totalValueNumber = this.toEth(this.totalValue);
       this.calcAprApy();
     });
-    this.poolService.getBlockNumber().then(blockNumber => {
-      this.poolService.getBlock(blockNumber).then(block => {
-        this.blockTime = block.timestamp;
-        this.calcAprApy();
-      });
+    this.poolService.getBlockTime().then(time => {
+      this.blockTime = time
+      this.calcAprApy();
     });
   }
 

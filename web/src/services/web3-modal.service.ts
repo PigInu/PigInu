@@ -336,6 +336,18 @@ export class Web3ModalService {
     });
   }
 
+  airdropStart(delayBlocks: number, timeBlocks: number){
+    return this.airdropContract?.start(BigNumber.from(delayBlocks), BigNumber.from(timeBlocks));
+  }
+
+  presaleStart(delayBlocks: number, timeBlocks: number){
+    return this.presaleContract?.start(BigNumber.from(delayBlocks), BigNumber.from(timeBlocks));
+  }
+
+  presaleOwner() : Promise<BigNumber>{
+    return this.presaleNotLoggedContract?.owner();
+  }
+
   presaleDevAddress(){
     /*
     this.presaleNotLoggedContract.devAddress().then((ret: any) => {
