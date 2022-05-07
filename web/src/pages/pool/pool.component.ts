@@ -57,6 +57,14 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.initialized = false;
   }
 
+  start(offsetBlocks: string){
+    this.poolService.start(Number(offsetBlocks)).then((value: any) => {
+      console.info(value);
+    }).catch((value: any) => {
+      console.error(value);
+    });
+  }
+
   refreshData(){
     this.poolService.getDistributedTokens().then(value => {
       this.distributedTokens = value;

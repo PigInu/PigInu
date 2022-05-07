@@ -32,5 +32,16 @@
             color: #000;
             cursor: default;
         }
+        app-loader{
+            font-size: 0.1em;
+            ::ng-deep {
+                .bubble, .sat{
+                    background-color: #fff!important;
+                }
+            }
+        }
+    }
+    .error{
+        display: inline-block;
     }
 }

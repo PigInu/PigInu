@@ -29,7 +29,7 @@ export class PoolService {
     "function getTokensToBeDistributed() view returns (uint256)",    
     "function tokenPerBlock () view returns (uint)",
     "function totalAllocPoint () view returns (uint)",
-    "function start (uint256, uint256)",
+    "function start (uint256)",
   ];
   private state : PoolServiceState = {
     token: new StateToken("/assets/token.png"),
@@ -80,8 +80,8 @@ export class PoolService {
     return this.getSignedContract().deposit(poolId, amount);
   }
 
-  start(delayBlocks: number, timeBlocks: number): Promise<ethers.Transaction> {
-    return this.getSignedContract().start(BigNumber.from(delayBlocks), BigNumber.from(timeBlocks));
+  start(offsetBlocks: number): Promise<ethers.Transaction> {
+    return this.getSignedContract().start(BigNumber.from(offsetBlocks));
   }
 
   withdraw(poolId: number, amount: BigNumber): Promise<ethers.Transaction> {

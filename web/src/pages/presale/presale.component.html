@@ -1,6 +1,42 @@
 
 <h1>Presale</h1>
-<app-start-contract *ngIf="isStartButtonVisible()" [contractService]="web3ModalSevice" [functionName]="'presaleStart'"></app-start-contract>
+
+<div class="bluebox" *ngIf="isStartButtonVisible()">
+  <table>
+    <tr>
+      <td>
+        Delay blocks:
+      </td>
+      <td>
+        <input #delayBlocks type="number" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Deposit Blocks 
+      </td>
+      <td>
+        <input #depositBlocks type="number" /> 
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Claim Blocks 
+      </td>
+      <td>
+        <input #claimBlocks type="number" /> 
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+        <button (click)="start(delayBlocks.value, depositBlocks.value, claimBlocks.value)">START</button>
+      </td>
+    </tr>
+  </table>  
+</div>
+ 
 
 <div class="grid">
   <div class="bluebox firstbox">
@@ -25,18 +61,23 @@
     </tr>
     <tr>
       <th>
-        Dev address: 
+        Dev wallets: 
       </th><td>
-          <span *ngIf="presale.devAddress  == ''"><app-loader></app-loader></span>
-          <span *ngIf="presale.devAddress  != ''"><a href="{{presale.devAddress | addressLink}}" target="_blank">{{presale.devAddress}}</a></span>
+          <span *ngIf="devFeePercent  == null"><app-loader></app-loader></span>
+          <span *ngIf="devFeePercent  != null">
+            <a class="walletPercent" *ngFor="let wallet of devWallets" href="{{wallet.address | addressLink}}" target="_blank">
+              <span>{{wallet.address}}</span> 
+              <span class="percent">{{wallet.percent | numberLocale}}%</span>
+            </a>
+          </span>
       </td> 
     </tr>
     <tr>
       <th>
         Deposited distribution:
       </th><td>
-          <span *ngIf="presale.devFeePercent  == -1"><app-loader></app-loader></span>
-          <span *ngIf="presale.devFeePercent  != -1">{{presale.devFeePercent}}% to dev wallet, {{100 - presale.devFeePercent}}% to liquidity</span>
+          <span *ngIf="devFeePercent  == null"><app-loader></app-loader></span>
+          <span *ngIf="devFeePercent  != null">{{devFeePercent}}% to dev wallet, {{100 - devFeePercent}}% to liquidity</span>
       </td> 
     </tr>
     <tr>
@@ -198,10 +239,10 @@
         Buy token: 
       </th>
       <td>
-        <button *ngIf="depositPeriodOver" class="disabled">
+        <button *ngIf="false && depositPeriodOver" class="disabled">
           Deposit period is over
         </button>
-        <span class="calc"  *ngIf="depositPeriodOver == false && presale.tokenPrice != -1 && this.presale.tokenTheir.symbol != '' && this.presale.tokenOur.symbol != ''">
+        <span class="calc"  *ngIf="(true || depositPeriodOver == false) && presale.tokenPrice != -1 && this.presale.tokenTheir.symbol != '' && this.presale.tokenOur.symbol != ''">
           <span class="inputWrap">
             <input onlyNumbers [allowDecimals]="true" #tokenOurPrice (change)="calcPrice(tokenOurPrice, tokenTheirPrice,  presale.tokenPrice)" (keyup)="calcPrice(tokenOurPrice, tokenTheirPrice,  presale.tokenPrice)"  value="" /> 
             <span>{{this.presale.tokenOur.symbol}}</span>
@@ -325,10 +366,10 @@
       &nbsp;
     </th>
     <td>
-      <button *ngIf="claimPeriodOver"class="disabled">
+      <button *ngIf="claimPeriodOver && false"class="disabled">
         Claim period is over
       </button>
-      <button *ngIf="claimPeriodOver == false" (click)="claim()"> 
+      <button *ngIf="claimPeriodOver == false || true" (click)="claim()"> 
         <span *ngIf="!claimLoading">Claim</span>
         <app-loader *ngIf="claimLoading" class="center"></app-loader>
       </button>

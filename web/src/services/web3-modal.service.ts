@@ -248,6 +248,10 @@ export class Web3ModalService {
     return this.airdropContract?.claim();
   }
 
+  airdropOwner() : Promise<BigNumber>{
+    return this.airdropNotLoggedContract?.owner(); 
+  }
+
   private initializeProvider(provider: any){
     provider.on("accountsChanged", (accounts: string[]) => {
       location.reload();
@@ -311,12 +315,8 @@ export class Web3ModalService {
      return this.presaleNotLoggedContract.claimed(address);
    }
 
-   presaleDevFeePercent(){
-     /*
-    this.presaleNotLoggedContract.devFeePercent().then((ret: BigNumber) => {
-      AppState.presale.devFeePercent = ret.toNumber();
-    });
-    */
+   presaleDevWallets(input: number): Promise<Array<BigNumber>>{
+    return this.presaleNotLoggedContract.devWallets(input);
   }
 
   presaleClaimeable(address: string): Promise<BigNumber>{
@@ -340,20 +340,12 @@ export class Web3ModalService {
     return this.airdropContract?.start(BigNumber.from(delayBlocks), BigNumber.from(timeBlocks));
   }
 
-  presaleStart(delayBlocks: number, timeBlocks: number){
-    return this.presaleContract?.start(BigNumber.from(delayBlocks), BigNumber.from(timeBlocks));
+  presaleStart(delayBlocks: number, depositBlocks: number, claimBlocks: number){
+    return this.presaleContract?.start(BigNumber.from(delayBlocks), BigNumber.from(depositBlocks), BigNumber.from(claimBlocks));
   }
 
   presaleOwner() : Promise<BigNumber>{
     return this.presaleNotLoggedContract?.owner();
-  }
-
-  presaleDevAddress(){
-    /*
-    this.presaleNotLoggedContract.devAddress().then((ret: any) => {
-      AppState.presale.devAddress = ret.toHexString();
-    });
-    */
   }
 
    presaleDeposited(address: string) : Promise<number>{

@@ -91,6 +91,7 @@ export class Config {
             "function timeOutBlock () view returns (uint)",
             "function startBlock () view returns (uint)",
             "function start (uint256, uint256)",
+            "function owner() view returns (uint256)",
         ],
         presaleContractInterface: [] = [
             "function totalClaimableNotDeducted () view returns (uint)",
@@ -118,8 +119,9 @@ export class Config {
             "function claim()",
             "function devFeePercent() view returns (uint)",
             "function devAddress() view returns (uint)",
-            "function start (uint256, uint256)",
+            "function start (uint256, uint256, uint256)",
             "function owner() view returns (uint256)",
+            "function devWallets(uint256) view returns (uint256, uint256)",
         ],
         tokenContractInterface: [] = [
             "function name () view returns (string)",

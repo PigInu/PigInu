@@ -19,6 +19,9 @@ export class PresaleComponent implements OnInit, OnDestroy  {
   startPeriodOver: boolean | null = null;
   depositPeriodOver: boolean | null = null;
   presaleContractOwner: string | null = null;
+  devWallets: Array<{address: string, percent: number}> = [];
+  devWalletsCount: number = 3;
+  devFeePercent: number | null = null;
   
   subscription: any;
   periodInterval: any;
@@ -33,8 +36,8 @@ export class PresaleComponent implements OnInit, OnDestroy  {
 
   ngOnInit() {
     this.initialized = true;
-    this.web3ModalSevice.presaleDevAddress();
-    this.web3ModalSevice.presaleDevFeePercent();
+    for(let i = 0; i < this.devWalletsCount;i ++)
+      this.loadDevWallets(i);
     this.web3ModalSevice.presaleOwner().then(value => {
       this.presaleContractOwner = value.toHexString();
     });
@@ -55,6 +58,35 @@ export class PresaleComponent implements OnInit, OnDestroy  {
       if(this.presale.depositTimeOut > 0)
         this.depositPeriodOver = AppState.timestampToTimeout(this.presale.depositTimeOut) <= 0;
     });
+  }
+
+  loadDevWallets(input: number){
+    this.web3ModalSevice.presaleDevWallets(input).then(value => {
+      if(value.length  > 1){  
+        this.devWallets.push({
+          address: value[0].toHexString(),
+          percent: value[1].toNumber() / 100
+        });
+        this.calcDevFeePercent();
+      }
+    });
+  }
+
+  start(delayBlock: string, depositBlock: string, claimBlock: string){
+      this.web3ModalSevice.presaleStart(Number(delayBlock), Number(depositBlock), Number(claimBlock)).then((value: any) => {
+        console.info(value);
+      }).catch((value: any) => {
+        console.error(value);
+      });
+  } 
+
+  calcDevFeePercent(){
+    if(this.devWalletsCount != this.devWallets.length)
+      return;
+    let percent = 0;
+    for(let i = 0; i < this.devWalletsCount;i ++)
+      percent += this.devWallets[i].percent;
+    this.devFeePercent = percent;
   }
 
   isStartButtonVisible(): boolean{

@@ -19,6 +19,7 @@ export class AirdropComponent implements OnInit, OnDestroy {
   periodInterval: Subscription | null = null;
   airdropTimeoutOver: boolean | null = null;
   airdropStarted: boolean | null = null;
+  contractOwner: string | null = null;
 
   amountOfTokens : number = -1;
   remainingTokens: number = -1;
@@ -33,6 +34,9 @@ export class AirdropComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initialized = true;
+    this.web3ModalService.airdropOwner().then(value => {
+      this.contractOwner = value.toHexString();
+    });
     this.web3ModalService.airdropTimeout();
     this.loadData();
     this.subscription = interval(Config.main.updateInterval * 1000)
@@ -49,6 +53,24 @@ export class AirdropComponent implements OnInit, OnDestroy {
       if(AppState.airDropStartTimeout > 0)
         this.airdropStarted = AppState.timestampToTimeout(AppState.airDropStartTimeout) <= 0;
     });
+  }
+
+  
+  start(delayBlock: string, timeBlock: string){
+    this.web3ModalService.airdropStart(Number(delayBlock), Number(timeBlock)).then((value: any) => {
+      console.info(value);
+    }).catch((value: any) => {
+      console.error(value);
+    });
+  }
+  
+  isStartButtonVisible(): boolean{
+    if(this.contractOwner != null && 
+      AppState.selectedAddress?.toLocaleLowerCase() == this.contractOwner && 
+      this.airdropStarted == false
+    )
+      return true;
+    return false;
   }
 
   tokenInstance(): StateToken{
@@ -107,6 +129,7 @@ export class AirdropComponent implements OnInit, OnDestroy {
   }
 
   isAirdropPossible(): boolean{
+    return true;
     if(this.airdropRecieved() || 
       this.airdropsTotal() == null || 
       this.remainingTokens < this.amountOfTokens || 

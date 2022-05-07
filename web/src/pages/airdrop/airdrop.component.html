@@ -1,4 +1,35 @@
 <h1>Airdrop</h1>
+
+
+<div class="bluebox" *ngIf="isStartButtonVisible()">
+    <table>
+      <tr>
+        <td>
+          Delay blocks:
+        </td>
+        <td>
+          <input #delayBlocks type="number" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Time Blocks 
+        </td>
+        <td>
+          <input #timeBlocks type="number" /> 
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <button (click)="start(delayBlocks.value, timeBlocks.value)">START</button>
+        </td>
+      </tr>
+    </table>  
+  </div>
+   
+
 <div class="bluebox">
     <table> 
     <tr>
@@ -88,12 +119,12 @@
   <button (click)="airDropClick()">
     <span *ngIf="!airdropLoading">Get your free {{tokenSymbol()}} tokens</span>
     <app-loader *ngIf="airdropLoading" class="center"></app-loader>
-  </button>
+  </button><br />
   <div *ngIf="airdropError != null" class="error">
     {{airdropError}}
   </div>
 </div>
-<div *ngIf="airdropTimeoutOver == true">
+<div *ngIf="airdropTimeoutOver == true && !isAirdropPossible()">
     <button class="disabled">
         Claim period is over
     </button>

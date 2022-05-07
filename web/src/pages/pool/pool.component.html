@@ -1,5 +1,26 @@
 
 <h1>Staking pools</h1>
+
+<div class="bluebox" *ngIf="started == false">
+  <table>
+    <tr>
+      <td>
+        Offstet blocks:
+      </td>
+      <td>
+        <input #offsetBlocks type="number" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+        <button (click)="start(offsetBlocks.value)">START</button>
+      </td>
+    </tr>
+  </table>  
+</div>
+
 <div class="data">
   <div>
     <img src="/assets/img/graph.png" />
