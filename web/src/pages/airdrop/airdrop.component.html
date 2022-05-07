@@ -1,6 +1,6 @@
 <h1>Airdrop</h1>
 
-
+<div>
 <div class="bluebox" *ngIf="isStartButtonVisible()">
     <table>
       <tr>
@@ -28,7 +28,7 @@
       </tr>
     </table>  
   </div>
-   
+</div>
 
 <div class="bluebox">
     <table> 
@@ -36,7 +36,10 @@
         <th>
         Start time: 
         </th><td>
-            <span *ngIf="airdropStarted == null"><app-loader></app-loader></span>
+            <span *ngIf="airdropStarted == null && notStarted == null"><app-loader></app-loader></span>
+            <span *ngIf="notStarted == true">
+                Not started
+            </span>
             <span *ngIf="airdropStarted != null">
                 <span *ngIf="airdropStarted == false"><countdown [config]="timeOutConfig(airdropStartTimeout())"></countdown> | </span>
                 {{airdropStartTimeout() * 1000 | dateTimeLocale}}
@@ -114,22 +117,22 @@
         </td> 
     </tr>
     </table>
-</div>
-<div *ngIf="isAirdropPossible()" class="connectButton"> 
-  <button (click)="airDropClick()">
-    <span *ngIf="!airdropLoading">Get your free {{tokenSymbol()}} tokens</span>
-    <app-loader *ngIf="airdropLoading" class="center"></app-loader>
-  </button><br />
-  <div *ngIf="airdropError != null" class="error">
-    {{airdropError}}
-  </div>
-</div>
-<div *ngIf="airdropTimeoutOver == true && !isAirdropPossible()">
-    <button class="disabled">
-        Claim period is over
-    </button>
-</div>
-<div class="connectButton" *ngIf="airdropRecieved()">
-    You have already received your {{tokenSymbol()}} tokens
-    <span *ngIf="airdropTransctionHash"><br />Transaction ID: <a href="{{airdropTransctionHash | transactionLink}}" target="_blank">{{airdropTransctionHash}}</a></span>
+    <div *ngIf="isAirdropPossible()" class="connectButton center"> 
+        <button (click)="airDropClick()">
+          <span *ngIf="!airdropLoading">Get your free {{tokenSymbol()}} tokens</span>
+          <app-loader *ngIf="airdropLoading" class="center"></app-loader>
+        </button><br />
+        <div *ngIf="airdropError != null" class="error">
+          {{airdropError}}
+        </div>
+      </div>
+      <div *ngIf="airdropTimeoutOver == true && !isAirdropPossible()">
+          <button class="disabled">
+              Claim period is over
+          </button>
+      </div>
+      <div class="connectButton" *ngIf="airdropRecieved()">
+          You have already received your {{tokenSymbol()}} tokens
+          <span *ngIf="airdropTransctionHash"><br />Transaction ID: <a href="{{airdropTransctionHash | transactionLink}}" target="_blank">{{airdropTransctionHash}}</a></span>
+      </div>
 </div>

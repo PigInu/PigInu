@@ -111,6 +111,8 @@ export class Web3ModalService {
     this.presaleNotLoggedContract.claimedCount().then((value: BigNumber) => { AppState.presale.claimedCount = Number(value.toString()); });
     this.presaleNotLoggedContract.depositedCount().then((value: BigNumber) => { AppState.presale.depositedCount = Number(value.toString()); });    
     this.presaleNotLoggedContract.startBlock().then((value: BigNumber) => { 
+      value = BigNumber.from(0);// TODO - dat pryc
+      AppState.presale.startBlock = value.toNumber();
       this.presaleNotLoggedContract.provider.getBlock(Number(value.toString())).then(value => {
         AppState.presale.startTime = Number(value.timestamp);  
       });
@@ -330,6 +332,7 @@ export class Web3ModalService {
       });
     });
     this.airdropNotLoggedContract.startBlock().then((ret: BigNumber) => {
+      AppState.airDropStartBlock = ret.toNumber();
       this.airdropNotLoggedContract.provider.getBlock(Number(ret.toString())).then(value => {
         AppState.airDropStartTimeout = Number(value.timestamp);  
       });

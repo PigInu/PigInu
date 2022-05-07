@@ -81,6 +81,12 @@
                     }
                     .asLink{
                         text-decoration: underline;
+                        display: flex;
+                        align-items: center;
+                        img{
+                            margin-left: auto;
+                            width: 23px;
+                        }
                         cursor: pointer;
                         &:hover{
                             text-decoration: none;

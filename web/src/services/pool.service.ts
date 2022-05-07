@@ -30,6 +30,7 @@ export class PoolService {
     "function tokenPerBlock () view returns (uint)",
     "function totalAllocPoint () view returns (uint)",
     "function start (uint256)",
+    "function owner() view returns (uint256)",
   ];
   private state : PoolServiceState = {
     token: new StateToken("/assets/token.png"),
@@ -66,6 +67,10 @@ export class PoolService {
         that.state.pools[idx] = new PoolState(pool, idx, that, this.getState().tokenEarn);
       });
     }
+  }
+
+  owner() : Promise<BigNumber>{
+    return this.getSignedContract().owner(); 
   }
 
   started(): Promise<Boolean> {

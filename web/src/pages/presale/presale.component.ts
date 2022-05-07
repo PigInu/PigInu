@@ -51,12 +51,14 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     this.periodInterval = interval(250)
     .pipe(takeWhile(() => (this.initialized) && !(this.claimPeriodOver == true && this.startPeriodOver == true && this.depositPeriodOver == true)))
     .subscribe(() => {
-      if(this.presale.claimTimeOut > 0)
-        this.claimPeriodOver = AppState.timestampToTimeout(this.presale.claimTimeOut) <= 0;
-      if(this.presale.startTime > 0)
-        this.startPeriodOver = AppState.timestampToTimeout(this.presale.startTime) <= 0;
-      if(this.presale.depositTimeOut > 0)
-        this.depositPeriodOver = AppState.timestampToTimeout(this.presale.depositTimeOut) <= 0;
+      if(this.presale.startBlock > 0){
+        if(this.presale.claimTimeOut > 0)
+          this.claimPeriodOver = AppState.timestampToTimeout(this.presale.claimTimeOut) <= 0;
+        if(this.presale.startTime > 0)
+          this.startPeriodOver = AppState.timestampToTimeout(this.presale.startTime) <= 0;
+        if(this.presale.depositTimeOut > 0)
+          this.depositPeriodOver = AppState.timestampToTimeout(this.presale.depositTimeOut) <= 0;
+      }
     });
   }
 
@@ -92,7 +94,7 @@ export class PresaleComponent implements OnInit, OnDestroy  {
   isStartButtonVisible(): boolean{
     if(this.presaleContractOwner != null && 
       AppState.selectedAddress?.toLocaleLowerCase() == this.presaleContractOwner && 
-      this.startPeriodOver == false
+      this.presale.startBlock == 0
     )
       return true;
     return false;

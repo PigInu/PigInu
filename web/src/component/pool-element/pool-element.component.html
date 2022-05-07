@@ -31,7 +31,7 @@
         <app-loader *ngIf="aprValue == null" class="center"></app-loader>
         <div *ngIf="aprValue != null && aprValue == -1"  class="green">-</div>
         <div *ngIf="aprValue != null && aprValue != -1"  class="green asLink" (click)="toogleAprApyModal()">
-          {{aprValue| numberLocale}} %
+          {{aprValue| numberLocale}} % <img src="/assets/svg/table-solid.svg">
         </div>
       </td>
     </tr>
@@ -40,7 +40,7 @@
         <app-loader *ngIf="apyValue == null" class="center"></app-loader>
         <div *ngIf="aprValue != null && aprValue == -1"  class="green">-</div>
         <div *ngIf="aprValue != null && aprValue != -1"  class="green asLink" (click)="toogleAprApyModal()">
-          {{apyValue| numberLocale}} %
+          {{apyValue| numberLocale}} % <img src="/assets/svg/table-solid.svg">
         </div>
       </td>
     </tr>

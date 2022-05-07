@@ -1,42 +1,42 @@
 
 <h1>Presale</h1>
-
-<div class="bluebox" *ngIf="isStartButtonVisible()">
-  <table>
-    <tr>
-      <td>
-        Delay blocks:
-      </td>
-      <td>
-        <input #delayBlocks type="number" />
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Deposit Blocks 
-      </td>
-      <td>
-        <input #depositBlocks type="number" /> 
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Claim Blocks 
-      </td>
-      <td>
-        <input #claimBlocks type="number" /> 
-      </td>
-    </tr>
-    <tr>
-      <td>
-      </td>
-      <td>
-        <button (click)="start(delayBlocks.value, depositBlocks.value, claimBlocks.value)">START</button>
-      </td>
-    </tr>
-  </table>  
+<div>
+  <div class="bluebox" *ngIf="isStartButtonVisible()">
+    <table>
+      <tr>
+        <td>
+          Delay blocks:
+        </td>
+        <td>
+          <input #delayBlocks type="number" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Deposit Blocks 
+        </td>
+        <td>
+          <input #depositBlocks type="number" /> 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Claim Blocks 
+        </td>
+        <td>
+          <input #claimBlocks type="number" /> 
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
+          <button (click)="start(delayBlocks.value, depositBlocks.value, claimBlocks.value)">START</button>
+        </td>
+      </tr>
+    </table>  
+  </div>
 </div>
- 
 
 <div class="grid">
   <div class="bluebox firstbox">
@@ -209,8 +209,9 @@
       <th>
         Deposit timeout: 
       </th><td>
-          <span *ngIf="presale.depositTimeOut == -1"><app-loader></app-loader></span>
-          <span *ngIf="presale.depositTimeOut != -1">
+          <span *ngIf="presale.depositTimeOut == -1 && presale.startBlock == -1"><app-loader></app-loader></span>
+          <span *ngIf="presale.startBlock == 0">Not started</span>
+          <span *ngIf="presale.depositTimeOut != -1 && presale.startBlock > 0">
             <span *ngIf="depositPeriodOver == false"><countdown [config]="timeOutConfig(this.presale.depositTimeOut)"></countdown> | </span>
             {{presale.depositTimeOut * 1000 | dateTimeLocale}}
           </span>

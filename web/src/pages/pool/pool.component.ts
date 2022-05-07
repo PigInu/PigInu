@@ -14,6 +14,8 @@ import { PoolService, PoolServiceState } from 'src/services/pool.service';
 })
 export class PoolComponent implements OnInit, OnDestroy {
   initialized: boolean = false;
+  
+  contractOwner: string | null = null;
 
   public transactionHash: string = "";
   public transactionError: string = "";
@@ -50,6 +52,9 @@ export class PoolComponent implements OnInit, OnDestroy {
     });
     this.poolService.totalAllocPoint().then(value => {
       this.totalAllocPoint = value.toNumber();
+    });
+    this.poolService.owner().then(value => {
+      this.contractOwner = value.toHexString();
     });
   }
 
@@ -91,6 +96,15 @@ export class PoolComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  isStartButtonVisible(): boolean{
+    if(this.contractOwner != null && 
+      AppState.selectedAddress?.toLocaleLowerCase() == this.contractOwner && 
+      this.started == false
+    )
+      return true;
+    return false;
   }
 
   calcValues(){

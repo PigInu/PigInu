@@ -19,6 +19,7 @@ export class AirdropComponent implements OnInit, OnDestroy {
   periodInterval: Subscription | null = null;
   airdropTimeoutOver: boolean | null = null;
   airdropStarted: boolean | null = null;
+  notStarted: boolean | null = null;
   contractOwner: string | null = null;
 
   amountOfTokens : number = -1;
@@ -37,7 +38,6 @@ export class AirdropComponent implements OnInit, OnDestroy {
     this.web3ModalService.airdropOwner().then(value => {
       this.contractOwner = value.toHexString();
     });
-    this.web3ModalService.airdropTimeout();
     this.loadData();
     this.subscription = interval(Config.main.updateInterval * 1000)
     .pipe(takeWhile(() => this.initialized))
@@ -48,10 +48,15 @@ export class AirdropComponent implements OnInit, OnDestroy {
     this.periodInterval = interval(250)
     .pipe(takeWhile(() => (this.initialized) && !(this.airdropTimeoutOver == true && this.airdropStarted == true)))
     .subscribe(() => {
-      if(AppState.airDropTimeout > 0)
-        this.airdropTimeoutOver = AppState.timestampToTimeout(AppState.airDropTimeout) <= 0;
-      if(AppState.airDropStartTimeout > 0)
-        this.airdropStarted = AppState.timestampToTimeout(AppState.airDropStartTimeout) <= 0;
+      if(AppState.airDropStartBlock == 0){
+          this.notStarted = true;
+      } else if(AppState.airDropStartBlock > 0){
+        this.notStarted = false;
+        if(AppState.airDropTimeout > 0)
+          this.airdropTimeoutOver = AppState.timestampToTimeout(AppState.airDropTimeout) <= 0;
+        if(AppState.airDropStartTimeout > 0)
+          this.airdropStarted = AppState.timestampToTimeout(AppState.airDropStartTimeout) <= 0;
+      }
     });
   }
 
@@ -67,7 +72,7 @@ export class AirdropComponent implements OnInit, OnDestroy {
   isStartButtonVisible(): boolean{
     if(this.contractOwner != null && 
       AppState.selectedAddress?.toLocaleLowerCase() == this.contractOwner && 
-      this.airdropStarted == false
+      this.notStarted == true
     )
       return true;
     return false;
@@ -167,6 +172,8 @@ export class AirdropComponent implements OnInit, OnDestroy {
   }
 
   private loadData(){
+    if(AppState.airDropStartBlock <= 0)
+      this.web3ModalService.airdropTimeout();
     //this.amountOfTokens = this.remainingTokens = this.totalClaimed = this.airdropsCount = -1;
     this.web3ModalService.getTotalClaimed().then(value => {
       this.totalClaimed = value;
