@@ -55,6 +55,10 @@ p{
     span a{
         word-break: break-all;
     }
+    .result a, td .result a{
+        word-break: break-all;
+        color: #26B538;
+    }
 }
 .greenbox{
     background: linear-gradient(#00a940, #7bd027);

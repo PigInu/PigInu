@@ -35,6 +35,12 @@
         </td>
       </tr>
     </table>  
+    <div *ngIf="startTransactionHash" class="result">
+      Transaction ID: <a href="{{startTransactionHash | transactionLink}}" target="_blank">{{startTransactionHash}}</a>
+    </div>
+    <div *ngIf="startTransactionError != ''" class="resultError">
+      {{startTransactionError}}
+    </div>    
   </div>
 </div>
 
@@ -63,8 +69,8 @@
       <th>
         Dev wallets: 
       </th><td>
-          <span *ngIf="devFeePercent  == null"><app-loader></app-loader></span>
-          <span *ngIf="devFeePercent  != null">
+          <span *ngIf="devWallets.length != devWalletsCount"><app-loader></app-loader></span>
+          <span *ngIf="devWallets.length == devWalletsCount">
             <a class="walletPercent" *ngFor="let wallet of devWallets" href="{{wallet.address | addressLink}}" target="_blank">
               <span>{{wallet.address}}</span> 
               <span class="percent">{{wallet.percent | numberLocale}}%</span>
@@ -76,8 +82,8 @@
       <th>
         Deposited distribution:
       </th><td>
-          <span *ngIf="devFeePercent  == null"><app-loader></app-loader></span>
-          <span *ngIf="devFeePercent  != null">{{devFeePercent}}% to dev wallet, {{100 - devFeePercent}}% to liquidity</span>
+          <span *ngIf="presale.devFeePercent == -1"><app-loader></app-loader></span>
+          <span *ngIf="presale.devFeePercent != -1">{{presale.devFeePercent}}% to dev wallet, {{100 - presale.devFeePercent}}% to liquidity</span>
       </td> 
     </tr>
     <tr>

@@ -60,12 +60,13 @@ export class AirdropComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+  startTransactionHash: string = "";
+  startTransactionError: string = "";
   start(delayBlock: string, timeBlock: string){
     this.web3ModalService.airdropStart(Number(delayBlock), Number(timeBlock)).then((value: any) => {
-      console.info(value);
+      this.startTransactionHash = value.hash;
     }).catch((value: any) => {
-      console.error(value);
+      this.startTransactionError = value.data.message;
     });
   }
   

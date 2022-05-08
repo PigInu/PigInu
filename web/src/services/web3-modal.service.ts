@@ -83,6 +83,9 @@ export class Web3ModalService {
       this.presaleNotLoggedContract.getBalanceTokenTheir().then(async (value: BigNumber) => {
         await decimalsPromise;
          AppState.presale.balanceTokenTheir = AppState.reduceTheirDecimals(value); 
+      });
+      this.presaleNotLoggedContract.devsFeePercent().then((value: BigNumber) => { 
+         AppState.presale.balanceTokenTheir = AppState.presale.devFeePercent = value.toNumber(); 
         });
     });
     this.presaleNotLoggedContract.tokenOur().then((value: BigNumber) => {

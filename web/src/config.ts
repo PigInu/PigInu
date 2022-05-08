@@ -117,7 +117,7 @@ export class Config {
             "function deposited(address) view returns (uint)",
             "function deposit(uint)",
             "function claim()",
-            "function devFeePercent() view returns (uint)",
+            "function devsFeePercent() view returns (uint)",
             "function devAddress() view returns (uint)",
             "function start (uint256, uint256, uint256)",
             "function owner() view returns (uint256)",

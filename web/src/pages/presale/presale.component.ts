@@ -21,7 +21,6 @@ export class PresaleComponent implements OnInit, OnDestroy  {
   presaleContractOwner: string | null = null;
   devWallets: Array<{address: string, percent: number}> = [];
   devWalletsCount: number = 3;
-  devFeePercent: number | null = null;
   
   subscription: any;
   periodInterval: any;
@@ -69,27 +68,20 @@ export class PresaleComponent implements OnInit, OnDestroy  {
           address: value[0].toHexString(),
           percent: value[1].toNumber() / 100
         });
-        this.calcDevFeePercent();
       }
     });
   }
 
+  startTransactionHash: string = "";
+  startTransactionError: string = "";
   start(delayBlock: string, depositBlock: string, claimBlock: string){
+    this.startTransactionError = this.startTransactionHash = "";
       this.web3ModalSevice.presaleStart(Number(delayBlock), Number(depositBlock), Number(claimBlock)).then((value: any) => {
-        console.info(value);
+        this.startTransactionHash = value.hash;
       }).catch((value: any) => {
-        console.error(value);
+        this.startTransactionError = value.data.message;
       });
   } 
-
-  calcDevFeePercent(){
-    if(this.devWalletsCount != this.devWallets.length)
-      return;
-    let percent = 0;
-    for(let i = 0; i < this.devWalletsCount;i ++)
-      percent += this.devWallets[i].percent;
-    this.devFeePercent = percent;
-  }
 
   isStartButtonVisible(): boolean{
     if(this.presaleContractOwner != null && 
@@ -222,7 +214,7 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     return AppState.timeOutConfig(timestamp);
   }
   
-  depositTransactionHash: string | undefined;
+  depositTransactionHash: string | undefined = "";
   depositError: string | null = null;
   depositLoading: boolean = false;
   deposit(amountString: string){

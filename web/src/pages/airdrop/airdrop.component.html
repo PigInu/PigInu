@@ -26,7 +26,13 @@
           <button (click)="start(delayBlocks.value, timeBlocks.value)">START</button>
         </td>
       </tr>
-    </table>  
+    </table> 
+    <div *ngIf="startTransactionHash" class="result">
+        Transaction ID: <a href="{{startTransactionHash | transactionLink}}" target="_blank">{{startTransactionHash}}</a>
+      </div>
+      <div *ngIf="startTransactionError != ''" class="resultError">
+        {{startTransactionError}}
+      </div>   
   </div>
 </div>
 

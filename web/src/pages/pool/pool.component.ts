@@ -62,11 +62,13 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.initialized = false;
   }
 
+  startTransactionHash: string = "";
+  startTransactionError: string = "";
   start(offsetBlocks: string){
     this.poolService.start(Number(offsetBlocks)).then((value: any) => {
-      console.info(value);
+      this.startTransactionHash = value.hash;
     }).catch((value: any) => {
-      console.error(value);
+      this.startTransactionError = value.data.message;
     });
   }
 
