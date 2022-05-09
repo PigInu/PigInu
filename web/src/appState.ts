@@ -281,6 +281,8 @@ export interface IPresale {
     tokenPriceLiquidity: number,
     tokenTheirMax: number,
     startBlock: number;
+    claimBlock :  number;
+    depositBlock : number;
 }
 
 export class AppState {
@@ -289,6 +291,7 @@ export class AppState {
     public static airdropRecieved: boolean | null = null;
     public static airDropTimeout: number = -1;
     public static airDropStartBlock: number = -1;
+    public static airDropEndBlock: number = -1;
     public static airDropStartTimeout: number = -1;    
     public static reduceActualTimestamp: number = -1;
      
@@ -362,7 +365,9 @@ export class AppState {
         totalClaimableNotDeducted: -1,
         liquidityTokenTheir: -1,
         balanceTokenTheir: -1,
-        startBlock: -1
+        startBlock: -1,
+        claimBlock : -1,
+        depositBlock : -1,
     }
 }
 

@@ -114,24 +114,53 @@ export class Web3ModalService {
     this.presaleNotLoggedContract.claimedCount().then((value: BigNumber) => { AppState.presale.claimedCount = Number(value.toString()); });
     this.presaleNotLoggedContract.depositedCount().then((value: BigNumber) => { AppState.presale.depositedCount = Number(value.toString()); });    
     this.presaleNotLoggedContract.startBlock().then((value: BigNumber) => { 
-      value = BigNumber.from(0);// TODO - dat pryc
       AppState.presale.startBlock = value.toNumber();
-      this.presaleNotLoggedContract.provider.getBlock(Number(value.toString())).then(value => {
-        AppState.presale.startTime = Number(value.timestamp);  
+      this.getBlockNumberTimeout(this.presaleNotLoggedContract, AppState.presale.startBlock).then(blockTimeout => {
+        AppState.presale.startTime = blockTimeout;
       });
     });
     this.presaleNotLoggedContract.claimTimeOutBlock().then((value: BigNumber) => { 
-      this.presaleNotLoggedContract.provider.getBlock(Number(value.toString())).then(value => {
-        AppState.presale.claimTimeOut = Number(value.timestamp);  
+      AppState.presale.claimBlock = value.toNumber();
+      this.getBlockNumberTimeout(this.presaleNotLoggedContract, AppState.presale.claimBlock).then(blockTimeout => {
+        AppState.presale.claimTimeOut = blockTimeout;
       });
     });
 
     this.presaleNotLoggedContract.depositTimeOutBlock().then((value: BigNumber) => { 
-      this.presaleNotLoggedContract.provider.getBlock(Number(value.toString())).then(value => {
-        AppState.presale.depositTimeOut = Number(value.timestamp);  
+      AppState.presale.depositBlock = value.toNumber();
+      this.getBlockNumberTimeout(this.presaleNotLoggedContract, AppState.presale.depositBlock).then(blockTimeout => {
+        AppState.presale.depositTimeOut = blockTimeout;
       });
     });
     this.presaleNotLoggedContract.totalClaimable().then((ret: BigNumber) => { this.reduceNumberDecimals(ret).then(value =>{ AppState.presale.totalClaimable = value; })});
+  }
+
+  public async getBlockNumberTimeout(contract: Contract, blockNumber: number){
+    return contract.provider.getBlock(blockNumber).then(async block => {
+      if(block != null)
+        return Number(block.timestamp);
+      const actualBlockNumber = await contract.provider.getBlockNumber();
+      const actualBlock = await contract.provider.getBlock(actualBlockNumber);
+      const blockTime = await this.getBlockTime(contract);
+      return actualBlock.timestamp + ((blockNumber - actualBlockNumber) * blockTime);        
+    });
+  }
+
+  public async getBlockTime(contract: Contract): Promise<number>{
+    const blockNum = 100;
+    let blockCurrent: any;
+    let blockOld: any;
+    let blockNumberCurrent = await contract.provider.getBlockNumber();
+    let promises = [];
+    promises.push(contract.provider.getBlock(blockNumberCurrent).then(res => blockCurrent = res));
+    promises.push(contract.provider.getBlock(blockNumberCurrent - blockNum).then(res => blockOld = res));
+    var i;
+    for (i = 0; i < promises.length; i++) 
+      await promises[i];
+    if(blockCurrent == null || blockOld == null)
+      return 0;
+    var timeDiff = blockCurrent.timestamp - blockOld.timestamp;
+    return timeDiff / blockNum;
   }
   
   private async reduceNumberDecimals(number: BigNumber) : Promise<number>{
@@ -330,14 +359,15 @@ export class Web3ModalService {
    
   airdropTimeout(){
     this.airdropNotLoggedContract.timeOutBlock().then((ret: BigNumber) => {
-      this.airdropNotLoggedContract.provider.getBlock(Number(ret.toString())).then(value => {
-        AppState.airDropTimeout = Number(value.timestamp);  
+      AppState.airDropEndBlock = ret.toNumber();
+      this.getBlockNumberTimeout(this.airdropNotLoggedContract, ret.toNumber()).then(blockTimeout => {
+        AppState.airDropTimeout = blockTimeout;
       });
     });
     this.airdropNotLoggedContract.startBlock().then((ret: BigNumber) => {
       AppState.airDropStartBlock = ret.toNumber();
-      this.airdropNotLoggedContract.provider.getBlock(Number(ret.toString())).then(value => {
-        AppState.airDropStartTimeout = Number(value.timestamp);  
+      this.getBlockNumberTimeout(this.airdropNotLoggedContract, ret.toNumber()).then(blockTimeout => {
+        AppState.airDropStartTimeout = blockTimeout;
       });
     });
   }

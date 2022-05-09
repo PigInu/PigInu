@@ -172,6 +172,14 @@ export class AirdropComponent implements OnInit, OnDestroy {
     return AppState.timeOutConfig(timestamp);
   }
 
+  public startBlock(): number{
+    return AppState.airDropStartBlock;
+  }
+
+  public endBlock(): number{
+    return AppState.airDropEndBlock;
+  }
+
   private loadData(){
     if(AppState.airDropStartBlock <= 0)
       this.web3ModalService.airdropTimeout();

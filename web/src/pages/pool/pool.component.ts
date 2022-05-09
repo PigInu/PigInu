@@ -30,7 +30,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   public tokensToBeDistributed: BigNumber | null = null;
 
   public started: Boolean | null = null;
-  public startBlock: BigNumber | null = null;
+  public startBlock: number | null = null;
   public startDate: number | null = null;
   public totalAllocPoint: number | null = null;
   public tokenPerBlock: BigNumber | null = null;
@@ -90,9 +90,9 @@ export class PoolComponent implements OnInit, OnDestroy {
         this.started = value;
         if(this.started){
           this.poolService.startBlock().then(value => {
-            this.startBlock = value;
-            this.poolService.getBlock( this.startBlock.toNumber() ).then(value => {
-              this.startDate = value.timestamp * 1000;
+            this.startBlock = value.toNumber();
+            this.poolService.getBlockNumberTimeout( this.startBlock ).then(value => {
+              this.startDate = value * 1000;
             });
           });
         }

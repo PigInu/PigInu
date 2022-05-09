@@ -118,29 +118,16 @@ export class PoolService {
     return this.getSignedContract().getMultiplier(from, to);
   }
 
-  getBlock(blockNumber: any): Promise<any>{
-    return this.getSignedContract().provider.getBlock(blockNumber);
-  }
-
   getBlockNumber(): Promise<any>{
     return this.getSignedContract().provider.getBlockNumber();
   }
 
-  async getBlockTime(): Promise<number>{
-    const blockNum = 100;
-    let blockCurrent: any;
-    let blockOld: any;
-    let blockNumberCurrent = await this.getSignedContract().provider.getBlockNumber();
-    let promises = [];
-    promises.push(this.getBlock(blockNumberCurrent).then(res => blockCurrent = res));
-    promises.push(this.getBlock(blockNumberCurrent - blockNum).then(res => blockOld = res));
-    var i;
-    for (i = 0; i < promises.length; i++) 
-      await promises[i];
-    if(blockCurrent == null || blockOld == null)
-      return 0;
-    var timeDiff = blockCurrent.timestamp - blockOld.timestamp;
-    return timeDiff / blockNum;
+  getBlockTime(): Promise<number>{
+    return this.web3ModalService.getBlockTime(this.getSignedContract());
+  }
+
+  getBlockNumberTimeout(blockNumber: number): Promise<number>{
+    return this.web3ModalService.getBlockNumberTimeout(this.getSignedContract(), blockNumber);
   }
 
   tokenPerBlock(): Promise<BigNumber>{
