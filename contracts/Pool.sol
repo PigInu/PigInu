@@ -101,6 +101,9 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function pendingTokens(uint _poolID, address _user) external view returns (uint) {
+		if(!started || startBlock > block.number) {
+			return 0;
+		}
 		PoolInfo storage pool = pools[_poolID];
 		UserInfo storage user = users[_poolID][_user];
 		uint accTokenPerShare = pool.accTokenPerShare;
@@ -115,14 +118,14 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function updateAllPools() public {
-		if (!started || finished) return;
+		if (!started || startBlock > block.number || finished) return;
 		for (uint poolID = 0; poolID < pools.length; poolID++) updatePool(poolID);
 		uint blockNumber = getRewardBlockNumber();
 		if (block.number > blockNumber) finished = true;
 	}
 
 	function updatePool(uint _poolID) internal {
-		if(!started || finished) return;
+		if(!started || startBlock > block.number || finished) return;
 		PoolInfo storage pool = pools[_poolID];
 		if (block.number <= pool.lastRewardBlock)	return;
 		uint blockNumber = getRewardBlockNumber();
