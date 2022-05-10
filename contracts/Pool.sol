@@ -23,6 +23,7 @@ contract Pool is Ownable, ReentrancyGuard {
  uint public endRewardBlockNumber;
  uint public startBlock;
  uint public totalAllocPoint;
+ bool public finished;
  event eventDeposit(address indexed user, uint indexed poolID, uint amount);
  event eventWithdraw(address indexed user, uint indexed poolID, uint amount);
  event eventEmergencyWithdraw(address indexed user, uint indexed poolID, uint amount);
@@ -115,12 +116,13 @@ contract Pool is Ownable, ReentrancyGuard {
  }
 
  function updateAllPools() public {
-  if (startBlock == 0 || startBlock > block.number || block.number > endRewardBlockNumber) return;
+  if (startBlock == 0 || startBlock > block.number || finished) return;
   for (uint poolID = 0; poolID < pools.length; poolID++) updatePool(poolID);
+  if (block.number > getRewardBlockNumber()) finished = true;
  }
 
  function updatePool(uint _poolID) internal {
-  if(startBlock == 0 || startBlock > block.number || block.number > endRewardBlockNumber) return;
+  if(startBlock == 0 || startBlock > block.number || finished) return;
   PoolInfo storage pool = pools[_poolID];
   if (block.number <= pool.lastRewardBlock)	return;
   uint rewardBlockNumber = getRewardBlockNumber();
@@ -142,6 +144,7 @@ contract Pool is Ownable, ReentrancyGuard {
  }
 
  function deposit(uint _poolID, uint _amount) public nonReentrant {
+  require(!finished, 'deposit: staking already finished');
   PoolInfo storage pool = pools[_poolID];
   UserInfo storage user = users[_poolID][msg.sender];
   updateAllPools();
@@ -210,7 +213,7 @@ contract Pool is Ownable, ReentrancyGuard {
  }
 
  function burnRemainingTokens() external {
-  require(endRewardBlockNumber > block.number, 'burnRemainingTokens: not yet finished');
+  require(finished, 'burnRemainingTokens: not yet finished');
   require(rewardTokensLeft > 0, 'burnRemainingTokens: no tokens to burn');
   tokenEarn.safeTransfer(burnAddress, tokensToBurn);
  }
