@@ -182,7 +182,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function emergencyWithdraw(uint _poolID) public nonReentrant {
-		PoolInfo storage pool = pools[_poolID];
+	 	PoolInfo storage pool = pools[_poolID];
 		UserInfo storage user = users[_poolID][msg.sender];
 		uint amount = user.amount;
 		user.amount = 0;
