@@ -74,9 +74,9 @@ export class Config {
             return "0x" +Config.main.chainID.toString(16);
         },       
         addressToken: '0x6411f12168f6ed7375dDD38Dd68A9130a9De7f91',
-        addressAirdrop: '0x4EaC75523D634f069CC3fa5F993F95fd6FFa4CFF',
-        addressPresale: '0x81Cd9B8A4f832095dA20fFB919B13604B34fD3d1',
-        addressPool: '0x04C21a1d621BF22e9730b59796B8eE17b11844E4',
+        addressAirdrop: '0x075980953f2bd6a1B70Cba2F9fc0cD3e3F04f389',
+        addressPresale: '0x7C0C6b816Ee582138895524E517606568E259F44',
+        addressPool: '0xe5682159E8c86ca75391aEc75102ABb238F31c3a',
         addressUSDToken: '0xf42a4429f107bd120c5e42e069fdad0ac625f615',
         addressLPToken: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
         airdropContractInterface: [] = [
