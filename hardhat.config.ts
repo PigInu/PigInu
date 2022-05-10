@@ -36,7 +36,7 @@ const config: HardhatUserConfig = {
    //url: 'https://matic-testnet-archive-rpc.bwarelabs.com',
    chainId: 80001,
    accounts: { mnemonic: mnemonic },
-   //gasPrice: 35000000000,
+   gasPrice: 35000000000,
   },
   polygonMainnet: {
    url: 'https://polygon-rpc.com',
