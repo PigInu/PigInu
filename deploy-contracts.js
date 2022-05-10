@@ -12,4 +12,3 @@ while (fil.indexOf('Contract: ') != -1) {
 var address = file.substring(file.indexOf("Pair address:") + 14 );
 address = address.substring(0, address.indexOf("\n"));
 console.log('LPToken ' + address);
-
