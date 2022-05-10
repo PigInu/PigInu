@@ -16,15 +16,13 @@ contract Pool is Ownable, ReentrancyGuard {
 	DevWallet[] public devWallets;
  IERC20 public tokenEarn;
 	address public burnAddress;
-	bool public started = false;
-	bool public finished = false;
 	uint public tokenPerBlock;
  uint public rewardTokensLeft;
 	uint public poolRewardAmount;
- uint public tokensToBurn = 0;
-	uint public endRewardBlockNumber = 1;
-	uint public startBlock = 1;
-	uint public totalAllocPoint = 0;
+ uint public tokensToBurn;
+	uint public endRewardBlockNumber;
+	uint public startBlock;
+	uint public totalAllocPoint;
 	event eventDeposit(address indexed user, uint indexed poolID, uint amount);
 	event eventWithdraw(address indexed user, uint indexed poolID, uint amount);
 	event eventEmergencyWithdraw(address indexed user, uint indexed poolID, uint amount);
@@ -66,7 +64,7 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
  function getTokensToBeBurned() public view returns (uint) {
-  if (!started || startBlock > block.number) return 0;
+  if (startBlock == 0 || startBlock > block.number) return 0;
   uint rewardBlockNumber = getRewardBlockNumber();
   if (block.number > rewardBlockNumber) return tokensToBurn;
   uint tokensToBurnTemp = tokensToBurn;
@@ -82,7 +80,7 @@ contract Pool is Ownable, ReentrancyGuard {
  }
 
  function getDistributedTokens() public view returns (uint) {
-  if (!started || startBlock > block.number) return 0;
+  if (startBlock == 0 || startBlock > block.number) return 0;
   uint rewardBlockNumber = getRewardBlockNumber();
   if (block.number > rewardBlockNumber) return poolRewardAmount;
   uint multiplier = getMultiplier(startBlock, rewardBlockNumber);
@@ -101,16 +99,15 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function pendingTokens(uint _poolID, address _user) external view returns (uint) {
-		if(!started || startBlock > block.number) {
+		if (startBlock == 0 || startBlock > block.number) {
 			return 0;
 		}
 		PoolInfo storage pool = pools[_poolID];
 		UserInfo storage user = users[_poolID][_user];
 		uint accTokenPerShare = pool.accTokenPerShare;
-		uint blockNumber = getRewardBlockNumber();
 		uint lpSupply = getPoolSupply(_poolID);
  	if (block.number > pool.lastRewardBlock && lpSupply != 0) {
-			uint multiplier = getMultiplier(pool.lastRewardBlock, blockNumber);
+			uint multiplier = getMultiplier(pool.lastRewardBlock, getRewardBlockNumber());
 			uint tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
 			accTokenPerShare = accTokenPerShare.add(tokenReward.mul(1e12).div(lpSupply));
 		}
@@ -118,32 +115,30 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function updateAllPools() public {
-		if (!started || startBlock > block.number || finished) return;
+		if (startBlock == 0 || startBlock > block.number || block.number > endRewardBlockNumber) return;
 		for (uint poolID = 0; poolID < pools.length; poolID++) updatePool(poolID);
-		uint blockNumber = getRewardBlockNumber();
-		if (block.number > blockNumber) finished = true;
 	}
 
 	function updatePool(uint _poolID) internal {
-		if(!started || startBlock > block.number || finished) return;
+		if(startBlock == 0 || startBlock > block.number || block.number > endRewardBlockNumber) return;
 		PoolInfo storage pool = pools[_poolID];
 		if (block.number <= pool.lastRewardBlock)	return;
-		uint blockNumber = getRewardBlockNumber();
+		uint rewardBlockNumber = getRewardBlockNumber();
   if (pool.allocPoint == 0) {
-			pool.lastRewardBlock = blockNumber;
+			pool.lastRewardBlock = rewardBlockNumber;
 			return;
 		}
 		uint lpSupply = getPoolSupply(_poolID);
-  uint multiplier = getMultiplier(pool.lastRewardBlock, blockNumber);
+  uint multiplier = getMultiplier(pool.lastRewardBlock, rewardBlockNumber);
 		uint tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
   if (lpSupply == 0) {
    tokensToBurn = tokensToBurn.add(tokenReward);
-   pool.lastRewardBlock = blockNumber;
+   pool.lastRewardBlock = rewardBlockNumber;
    return;
   }
   rewardTokensLeft = rewardTokensLeft.sub(tokenReward);
 		pool.accTokenPerShare = pool.accTokenPerShare.add(tokenReward.mul(1e12).div(lpSupply));
-		pool.lastRewardBlock = blockNumber;
+		pool.lastRewardBlock = rewardBlockNumber;
 	}
 
 	function deposit(uint _poolID, uint _amount) public nonReentrant {
@@ -206,17 +201,16 @@ contract Pool is Ownable, ReentrancyGuard {
 	}
 
 	function start(uint _offsetInBlockNumber) public onlyOwner {
-		require(!started, 'start: already started');
+		require(startBlock == 0, 'start: already started');
 		startBlock = block.number.add(_offsetInBlockNumber);
 		uint blocks = poolRewardAmount.div(tokenPerBlock);
 		endRewardBlockNumber = startBlock.add(blocks);
 		for (uint poolID = 0; poolID < pools.length; poolID++) pools[poolID].lastRewardBlock = startBlock;
 		updateAllPools();
-		started = true;
 	}
 
-	function burnRemainingTokens() external onlyOwner {
-		require(finished, 'burnRemainingTokens: not yet finished');
+	function burnRemainingTokens() external {
+		require(endRewardBlockNumber > block.number, 'burnRemainingTokens: not yet finished');
 		require(rewardTokensLeft > 0, 'burnRemainingTokens: no tokens to burn');
 		tokenEarn.safeTransfer(burnAddress, tokensToBurn);
 	}
