@@ -10,10 +10,15 @@ async function main() {
  // TOKEN SETTINGS:
  const tokenOurName = 'Pig Inu Token';
  const tokenOurSymbol = 'PIG';
- const tokenOurSupply = 10000000; // 10 000 000 tokens
  const tokenOurDecimals = 18;
  const tokenOurBurnFee = 2;
  const tokenOurDevFee = 3;
+
+ // TOKEN SETTINGS - RELEASE:
+ // const tokenOurSupply = 10000000; // 10 000 000 tokens
+
+ // TOKEN SETTINGS - TEST:
+ const tokenOurSupply = 1000000000000; // 1 000 000 000 000 tokens
 
  // AIRDROP SETTINGS:
  const airdropDrop = '1000000000000000000'; // 1 token
