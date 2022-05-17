@@ -216,7 +216,7 @@ contract Pool is Ownable, ReentrancyGuard {
  function burnRemainingTokens() external {
   require(block.number > endRewardBlockNumber, 'burnRemainingTokens: not yet finished');
   if (!finished) updateAllPools();
-  if(rewardTokensLeft > 0) {
+  if (rewardTokensLeft > 0) {
     tokenEarn.safeTransfer(burnAddress, tokensToBurn);
     emit eventTokensBurn(burnAddress, tokensToBurn);
   }
