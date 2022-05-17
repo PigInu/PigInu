@@ -27,6 +27,7 @@ contract Pool is Ownable, ReentrancyGuard {
  event eventDeposit(address indexed user, uint indexed poolID, uint amount);
  event eventWithdraw(address indexed user, uint indexed poolID, uint amount);
  event eventEmergencyWithdraw(address indexed user, uint indexed poolID, uint amount);
+ event eventTokensBurn(address indexed burnAddress, uint indexed tokensBurned);
  event eventAddDevAddress(address indexed devAddress, uint indexed sharePercent);
 
  struct UserInfo {
@@ -213,9 +214,12 @@ contract Pool is Ownable, ReentrancyGuard {
  }
 
  function burnRemainingTokens() external {
-  require(finished, 'burnRemainingTokens: not yet finished');
-  require(rewardTokensLeft > 0, 'burnRemainingTokens: no tokens to burn');
-  tokenEarn.safeTransfer(burnAddress, tokensToBurn);
+  require(block.number > endRewardBlockNumber, 'burnRemainingTokens: not yet finished');
+  updateAllPools();
+  if(rewardTokensLeft > 0) {
+    tokenEarn.safeTransfer(burnAddress, tokensToBurn);
+    emit eventTokensBurn(burnAddress, tokensToBurn);
+  }
  }
 
  function addDevAddress(address _devAddress, uint _sharePercent) public onlyOwner {
