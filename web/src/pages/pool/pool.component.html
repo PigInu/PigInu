@@ -82,12 +82,24 @@
     </tr>
     <tr>
       <th>
-        Started: 
+        Start: 
       </th><td>
         <span *ngIf="started == null || (started == true && startDate == null)"><app-loader></app-loader></span>
         <span *ngIf="started == false">Not started</span>
-        <span *ngIf="started == true && startDate != null">{{startDate | dateTimeLocale}}</span>
-        <span *ngIf="startBlock != null && startBlock > 0"> (Block number: {{startBlock}})</span>
+        <span *ngIf="started == true && startDate != null">
+          <span *ngIf="startDateIsReal == false">
+            <countdown [config]="timeOutConfig(startDate / 1000)"></countdown> | Estimated time:
+          </span>
+          <span *ngIf="startDateIsReal == true">Time:</span>
+          {{startDate | dateTimeLocale}}
+        </span>
+      </td> 
+    </tr>
+    <tr>
+      <th *ngIf="startBlock != null && startBlock > 0">
+        Block: 
+      </th><td>
+        {{startBlock}}
       </td> 
     </tr>
   </table>

@@ -4,7 +4,7 @@ import { BigNumber, ethers } from 'ethers';
 import { AppState, StateToken } from 'src/appState';
 import { Config } from 'src/config';
 import { BigNumberLocalePipe } from 'src/pipe/BigNumberLocale.pipe';
-import { Web3ModalService } from './web3-modal.service';
+import { BlockTimeout, Web3ModalService } from './web3-modal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -73,10 +73,6 @@ export class PoolService {
     return this.getSignedContract().owner(); 
   }
 
-  started(): Promise<Boolean> {
-    return this.getSignedContract().started();
-  }
-
   startBlock(): Promise<BigNumber> {
     return this.getSignedContract().startBlock();
   }
@@ -126,7 +122,7 @@ export class PoolService {
     return this.web3ModalService.getBlockTime(this.getSignedContract());
   }
 
-  getBlockNumberTimeout(blockNumber: number): Promise<number>{
+  getBlockNumberTimeout(blockNumber: number): Promise<BlockTimeout>{
     return this.web3ModalService.getBlockNumberTimeout(this.getSignedContract(), blockNumber);
   }
 

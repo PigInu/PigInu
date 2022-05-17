@@ -116,33 +116,39 @@ export class Web3ModalService {
     this.presaleNotLoggedContract.startBlock().then((value: BigNumber) => { 
       AppState.presale.startBlock = value.toNumber();
       this.getBlockNumberTimeout(this.presaleNotLoggedContract, AppState.presale.startBlock).then(blockTimeout => {
-        AppState.presale.startTime = blockTimeout;
+        AppState.presale.startTime = blockTimeout.timeout;
+        AppState.presale.startTimeIsReal = blockTimeout.realTime;
       });
     });
     this.presaleNotLoggedContract.claimTimeOutBlock().then((value: BigNumber) => { 
       AppState.presale.claimBlock = value.toNumber();
       this.getBlockNumberTimeout(this.presaleNotLoggedContract, AppState.presale.claimBlock).then(blockTimeout => {
-        AppState.presale.claimTimeOut = blockTimeout;
+        AppState.presale.claimTimeOut = blockTimeout.timeout;
+        AppState.presale.claimTimeOutIsReal = blockTimeout.realTime;
       });
     });
 
     this.presaleNotLoggedContract.depositTimeOutBlock().then((value: BigNumber) => { 
       AppState.presale.depositBlock = value.toNumber();
       this.getBlockNumberTimeout(this.presaleNotLoggedContract, AppState.presale.depositBlock).then(blockTimeout => {
-        AppState.presale.depositTimeOut = blockTimeout;
+        AppState.presale.depositTimeOut = blockTimeout.timeout;
+        AppState.presale.depositTimeOutIsReal = blockTimeout.realTime;
       });
     });
     this.presaleNotLoggedContract.totalClaimable().then((ret: BigNumber) => { this.reduceNumberDecimals(ret).then(value =>{ AppState.presale.totalClaimable = value; })});
   }
 
-  public async getBlockNumberTimeout(contract: Contract, blockNumber: number){
+  public async getBlockNumberTimeout(contract: Contract, blockNumber: number): Promise<BlockTimeout>{
     return contract.provider.getBlock(blockNumber).then(async block => {
       if(block != null)
-        return Number(block.timestamp);
+        return {timeout: Number(block.timestamp), realTime: true};
       const actualBlockNumber = await contract.provider.getBlockNumber();
       const actualBlock = await contract.provider.getBlock(actualBlockNumber);
       const blockTime = await this.getBlockTime(contract);
-      return actualBlock.timestamp + ((blockNumber - actualBlockNumber) * blockTime);        
+      let timeout = actualBlock.timestamp + ((blockNumber - actualBlockNumber) * blockTime);
+      if(timeout < actualBlock.timestamp + 10)
+        timeout = actualBlock.timestamp + 10;
+      return {timeout: timeout, realTime: false};        
     });
   }
 
@@ -361,13 +367,15 @@ export class Web3ModalService {
     this.airdropNotLoggedContract.timeOutBlock().then((ret: BigNumber) => {
       AppState.airDropEndBlock = ret.toNumber();
       this.getBlockNumberTimeout(this.airdropNotLoggedContract, ret.toNumber()).then(blockTimeout => {
-        AppState.airDropTimeout = blockTimeout;
+        AppState.airDropTimeout = blockTimeout.timeout;
+        AppState.airDropTimeoutIsReal = blockTimeout.realTime;
       });
     });
     this.airdropNotLoggedContract.startBlock().then((ret: BigNumber) => {
       AppState.airDropStartBlock = ret.toNumber();
       this.getBlockNumberTimeout(this.airdropNotLoggedContract, ret.toNumber()).then(blockTimeout => {
-        AppState.airDropStartTimeout = blockTimeout;
+        AppState.airDropStartTimeout = blockTimeout.timeout;
+        AppState.airDropStartTimeoutIsReal = blockTimeout.realTime;
       });
     });
   }
@@ -403,4 +411,9 @@ export class Web3ModalService {
   presaleClaim(): Promise<ethers.Transaction> {
     return this.presaleContract?.claim();
   }
+}
+
+export interface BlockTimeout{
+  timeout: number;
+  realTime: boolean;
 }

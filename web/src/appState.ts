@@ -273,8 +273,11 @@ export interface IPresale {
     totalDeposited: number,
     totalClaimed: number,
     startTime: number,
+    startTimeIsReal: boolean | null,
     depositTimeOut: number,
+    depositTimeOutIsReal: boolean | null,
     claimTimeOut: number,
+    claimTimeOutIsReal: boolean | null,
     totalClaimable: number,
     devFeePercent: number;
     devAddress: string,
@@ -290,9 +293,11 @@ export class AppState {
     public static chainId: number | null = null;
     public static airdropRecieved: boolean | null = null;
     public static airDropTimeout: number = -1;
+    public static airDropTimeoutIsReal: boolean | null = null;
     public static airDropStartBlock: number = -1;
     public static airDropEndBlock: number = -1;
-    public static airDropStartTimeout: number = -1;    
+    public static airDropStartTimeout: number = -1;  
+    public static airDropStartTimeoutIsReal: boolean | null = null;
     public static reduceActualTimestamp: number = -1;
      
     public static token : StateToken = new StateToken("/assets/icons/PIG.png");
@@ -353,8 +358,11 @@ export class AppState {
         totalDeposited: -1,
         totalClaimed: -1,
         startTime: -1,
+        startTimeIsReal: null,
         depositTimeOut: -1,
+        depositTimeOutIsReal: null,
         claimTimeOut: -1,
+        claimTimeOutIsReal: null,
         devFeePercent: -1,
         totalClaimable: -1,
         devAddress: "",

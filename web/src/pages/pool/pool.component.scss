@@ -51,4 +51,17 @@
             }
         }
     }
+
+    countdown ::ng-deep .item{
+        background-color: #1095C1;
+        text-align: center;
+        width: 2.65em;
+        display:inline-block;
+        margin-right: 4px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        color: #fff;
+        height: 1.8em;
+        line-height: 1.8em;
+    }
 }

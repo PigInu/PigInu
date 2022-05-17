@@ -113,6 +113,14 @@ export class AirdropComponent implements OnInit, OnDestroy {
     return AppState.airDropStartTimeout;
   }
 
+  airdropTimeoutIsReal(): boolean | null{
+    return AppState.airDropTimeoutIsReal;
+  }
+
+  airdropStartTimeoutIsReal(): boolean | null{
+    return AppState.airDropStartTimeoutIsReal;
+  }  
+
   airdropsTotal(): null | number{
     if(this.remainingTokens == -1 || this.amountOfTokens == -1 || this.airdropsCount == -1)
       return null;

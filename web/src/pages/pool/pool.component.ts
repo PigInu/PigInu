@@ -1,5 +1,6 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core';
 import { BigNumber } from 'ethers';
+import { CountdownConfig } from 'ngx-countdown';
 import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { AppComponent } from 'src/app/app.component';
@@ -32,6 +33,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   public started: Boolean | null = null;
   public startBlock: number | null = null;
   public startDate: number | null = null;
+  public startDateIsReal: boolean | null = null;
   public totalAllocPoint: number | null = null;
   public tokenPerBlock: BigNumber | null = null;
 
@@ -85,19 +87,22 @@ export class PoolComponent implements OnInit, OnDestroy {
       this.tokensToBeBurned = value;
       this.calcValues();
     });
-    if(this.started != true){
-      this.poolService.started().then(value => {
-        this.started = value;
-        if(this.started){
-          this.poolService.startBlock().then(value => {
+    //if(this.started != true){
+        this.poolService.startBlock().then(value => {
+          if(value.toNumber() > 0){
             this.startBlock = value.toNumber();
-            this.poolService.getBlockNumberTimeout( this.startBlock ).then(value => {
-              this.startDate = value * 1000;
-            });
-          });
-        }
+            if(this.startBlock != null){
+              this.started = true;
+              this.poolService.getBlockNumberTimeout( this.startBlock as number ).then(value => {
+                this.startDate = value.timeout * 1000;
+                this.startDateIsReal = value.realTime;
+              });
+            }
+          } else {
+            this.started = false;
+          }
       });
-    }
+    //}
   }
 
   isStartButtonVisible(): boolean{
@@ -139,5 +144,9 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   notifyTransactionError(transactionError: string){
     this.transactionError = transactionError;
+  }
+  
+  timeOutConfig(timestamp: number): CountdownConfig {
+    return AppState.timeOutConfig(timestamp);
   }
 }
