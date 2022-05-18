@@ -33,6 +33,8 @@ const config: HardhatUserConfig = {
    //url: 'https://rpc-mumbai.matic.today',
    //url: 'https://matic-mumbai.chainstacklabs.com',
    url: 'https://rpc-mumbai.maticvigil.com/v1/59d0dacfbfcfd800a0b115a9af6ff41b49d834ef',
+   //url: 'https://rpc-mumbai.maticvigil.com/v1/62bd48eb9fa3911543c8f906cc4c6dbbda47c9d3',
+   //url: 'https://rpc-endpoints.superfluid.dev/mumbai',
    //url: 'https://rpc-mumbai.maticvigil.com',
    //url: 'https://matic-testnet-archive-rpc.bwarelabs.com',
    chainId: 80001,
