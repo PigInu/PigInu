@@ -34,6 +34,11 @@ export class PoolComponent implements OnInit, OnDestroy {
   public startBlock: number | null = null;
   public startDate: number | null = null;
   public startDateIsReal: boolean | null = null;
+
+  public endBlock: number | null = null;
+  public endDate: number | null = null;
+  public endDateIsReal: boolean | null = null;
+
   public totalAllocPoint: number | null = null;
   public tokenPerBlock: BigNumber | null = null;
 
@@ -102,6 +107,19 @@ export class PoolComponent implements OnInit, OnDestroy {
             this.started = false;
           }
       });
+      
+      this.poolService.endRewardBlockNumber().then(value => {
+        if(value.toNumber() > 0){
+          this.endBlock = value.toNumber();
+          if(this.endBlock != null){
+            this.poolService.getBlockNumberTimeout( this.endBlock).then(value => {
+              this.endDate = value.timeout * 1000;
+              this.endDateIsReal = value.realTime;
+            });
+          }
+        }
+    });
+
     //}
   }
 

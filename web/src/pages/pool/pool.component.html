@@ -87,19 +87,37 @@
         <span *ngIf="started == null || (started == true && startDate == null)"><app-loader></app-loader></span>
         <span *ngIf="started == false">Not started</span>
         <span *ngIf="started == true && startDate != null">
-          <span *ngIf="startDateIsReal == false">
-            <countdown [config]="timeOutConfig(startDate / 1000)"></countdown> | Estimated time:
-          </span>
+          <div *ngIf="startBlock != null && startBlock > 0">
+            Block: 
+            {{startBlock}}
+          </div> 
           <span *ngIf="startDateIsReal == true">Time:</span>
+          <span *ngIf="startDateIsReal == false">Estimated time:</span>
           {{startDate | dateTimeLocale}}
+          <span *ngIf="startDateIsReal == false">
+            <countdown [config]="timeOutConfig(startDate / 1000)"></countdown>
+          </span>
         </span>
       </td> 
     </tr>
     <tr>
-      <th *ngIf="startBlock != null && startBlock > 0">
-        Block: 
+      <th>
+        End: 
       </th><td>
-        {{startBlock}}
+        <span *ngIf="started == null || (started == true && endDate == null)"><app-loader></app-loader></span>
+        <span *ngIf="started == false">Not started</span>
+        <span *ngIf="started == true && endDate != null">
+          <div *ngIf="endBlock != null && endBlock > 0">
+            Block: 
+            {{endBlock}}
+          </div> 
+          <span *ngIf="endDateIsReal == true">Time:</span>
+          <span *ngIf="endDateIsReal == false">Estimated time:</span>
+          {{endDate | dateTimeLocale}}
+          <span *ngIf="endDateIsReal == false && startDateIsReal == true">
+            <countdown [config]="timeOutConfig(endDate / 1000)"></countdown>
+          </span>
+        </span>
       </td> 
     </tr>
   </table>

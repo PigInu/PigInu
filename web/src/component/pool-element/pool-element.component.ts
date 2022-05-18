@@ -29,6 +29,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   addressPoolDataLoading: number = 0;
   private addressPoolData: AddressPoolData | null = null;
   private multiplier: number = -1;
+  private owner: string | null = null;
   approveTransactionHash: string = "";
   approveWaiting: boolean = false;
   subscription: Subscription | null = null;
@@ -169,9 +170,19 @@ export class PoolElementComponent implements OnInit, OnDestroy {
       this.calcAprApy();
     });
     this.pool.tokenDeposit.balanceOf(this.contractAddress)?.then(value => {
-      this.totalValue = value;
-      this.totalValueNumber = this.toEth(this.totalValue);
-      this.calcAprApy();
+      if(this.pool.tokenDeposit.address != this.pool.tokenEarn.address){
+        this.totalValue = value;
+        this.totalValueNumber = this.toEth(this.totalValue);
+        this.calcAprApy();
+      } else {
+        if(!this.owner)
+          this.pool.tokenDeposit.owner()?.then(owner => {
+            this.owner = owner.toHexString();
+            this.calcTotalValueSamePool(value);
+          });
+        else
+          this.calcTotalValueSamePool(value);
+      }
     });
     this.poolService.getBlockTime().then(time => {
       this.blockTime = time
@@ -179,6 +190,15 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     });
   }
 
+  calcTotalValueSamePool(value: BigNumber){
+    if(this.owner)
+      this.pool.tokenDeposit.balanceOf(this.owner)?.then(ownerValue => {
+        this.totalValue = value.div(ownerValue);
+        this.totalValueNumber = this.toEth(this.totalValue);
+        this.calcAprApy();
+      });
+  }
+  
   calcAprApy(){
     this.aprValue = this.apr();
     this.apyValue = this.apy();

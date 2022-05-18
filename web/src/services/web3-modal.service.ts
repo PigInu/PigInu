@@ -362,7 +362,15 @@ export class Web3ModalService {
   presaleClaimeable(address: string): Promise<BigNumber>{
     return this.presaleNotLoggedContract.claimable(address);
   }
+
+  airdropMinBaseCoinBalance(): Promise<BigNumber>{
+    return this.airdropNotLoggedContract.minBaseCoinBalance();
+  }
    
+  airdropNetwork(): Promise<ethers.providers.Network>{
+    return this.airdropNotLoggedContract.provider.getNetwork();
+  }
+
   airdropTimeout(){
     this.airdropNotLoggedContract.timeOutBlock().then((ret: BigNumber) => {
       AppState.airDropEndBlock = ret.toNumber();

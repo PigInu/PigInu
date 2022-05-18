@@ -131,8 +131,12 @@ export class StateToken {
                 for (let i = 0; i < promises.length; i++) 
                     await promises[i];
 
-                let priceTOK1: number = this.reduceDecimals(balUsd) / this.reduceDecimals(balTOK1);
-                let priceTOK2: number =  this.reduceDecimals(balUsd) / this.reduceDecimals(balTOK2);
+                //let priceTOK1: number = this.reduceDecimals(balUsd) / this.reduceDecimals(balTOK1);
+                //let priceTOK2: number =  this.reduceDecimals(balUsd) / this.reduceDecimals(balTOK2);
+
+                let priceTOK1: number = balUsd.mul(this.decimals).div(balTOK1).toNumber();
+                let priceTOK2: number = balUsd.mul(this.decimals).div(balTOK2).toNumber();
+
 
                 const balTOK1mul = balTOK1.mul(this.decimals);//this.calcBN(balTOK1, decimalDiv, 'mul');
                 const balTOK2mul = balTOK2.mul(this.decimals);// = this.calcBN(balTOK2, decimalDiv, 'mul');
@@ -195,6 +199,13 @@ export class StateToken {
         const c = this.getContract(false)
         if(c)
             return c.balanceOf(address);
+        return null;
+    }
+
+    owner() : Promise<BigNumber> | null{
+        const c = this.getContract(false)
+        if(c)
+            return c.owner();
         return null;
     }
 

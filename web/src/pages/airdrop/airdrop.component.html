@@ -46,19 +46,15 @@
             <span *ngIf="notStarted == true">
                 Not started
             </span>
-            <span *ngIf="airdropStarted != null">
-                <span *ngIf="airdropStarted == false"><countdown [config]="timeOutConfig(airdropStartTimeout())"></countdown> | </span>            
+            <span *ngIf="airdropStarted != null">       
+                <div *ngIf="airdropStartTimeout() != -1 && startBlock() > 0">
+                    Block:  {{startBlock()}}
+                </div>    
                 <span *ngIf="airdropStartTimeoutIsReal() == false">Estimated time:</span>
                 <span *ngIf="airdropStartTimeoutIsReal() == true">Time:</span>
                 {{airdropStartTimeout() * 1000 | dateTimeLocale}}
+                <span *ngIf="airdropStartTimeoutIsReal() == false"><countdown [config]="timeOutConfig(airdropStartTimeout())"></countdown></span> 
             </span>
-        </td> 
-    </tr>
-    <tr *ngIf="airdropStartTimeout() != -1 && startBlock() > 0">
-        <th>
-        Block: 
-        </th><td>
-            {{startBlock()}}
         </td> 
     </tr>
     <tr *ngIf="airdropStarted == true">
@@ -67,18 +63,15 @@
         </th><td>
             <span *ngIf="airdropTimeoutOver == null"><app-loader></app-loader></span>
             <span *ngIf="airdropTimeoutOver != null">
-                <span *ngIf="airdropTimeoutOver == false"><countdown [config]="timeOutConfig(airdropTimeout())"></countdown> | </span>
+                <div *ngIf="airdropTimeoutOver != null && airdropStarted == true">
+                    Block: 
+                    {{endBlock()}}
+                </div>
                 <span *ngIf="airdropTimeoutIsReal() == false">Estimated time:</span>
                 <span *ngIf="airdropTimeoutIsReal() == true">Time:</span>
                 {{airdropTimeout() * 1000 | dateTimeLocale}}
+                <span *ngIf="airdropTimeoutOver == false"><countdown [config]="timeOutConfig(airdropTimeout())"></countdown></span>
             </span>
-        </td> 
-    </tr>
-    <tr *ngIf="airdropTimeoutOver != null && airdropStarted == true">
-        <th>
-            Block: 
-        </th><td>
-            {{endBlock()}}
         </td> 
     </tr>
     <tr>
@@ -138,6 +131,14 @@
         </th><td>
             <span *ngIf="totalClaimed == -1"><app-loader></app-loader></span>
             <span *ngIf="totalClaimed != -1">{{totalClaimed | numberLocale}} {{tokenSymbol()}}</span>
+        </td> 
+    </tr>
+    <tr>
+        <th>
+            Minimum wallet balance: 
+        </th><td>
+            <span *ngIf="minBaseCoinBalance == null"><app-loader></app-loader></span>
+            <span *ngIf="minBaseCoinBalance != null">{{minBaseCoinBalance | BigNumberLocale : tokenDecimals()}} {{network?.name | uppercase}}</span>
         </td> 
     </tr>
     </table>

@@ -4,7 +4,7 @@ import { Config } from 'src/config';
 import { takeWhile } from 'rxjs/operators';
 import { Web3ModalService } from 'src/services/web3-modal.service';
 import { AppState, StateToken } from 'src/appState';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { CountdownConfig } from 'ngx-countdown';
 
 @Component({
@@ -21,6 +21,8 @@ export class AirdropComponent implements OnInit, OnDestroy {
   airdropStarted: boolean | null = null;
   notStarted: boolean | null = null;
   contractOwner: string | null = null;
+  minBaseCoinBalance: BigNumber | null = null;
+  network: ethers.providers.Network | null = null;
 
   amountOfTokens : number = -1;
   remainingTokens: number = -1;
@@ -38,6 +40,12 @@ export class AirdropComponent implements OnInit, OnDestroy {
     this.web3ModalService.airdropOwner().then(value => {
       this.contractOwner = value.toHexString();
     });
+    this.web3ModalService.airdropMinBaseCoinBalance().then(value => {
+      this.minBaseCoinBalance = value;
+    });
+    this.web3ModalService.airdropNetwork().then(value => {
+      this.network = value;
+    });
     this.loadData();
     this.subscription = interval(Config.main.updateInterval * 1000)
     .pipe(takeWhile(() => this.initialized))
@@ -46,15 +54,18 @@ export class AirdropComponent implements OnInit, OnDestroy {
     });
 
     this.periodInterval = interval(250)
-    .pipe(takeWhile(() => (this.initialized) && !(this.airdropTimeoutOver == true && this.airdropStarted == true)))
+    .pipe(takeWhile(() => 
+      (this.initialized) && 
+      !(this.airdropTimeoutOver == true && this.airdropStarted == true)
+    ))
     .subscribe(() => {
       if(AppState.airDropStartBlock == 0){
           this.notStarted = true;
       } else if(AppState.airDropStartBlock > 0){
         this.notStarted = false;
-        if(AppState.airDropTimeout > 0)
+        if(AppState.airDropTimeout > 0 && AppState.airDropTimeoutIsReal)
           this.airdropTimeoutOver = AppState.timestampToTimeout(AppState.airDropTimeout) <= 0;
-        if(AppState.airDropStartTimeout > 0)
+        if(AppState.airDropStartTimeout > 0 && AppState.airDropStartTimeoutIsReal)
           this.airdropStarted = AppState.timestampToTimeout(AppState.airDropStartTimeout) <= 0;
       }
     });
@@ -91,6 +102,10 @@ export class AirdropComponent implements OnInit, OnDestroy {
 
   tokenSymbol(): string{
     return this.tokenInstance().symbol;
+  }
+
+  tokenDecimals(): number{
+    return this.tokenInstance().decimals;
   }
 
   airdropTokenAddress() : string{
@@ -189,8 +204,8 @@ export class AirdropComponent implements OnInit, OnDestroy {
   }
 
   private loadData(){
-    if(AppState.airDropStartBlock <= 0)
-      this.web3ModalService.airdropTimeout();
+    //if(AppState.airDropStartTimeoutIsReal != true || AppState.airDropTimeoutIsReal != true)
+    this.web3ModalService.airdropTimeout();
     //this.amountOfTokens = this.remainingTokens = this.totalClaimed = this.airdropsCount = -1;
     this.web3ModalService.getTotalClaimed().then(value => {
       this.totalClaimed = value;

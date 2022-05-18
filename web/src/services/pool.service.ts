@@ -17,6 +17,7 @@ export class PoolService {
     "function userInfo(address)",
     "function started () view returns (bool)",
     "function startBlock () view returns (uint256)",
+    "function endRewardBlockNumber () view returns (uint256)",
     "function tokenEarn() view returns (address)",
     "function deposit (uint256, uint256)",
     "function withdraw  (uint256, uint256)",
@@ -75,6 +76,10 @@ export class PoolService {
 
   startBlock(): Promise<BigNumber> {
     return this.getSignedContract().startBlock();
+  }
+
+  endRewardBlockNumber(): Promise<BigNumber> {
+    return this.getSignedContract().endRewardBlockNumber();
   }
   
   deposit(poolId: number, amount: BigNumber): Promise<ethers.Transaction> {

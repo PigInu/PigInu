@@ -51,11 +51,11 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     .pipe(takeWhile(() => (this.initialized) && !(this.claimPeriodOver == true && this.startPeriodOver == true && this.depositPeriodOver == true)))
     .subscribe(() => {
       if(this.presale.startBlock > 0){
-        if(this.presale.claimTimeOut > 0)
+        if(this.presale.claimTimeOut > 0 && AppState.presale.claimTimeOutIsReal)
           this.claimPeriodOver = AppState.timestampToTimeout(this.presale.claimTimeOut) <= 0;
-        if(this.presale.startTime > 0)
+        if(this.presale.startTime > 0 && AppState.presale.startTimeIsReal)
           this.startPeriodOver = AppState.timestampToTimeout(this.presale.startTime) <= 0;
-        if(this.presale.depositTimeOut > 0)
+        if(this.presale.depositTimeOut > 0 && AppState.presale.depositTimeOutIsReal)
           this.depositPeriodOver = AppState.timestampToTimeout(this.presale.depositTimeOut) <= 0;
       }
     });

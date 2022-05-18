@@ -74,9 +74,9 @@ export class Config {
             return "0x" +Config.main.chainID.toString(16);
         },       
         addressToken: '0x6411f12168f6ed7375dDD38Dd68A9130a9De7f91',
-        addressAirdrop: '0x38569C0A791BBaE641Ba1F06555aC531501bb014',
-        addressPresale: '0xB727286f837765c5Da03C7381734319E507C5895',
-        addressPool: '0x8b1F20AC79150b3dB14D5F85bB66de67a59e560a',
+        addressAirdrop: '0x2087fBb54AA07F00d0375ff749f5096DaFe28417',
+        addressPresale: '0x4cCF5Bc85c6D5B77BC9f713C9e1D4589985f26C5',
+        addressPool: '0xF9C57FB18A4AF2266D9AB5e50184a2A96749eBe9',
         addressUSDToken: '0xf42a4429f107bd120c5e42e069fdad0ac625f615',
         addressLPToken: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
         airdropContractInterface: [] = [
@@ -92,6 +92,7 @@ export class Config {
             "function startBlock () view returns (uint)",
             "function start (uint256, uint256)",
             "function owner() view returns (uint256)",
+            "function minBaseCoinBalance() view returns (uint256)",
         ],
         presaleContractInterface: [] = [
             "function totalClaimableNotDeducted () view returns (uint)",
@@ -130,7 +131,8 @@ export class Config {
             "function allowance (address, address) view returns (uint)",
             "function approve (address, uint)",
             "function totalSupply () view returns (uint)",
-            "function balanceOf (address) view returns (uint)",            
+            "function balanceOf (address) view returns (uint)",  
+            "function owner() view returns (uint256)",          
         ],
     } 
 }
