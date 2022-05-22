@@ -13,65 +13,53 @@ async function main() {
  const tokenOurDecimals = 18;
  const tokenOurBurnFee = 2;
  const tokenOurDevFee = 3;
-
- // TOKEN SETTINGS - RELEASE:
- // const tokenOurSupply = 10000000; // 10 000 000 tokens
-
- // TOKEN SETTINGS - TEST:
- const tokenOurSupply = 1000000000000; // 1 000 000 000 000 tokens
+ const tokenOurSupply = 1000000000; // 1 000 000 000 tokens
 
  // AIRDROP SETTINGS:
- const airdropDrop = '1000000000000000000'; // 1 token
+ const airdropDrop = '10000000000000000000'; // 10 tokens
  const airdropMinBaseCoinBalance = '10000000000000000000'; // 10 MATIC
 
  // AIRDROP SETTINGS - RELEASE:
- //const airdropAmount = '500000000000000000000000'; // 500 000 tokens
+ //const airdropAmount = '50000000000000000000000000'; // 50 000 000 tokens
 
  // AIRDROP SETTINGS - TEST:
- const airdropAmount = '2000000000000000000'; // 2 tokens
- const airdropDelayBlocks = '260'; // 260 blocks (10 minutes on MATIC)
- const airdropTimeBlocks = '130'; // 130 blocks (5 minutes on MATIC)
+ const airdropAmount = '20000000000000000000'; // 20 tokens
 
  // PRESALE SETTINGS:
- const presalePricePresale = '1000000000000000000'; // 1 USD
- const presalePriceLiquidity = '2000000000000000000'; // 2 USD
- const presaleDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
- const presaleDevAddress1Share = '4500';
- const presaleDevAddress2 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
- const presaleDevAddress2Share = '4500';
+ const presalePricePresale = '10000000000000000'; // 0.01 USD
+ const presalePriceLiquidity = '20000000000000000'; // 0.02 USD
+ const presaleDevAddress1 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
+ const presaleDevAddress1Share = '4750';
+ const presaleDevAddress2 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const presaleDevAddress2Share = '4750';
  const presaleDevAddress3 = '0xF3E0B0b7A57C70CB2876Aa6C763eB2668fC8BF20';
- const presaleDevAddress3Share = '1000';
+ const presaleDevAddress3Share = '500';
 
  // PRESALE SETTINGS - RELEASE:
- //const presaleAmount = '7500000000000000000000000' // 7 500 000 tokens
+ //const presaleAmount = '750000000000000000000000000' // 750 000 000 tokens
 
  // PRESALE SETTINGS - TEST:
  const presaleAmount = '20000000000000000000'; // 20 tokens
- const presaleDepositAmount = '10000000000000000000'; // 10 tokens
- const presaleDelayBlocks = '130'; // 130 blocks (5 minutes on MATIC)
- const presaleDepositBlocks = '130'; // 130 blocks (5 minutes on MATIC)
- const presaleClaimBlocks = '130'; // 130 blocks (5 minutes on MATIC)
-
+ 
  // POOL SETTINGS:
- const poolDevAddress1 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const poolDevAddress1 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
  const poolDevAddress1Share = '5000';
- const poolDevAddress2 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
+ const poolDevAddress2 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
  const poolDevAddress2Share = '5000';
- const poolTokensPerBlock = '100000000000000000'; // 0.1 tokens / block
+ const poolTokensPerBlock = '10000000000000000000'; // 10 tokens / block
 
  // POOL SETTINGS - RELELASE:
- //const poolTokens = '2000000000000000000000000'; // 2 000 000 tokens
+ //const poolTokens = '200000000000000000000000000'; // 200 000 000 tokens
  //const poolTokenOurAllocPoint = '1';
  //const poolTokenUSDAllocPoint = '1';
  //const poolTokenOurUSDLPAllocPoint = '1';
 
  // POOL SETTINGS - TEST:
- const poolTokens = '10000000000000000000'; // 10 tokens
+ const poolTokens = '1000000000000000000000'; // 1 000 tokens
  const poolTokenOurAllocPoint = '1';
  const poolTokenUSDAllocPoint = '2';
  const poolTokenOurUSDLPAllocPoint = '5';
- const poolDelayBlocks = '130'; // 130 blocks (5 minutes on MATIC)
-
+ 
  // OTHER SETTINGS:
  const maxint = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
  const burnAddress = '0x000000000000000000000000000000000000dEaD';
