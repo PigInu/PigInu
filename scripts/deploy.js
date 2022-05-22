@@ -32,7 +32,7 @@ async function main() {
  const presaleDevAddress1Share = '4750';
  const presaleDevAddress2 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
  const presaleDevAddress2Share = '4750';
- const presaleDevAddress3 = '0xF3E0B0b7A57C70CB2876Aa6C763eB2668fC8BF20';
+ const presaleDevAddress3 = '0x0764e51E10515d4bE6AA2940B5724fCF3038FCD1';
  const presaleDevAddress3Share = '500';
 
  // PRESALE SETTINGS - RELEASE:
@@ -146,6 +146,8 @@ async function main() {
  await runFunction(pool, 'addDevAddress', poolDevAddress1, poolDevAddress1Share);
  console.log('Pool - addDevAddress:');
  await runFunction(pool, 'addDevAddress', poolDevAddress2, poolDevAddress2Share);
+ console.log('Token address: ' + tokenOur.address);
+ console.log('USD address: ' + tokenTheir.address);
  console.log('Pair address: ' + tokenOurUSDLPAddress);
  console.log('Pool - createPool - tokenOur:');
  await runFunction(pool, 'createPool', poolTokenOurAllocPoint, tokenOur.address,  0); // Our -> Our

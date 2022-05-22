@@ -33,9 +33,9 @@ npx hardhat run --network $NETWORK $DEPLOY_SCRIPT 2>&1 | tee $LOG
 ./verify.sh $NETWORK
 rm -f ./verify.sh
 
-
 CONTRACTS=`node deploy-contracts.js`
 ARRAY=($CONTRACTS)
+CONFIGPATH='./web/src/config.ts'
 sw=false
 for i in "${!ARRAY[@]}"
  do
@@ -45,7 +45,32 @@ for i in "${!ARRAY[@]}"
    echo 'Change address of '$NAME' contract in web config (Y/N, default: N):'
    read CHANGE
    if [ "$CHANGE" = 'Y' ] || [ "$CHANGE" = 'y'  ]; then
-    sed -i '/address'$NAME'/c\        address'$NAME': '\'$ADDR\'',' ./web/src/config.ts
+    sed -i '/address'$NAME'/c\        address'$NAME': '\'$ADDR\'',' $CONFIGPATH
+    if [ "$NAME" = 'Token' ]; then
+     LN=$(($(grep -n "flag: 'token'" $CONFIGPATH | cut -f1 -d":")+1))
+     sed -i "$((LN))s/.*/                address: '$ADDR',/g" $CONFIGPATH
+    fi
+    if [ "$NAME" = 'USDToken' ]; then
+     LN=$(($(grep -n "flag: 'usdtoken'" $CONFIGPATH | cut -f1 -d":")+1))
+     sed -i "$((LN))s/.*/                address: '$ADDR',/g" $CONFIGPATH
+    fi
+    if [ "$NAME" = 'LPToken' ]; then
+     LN=$(($(grep -n "flag: 'lptoken'" $CONFIGPATH | cut -f1 -d":")+1))
+     sed -i "$((LN))s/.*/                address: '$ADDR',/g" $CONFIGPATH
+     LNA=$(($LN+1))
+     LPA=''
+     LPB=''
+     for j in "${!ARRAY[@]}"
+     do
+      if [ ${ARRAY[$j]} = 'Token' ]; then
+       LPA=${ARRAY[$j+1]}
+      fi
+      if [ ${ARRAY[$j]} = 'USDToken' ]; then
+       LPB=${ARRAY[$j+1]}
+      fi
+     done
+     sed -i "$((LNA))s/.*/                lpAdresses: ['$LPA', '$LPB'],/g" $CONFIGPATH
+    fi
    fi
    sw=true
   else

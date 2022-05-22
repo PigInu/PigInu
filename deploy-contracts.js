@@ -12,3 +12,6 @@ while (fil.indexOf('Contract: ') != -1) {
 var address = file.substring(file.indexOf("Pair address:") + 14 );
 address = address.substring(0, address.indexOf("\n"));
 console.log('LPToken ' + address);
+address = file.substring(file.indexOf("USD address:") + 13 );
+address = address.substring(0, address.indexOf("\n"));
+console.log('USDToken ' + address);

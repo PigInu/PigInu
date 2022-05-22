@@ -5,7 +5,6 @@ export class Config {
         description: 'Claim your PIG tokens!',
         updateInterval: 10, 
         poolUpdateInterval: 10,
-       
         // network: 'https://rpc-mainnet.matic.quiknode.pro', // Polygon (MATIC) - Mainnet
         // explorer: 'https://polygonscan.com/', // Polygon (MATIC) - Mainnet
         // chainID: '137',
@@ -51,34 +50,37 @@ export class Config {
             {
                 name: 'PIG',
                 symbol: 'PIG',
-                icon: "/assets/icons/PIG.png",
-                address: '0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3',
+                icon: '/assets/icons/PIG.png',
+                flag: 'token',
+                address: '0x8Db935B4e7925DB2Ee7590A4DE922a4A4F3f2A9c',
             }, 
             {
                 name: 'PIG-DAI LP',
                 symbol: 'PIG-DAI LP',
-                icon: "/assets/icons/PIG-DAI.png",
-                address: '0xc5dc2247c891bFC3Ba2F9378c428C30199e5a194',
-                lpAdresses: ['0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3', '0xF42a4429F107bD120C5E42E069FDad0AC625F615']
+                icon: '/assets/icons/PIG-DAI.png',
+                flag: 'lptoken',
+                address: '0x97A41A73f73574819ae64eA501Dde0B877e01De6',
+                lpAdresses: ['0x8Db935B4e7925DB2Ee7590A4DE922a4A4F3f2A9c', '0xF42a4429F107bD120C5E42E069FDad0AC625F615'],
             }, 
             {
                 name: 'DAI',
                 symbol: 'DAI',
-                icon: "/assets/icons/DAI.png",
+                icon: '/assets/icons/DAI.png',
+                flag: 'usdtoken',
                 address: '0xF42a4429F107bD120C5E42E069FDad0AC625F615',
             },             
         ],
         explorer: 'https://mumbai.polygonscan.com/', // Polygon (MATIC) - Testnet
         chainID: 80001,
         getHexChainId() : string{
-            return "0x" +Config.main.chainID.toString(16);
+            return "0x" + Config.main.chainID.toString(16);
         },       
-        addressToken: '0xD82053731eb6Df34C55e1C8Cd7b48e5C1814da43',
-        addressAirdrop: '0x8D35acD9Ab5289927f83D08E835D2cA3b8024049',
-        addressPresale: '0x0bebFc05f9544C4F00330a9E4557FDEbF6186478',
-        addressPool: '0xeA6A49F53AFD71EF9a405B497363202cf5a3fbf3',
-        addressUSDToken: '0xf42a4429f107bd120c5e42e069fdad0ac625f615',
-        addressLPToken: '0x0000000000000000000000000000000000000000',
+        addressToken: '0x8Db935B4e7925DB2Ee7590A4DE922a4A4F3f2A9c',
+        addressAirdrop: '0x3417707b8A40fAaA83967226bc61bB1a92969D4F',
+        addressPresale: '0xB41BC0bb75BdbF1E85A1E5A0076A40eeF7596F70',
+        addressPool: '0xFC9B761E5C91f6DE8c22C07813e0DeFCaF5c8ae2',
+        addressUSDToken: '0xF42a4429F107bD120C5E42E069FDad0AC625F615',
+        addressLPToken: '0x97A41A73f73574819ae64eA501Dde0B877e01De6',
         airdropContractInterface: [] = [
             "function claimCount () view returns (uint)",
             //"event Transfer(address indexed from, address indexed to, uint amount)",
