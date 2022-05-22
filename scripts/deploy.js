@@ -64,9 +64,9 @@ async function main() {
  const maxint = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
  const burnAddress = '0x000000000000000000000000000000000000dEaD';
  const routerAddress = '0x8954AfA98594b838bda56FE4C12a09D7739D179b'; // quickswap.exchange (Polygon Testnet)
- // const routerAddress = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'; // quickswap.exchange (Polygon Mainnet)
- // const routerAddress = '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3'; // pancake.kiemtienonline360.com (BSC Testnet)
- // const routerAddress = '0x10ED43C718714eb63d5aA57B78B54704E256024E'; // pancakeswap.finance (BSC Mainnet)
+ //const routerAddress = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'; // quickswap.exchange (Polygon Mainnet)
+ //const routerAddress = '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3'; // pancake.kiemtienonline360.com (BSC Testnet)
+ //const routerAddress = '0x10ED43C718714eb63d5aA57B78B54704E256024E'; // pancakeswap.finance (BSC Mainnet)
 
  getWelcomeMessage('Pig Inu');
  netInfo = await getNetworkInfo();
@@ -75,26 +75,30 @@ async function main() {
  console.log('Deploying smart contracts ...');
  console.log();
 
+ // CONTRACT ATTACH - RELEASE:
+ //const TokenTheir = await ethers.getContractFactory('Token');
+ //const tokenTheir = await TokenTheir.attach('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'); // DAI
+ 
  // CONTRACT ATTACH - TEST:
- var TokenTheir = await ethers.getContractFactory('Token');
- var tokenTheir = await TokenTheir.attach('0xF42a4429F107bD120C5E42E069FDad0AC625F615');
- var TokenOur = await ethers.getContractFactory('Token');
- var tokenOur = await TokenOur.attach('0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3');
- var LiquidityManager = await ethers.getContractFactory('LiquidityManager');
- var liquidityManager = await LiquidityManager.attach('0x2AC2b397562441c5dc0c7Df1926bcEBb0f40489a');
- // var Presale = await ethers.getContractFactory('Presale');
- // var presale = await Presale.attach('');
- // var Airdrop = await ethers.getContractFactory('Airdrop');
- // var airdrop = await Airdrop.attach('');
- // var Pool = await ethers.getContractFactory('Pool');
- // var pool = await Pool.attach('');
+ const TokenTheir = await ethers.getContractFactory('Token');
+ const tokenTheir = await TokenTheir.attach('0xF42a4429F107bD120C5E42E069FDad0AC625F615'); // XUSD
+ //const TokenOur = await ethers.getContractFactory('Token');
+ //const tokenOur = await TokenOur.attach('');
+ //const LiquidityManager = await ethers.getContractFactory('LiquidityManager');
+ //const liquidityManager = await LiquidityManager.attach('0x2AC2b397562441c5dc0c7Df1926bcEBb0f40489a');
+ //const Presale = await ethers.getContractFactory('Presale');
+ //const presale = await Presale.attach('');
+ //const Airdrop = await ethers.getContractFactory('Airdrop');
+ //const airdrop = await Airdrop.attach('');
+ //const Pool = await ethers.getContractFactory('Pool');
+ //const pool = await Pool.attach('');
 
  // CONTRACT DEPLOY - RELEASE:
- //var tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
- //var liquidityManager = await deploy('LiquidityManager');
- var presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, liquidityManager.address);
- var airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
- var pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
+ const tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
+ const liquidityManager = await deploy('LiquidityManager');
+ const presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, liquidityManager.address);
+ const airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
+ const pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
 
  // SUMMARY - BEFORE FUNCTIONS:
  createVerifyScript();
@@ -108,11 +112,10 @@ async function main() {
  console.log('TokenOur - setTaxExclusion - Airdrop:');
  await runFunction(tokenOur, 'setTaxExclusion', airdrop.address, true);
 
-/*
+
  // LIQUIDITY MANAGER FUNCTIONS:
  console.log('LiquidityManager - createPair:');
  await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
-*/
 
  // PRESALE FUNCTIONS:
  console.log('Presale - depositOwn:');
@@ -138,7 +141,7 @@ async function main() {
 
  // POOL FUNCTIONS:
  console.log('LiquidityManager - getPairAddress:');
- var tokenOurUSDLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
+ const tokenOurUSDLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
  console.log('Pool - addDevAddress:');
  await runFunction(pool, 'addDevAddress', poolDevAddress1, poolDevAddress1Share);
  console.log('Pool - addDevAddress:');
