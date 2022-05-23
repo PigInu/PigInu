@@ -155,14 +155,24 @@
       </td> 
     </tr>
     <tr>
-        <th>
-          Claimable / claimed:
-        </th><td>
-            <span *ngIf="claimablePercent() == -1"><app-loader></app-loader></span>
-            <div *ngIf="claimablePercent() > -1" class="center">
-              <app-progress [percent]="claimablePercent()" [text]="(presale.totalClaimable | numberLocale) + ' ' + this.presale.tokenOur.symbol + ' / ' + (presale.totalClaimed | numberLocale) + ' ' + this.presale.tokenOur.symbol"></app-progress>
-            </div>
-        </td> 
+      <th>
+        Deposited / max:
+      </th><td>
+          <span *ngIf="progressPercent() == -1"><app-loader></app-loader></span>
+          <div *ngIf="progressPercent() > -1" class="center">
+            <app-progress [percent]="progressPercent()" [text]="(presale.totalDeposited | numberLocale) + ' ' + this.presale.tokenTheir.symbol + ' / ' + (presale.tokenTheirMax | numberLocale) + ' ' + this.presale.tokenTheir.symbol"></app-progress>
+        </div>
+      </td> 
+    </tr>
+    <tr>
+      <th>
+        Claimable / claimed:
+      </th><td>
+          <span *ngIf="claimablePercent() == -1"><app-loader></app-loader></span>
+          <div *ngIf="claimablePercent() > -1" class="center">
+            <app-progress [percent]="claimablePercent()" [text]="(presale.totalClaimable | numberLocale) + ' ' + this.presale.tokenOur.symbol + ' / ' + (presale.totalClaimed | numberLocale) + ' ' + this.presale.tokenOur.symbol"></app-progress>
+          </div>
+      </td> 
     </tr>
     <tr>
       <th>
@@ -363,16 +373,6 @@
           <span *ngIf="presale.depositTimeOutIsReal == true"><countdown [config]="timeOutConfig(this.presale.claimTimeOut)"></countdown></span>  
         </span>
     </td> 
-  </tr>
-  <tr>
-      <th>
-        Token their max: 
-      </th><td>
-          <span *ngIf="progressPercent() == -1"><app-loader></app-loader></span>
-          <div *ngIf="progressPercent() > -1" class="center">
-            <app-progress [percent]="progressPercent()" [text]="(presale.totalDeposited | numberLocale) + ' ' + this.presale.tokenTheir.symbol + ' / ' + (presale.tokenTheirMax | numberLocale) + ' ' + this.presale.tokenTheir.symbol"></app-progress>
-        </div>
-      </td> 
   </tr>
   <tr *ngIf="presale.tokenOur.isReady()">
     <th>
