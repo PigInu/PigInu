@@ -52,15 +52,15 @@ export class Config {
                 symbol: 'PIG',
                 icon: '/assets/icons/PIG.png',
                 flag: 'token',
-                address: '0x8Db935B4e7925DB2Ee7590A4DE922a4A4F3f2A9c',
+                address: '0xc4915f44280B5E3bc7115e229A272172Ad4A57b8',
             }, 
             {
                 name: 'PIG-DAI LP',
                 symbol: 'PIG-DAI LP',
                 icon: '/assets/icons/PIG-DAI.png',
                 flag: 'lptoken',
-                address: '0x97A41A73f73574819ae64eA501Dde0B877e01De6',
-                lpAdresses: ['0x8Db935B4e7925DB2Ee7590A4DE922a4A4F3f2A9c', '0xF42a4429F107bD120C5E42E069FDad0AC625F615'],
+                address: '0x218BdcfF3ba546F3802d17777883DaB5286e9017',
+                lpAdresses: ['0xc4915f44280B5E3bc7115e229A272172Ad4A57b8', '0xF42a4429F107bD120C5E42E069FDad0AC625F615'],
             }, 
             {
                 name: 'DAI',
@@ -75,12 +75,12 @@ export class Config {
         getHexChainId() : string{
             return "0x" + Config.main.chainID.toString(16);
         },       
-        addressToken: '0x8Db935B4e7925DB2Ee7590A4DE922a4A4F3f2A9c',
-        addressAirdrop: '0x3417707b8A40fAaA83967226bc61bB1a92969D4F',
-        addressPresale: '0xB41BC0bb75BdbF1E85A1E5A0076A40eeF7596F70',
-        addressPool: '0xFC9B761E5C91f6DE8c22C07813e0DeFCaF5c8ae2',
+        addressToken: '0xc4915f44280B5E3bc7115e229A272172Ad4A57b8',
+        addressAirdrop: '0x2BC911a1a09897DbA816E22fd2A4eE4ECE694615',
+        addressPresale: '0x5463d7d2Ba7C0825FC6A0BFa5b5Fa78A25508A16',
+        addressPool: '0x1a4D1365A64f40eDA835807E117F7a943F81fd02',
         addressUSDToken: '0xF42a4429F107bD120C5E42E069FDad0AC625F615',
-        addressLPToken: '0x97A41A73f73574819ae64eA501Dde0B877e01De6',
+        addressLPToken: '0x218BdcfF3ba546F3802d17777883DaB5286e9017',
         airdropContractInterface: [] = [
             "function claimCount () view returns (uint)",
             //"event Transfer(address indexed from, address indexed to, uint amount)",

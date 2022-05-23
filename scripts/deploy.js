@@ -47,18 +47,15 @@ async function main() {
  const poolDevAddress2 = '0x9379FbC746C73b3D6D293Ab047e3271BFEA338c5';
  const poolDevAddress2Share = '5000';
  const poolTokensPerBlock = '10000000000000000000'; // 10 tokens / block
+ const poolTokenOurAllocPoint = '1';
+ const poolTokenUSDAllocPoint = '1';
+ const poolTokenOurUSDLPAllocPoint = '1';
 
  // POOL SETTINGS - RELELASE:
  //const poolTokens = '200000000000000000000000000'; // 200 000 000 tokens
- //const poolTokenOurAllocPoint = '1';
- //const poolTokenUSDAllocPoint = '1';
- //const poolTokenOurUSDLPAllocPoint = '1';
-
+ 
  // POOL SETTINGS - TEST:
  const poolTokens = '1000000000000000000000'; // 1 000 tokens
- const poolTokenOurAllocPoint = '1';
- const poolTokenUSDAllocPoint = '2';
- const poolTokenOurUSDLPAllocPoint = '5';
  
  // OTHER SETTINGS:
  const maxint = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
