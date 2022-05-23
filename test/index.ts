@@ -587,6 +587,15 @@ describe('Pool tests', function () {
   expect(tokensToBurn).to.be.equal(poolTokensOPerBlock);
  });
 
+ it('Should return tokens to burn after reaching last reward block', async function () {
+  const lastRewardBlock = await _poolContract.endRewardBlockNumber();
+  const actualBlock = await ethers.provider.getBlockNumber();
+  const blocksToMineHex = lastRewardBlock.sub(actualBlock).toHexString().replace(/0x0+/, '0x');
+  await ethers.provider.send('hardhat_mine', [blocksToMineHex]);
+  const tokensToBurn = await _poolContract.getTokensToBeBurned();
+  expect(tokensToBurn).to.be.equal(poolTokens);
+ });
+
  it('Should return distributed tokens', async function () {
   await ethers.provider.send('evm_mine', []);
   await ethers.provider.send('evm_mine', []);
