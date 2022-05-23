@@ -68,7 +68,7 @@ contract Pool is Ownable, ReentrancyGuard {
  function getTokensToBeBurned() public view returns (uint) {
   if (startBlock == 0 || startBlock > block.number) return 0;
   uint rewardBlockNumber = getRewardBlockNumber();
-  if (block.number > rewardBlockNumber) return tokensToBurn;
+  if (finished) return tokensToBurn;
   uint tokensToBurnTemp = tokensToBurn;
   for (uint poolID = 0; poolID < pools.length; poolID++) {
    PoolInfo memory pool = pools[poolID];
