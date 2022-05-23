@@ -30,7 +30,7 @@ async function main() {
  const presalePriceLiquidity = '20000000000000000'; // 0.02 USD
  const presaleDevAddress1 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
  const presaleDevAddress1Share = '4750';
- const presaleDevAddress2 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const presaleDevAddress2 = '0x9379FbC746C73b3D6D293Ab047e3271BFEA338c5';
  const presaleDevAddress2Share = '4750';
  const presaleDevAddress3 = '0x0764e51E10515d4bE6AA2940B5724fCF3038FCD1';
  const presaleDevAddress3Share = '500';
@@ -44,7 +44,7 @@ async function main() {
  // POOL SETTINGS:
  const poolDevAddress1 = '0x67Cb8eA92E713b39cd222C0505645B5d1B5907c8';
  const poolDevAddress1Share = '5000';
- const poolDevAddress2 = '0x650E5c6071f31065d7d5Bf6CaD5173819cA72c41';
+ const poolDevAddress2 = '0x9379FbC746C73b3D6D293Ab047e3271BFEA338c5';
  const poolDevAddress2Share = '5000';
  const poolTokensPerBlock = '10000000000000000000'; // 10 tokens / block
 

@@ -278,7 +278,7 @@
     footer{
         .bg{
             text-align: center;
-            background: url("/assets/img/footer.jpg");
+            background: url("/assets/img/footer.jpg") no-repeat;
             background-size: contain;
             box-sizing: border-box;
             height: 637px;

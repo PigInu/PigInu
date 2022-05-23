@@ -77,12 +77,11 @@ export class PoolElementComponent implements OnInit, OnDestroy {
     if(this.totalValue != null && 
       this.blockTime != null &&
       this.totalAllocPoint != null && 
-      this.totalAllocPoint != 0 &&
       this.tokenPerBlock != null &&
-      this.totalValueNumber != null && 
-      this.tokenPriceValue != -1
+      this.totalValueNumber != null
+      // && this.tokenPriceValue != -1
     ) {
-      if(this.totalValueNumber == 0)
+      if(this.totalValueNumber == 0 || this.totalAllocPoint == 0 || this.tokenPriceValue <= 0)
         return -1;
       const tokenPrice = this.tokenPriceValue;
       const poolAllocPoint = this.pool.data.allocPoint.toNumber();

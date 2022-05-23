@@ -72,7 +72,7 @@ export class StateToken {
         return AppState.selectedAddress + contractAddress;
     }
     updateTotalSupply(){
-        if(this.totalSupplyLoading == -2)
+        if(this.totalSupplyLoading == -2 || this.decimals <= 0)
             return;
         const c= this.getContract(false);
         if(c){

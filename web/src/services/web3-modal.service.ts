@@ -85,8 +85,8 @@ export class Web3ModalService {
          AppState.presale.balanceTokenTheir = AppState.reduceTheirDecimals(value); 
       });
       this.presaleNotLoggedContract.devsFeePercent().then((value: BigNumber) => { 
-         AppState.presale.balanceTokenTheir = AppState.presale.devFeePercent = value.toNumber(); 
-        });
+          AppState.presale.devFeePercent = value.toNumber(); 
+      });
     });
     this.presaleNotLoggedContract.tokenOur().then((value: BigNumber) => {
       AppState.presale.tokenOur.address = value.toHexString();

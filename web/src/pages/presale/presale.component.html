@@ -92,7 +92,7 @@
         Deposited distribution:
       </th><td>
           <span *ngIf="presale.devFeePercent == -1"><app-loader></app-loader></span>
-          <span *ngIf="presale.devFeePercent != -1">{{presale.devFeePercent}}% to dev wallet, {{100 - presale.devFeePercent}}% to liquidity</span>
+          <span *ngIf="presale.devFeePercent != -1">{{presale.devFeePercent}}% to dev wallet(s), {{100 - presale.devFeePercent}}% to liquidity</span>
       </td> 
     </tr>
     <tr>
