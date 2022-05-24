@@ -276,6 +276,7 @@
     }
 
     footer{
+        margin-top: 20px;
         .bg{
             text-align: center;
             background: url("/assets/img/footer.jpg") no-repeat;
@@ -284,11 +285,11 @@
             height: 637px;
             max-height: 37vw;
             .flex-buttons{
-                font-size: 1.7vw;
+                font-size: min(1.7vw, 32px);
                 display: flex;
                 justify-content: center;
-                gap: 14vw;
-                padding: 6vw 0 0 2vw;
+                gap: 8.2em;
+                padding: 0vw 0 0 1.5em;
                 a{
                     position: relative;
                     display: inline-block;
@@ -309,7 +310,7 @@
                         font-weight: bold;
                     }
                     &:last-child{
-                        margin-top: 4vw;
+                        margin-top: 3em;
                     }
                 }
             }
