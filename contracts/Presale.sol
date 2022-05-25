@@ -82,6 +82,7 @@ contract Presale is Ownable, ReentrancyGuard {
   totalDeposited += _amount;
   totalClaimable += toClaim;
   totalClaimableNotDeducted += toClaim;
+  depositedCount++;
   emit eventDeposited(msg.sender, _amount);
  }
 
@@ -103,6 +104,7 @@ contract Presale is Ownable, ReentrancyGuard {
   claimable[msg.sender] -= amount;
   totalClaimed += amount;
   totalClaimable -= amount;
+  claimedCount++;
   emit eventClaimed(msg.sender, amount);
  }
 
