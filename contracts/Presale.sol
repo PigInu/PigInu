@@ -143,7 +143,7 @@ contract Presale is Ownable, ReentrancyGuard {
  }
 
  function getLiquidityTokenTheir() public view returns (uint) {
-  return (totalClaimableNotDeducted * (100 - devsFeePercent)) / 100;
+  return (totalDeposited * (100 - devsFeePercent)) / 100;
  }
 
  function getBalanceTokenOur() public view returns (uint) {

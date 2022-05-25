@@ -60,7 +60,7 @@ export class Config {
                 icon: '/assets/icons/PIG-DAI.png',
                 flag: 'lptoken',
                 address: '0x218BdcfF3ba546F3802d17777883DaB5286e9017',
-                lpAdresses: ['0xc4915f44280B5E3bc7115e229A272172Ad4A57b8', '0xF42a4429F107bD120C5E42E069FDad0AC625F615'],
+                lpAdresses: ['', 'ypings'],
             }, 
             {
                 name: 'DAI',
@@ -77,7 +77,7 @@ export class Config {
         },       
         addressToken: '0xc4915f44280B5E3bc7115e229A272172Ad4A57b8',
         addressAirdrop: '0x2BC911a1a09897DbA816E22fd2A4eE4ECE694615',
-        addressPresale: '0x5463d7d2Ba7C0825FC6A0BFa5b5Fa78A25508A16',
+        addressPresale: '0x65AeD48993aA79c5a9F008c96C0Be8f255063881',
         addressPool: '0x1a4D1365A64f40eDA835807E117F7a943F81fd02',
         addressUSDToken: '0xF42a4429F107bD120C5E42E069FDad0AC625F615',
         addressLPToken: '0x218BdcfF3ba546F3802d17777883DaB5286e9017',

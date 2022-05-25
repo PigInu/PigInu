@@ -9,9 +9,13 @@ while (fil.indexOf('Contract: ') != -1) {
  address = address.substring(0, address.indexOf("\n"));
  console.log(name + ' ' + address);
 }
-var address = file.substring(file.indexOf("Pair address:") + 14 );
-address = address.substring(0, address.indexOf("\n"));
-console.log('LPToken ' + address);
-address = file.substring(file.indexOf("USD address:") + 13 );
-address = address.substring(0, address.indexOf("\n"));
-console.log('USDToken ' + address);
+if (file.indexOf('Pair address:') != -1) {
+ var address = file.substring(file.indexOf('Pair address:') + 14 );
+ address = address.substring(0, address.indexOf("\n"));
+ console.log('LPToken ' + address);
+}
+if (file.indexOf('USD address:') != -1) {
+ address = file.substring(file.indexOf('USD address:') + 13 );
+ address = address.substring(0, address.indexOf("\n"));
+ console.log('USDToken ' + address);
+}

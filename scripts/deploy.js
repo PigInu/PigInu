@@ -79,23 +79,23 @@ async function main() {
  // CONTRACT ATTACH - TEST:
  const TokenTheir = await ethers.getContractFactory('Token');
  const tokenTheir = await TokenTheir.attach('0xF42a4429F107bD120C5E42E069FDad0AC625F615'); // XUSD
- //const TokenOur = await ethers.getContractFactory('Token');
- //const tokenOur = await TokenOur.attach('');
- //const LiquidityManager = await ethers.getContractFactory('LiquidityManager');
- //const liquidityManager = await LiquidityManager.attach('0x2AC2b397562441c5dc0c7Df1926bcEBb0f40489a');
+ const TokenOur = await ethers.getContractFactory('Token');
+ const tokenOur = await TokenOur.attach('0xc4915f44280B5E3bc7115e229A272172Ad4A57b8');
+ const LiquidityManager = await ethers.getContractFactory('LiquidityManager');
+ const liquidityManager = await LiquidityManager.attach('0x2AC2b397562441c5dc0c7Df1926bcEBb0f40489a');
  //const Presale = await ethers.getContractFactory('Presale');
  //const presale = await Presale.attach('');
- //const Airdrop = await ethers.getContractFactory('Airdrop');
- //const airdrop = await Airdrop.attach('');
- //const Pool = await ethers.getContractFactory('Pool');
- //const pool = await Pool.attach('');
+ const Airdrop = await ethers.getContractFactory('Airdrop');
+ const airdrop = await Airdrop.attach('0x2BC911a1a09897DbA816E22fd2A4eE4ECE694615');
+ const Pool = await ethers.getContractFactory('Pool');
+ const pool = await Pool.attach('0x1a4D1365A64f40eDA835807E117F7a943F81fd02');
 
  // CONTRACT DEPLOY - RELEASE:
- const tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
- const liquidityManager = await deploy('LiquidityManager');
+ //const tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
+ //const liquidityManager = await deploy('LiquidityManager');
  const presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, liquidityManager.address);
- const airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
- const pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
+ //const airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
+ //const pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
 
  // SUMMARY - BEFORE FUNCTIONS:
  createVerifyScript();
@@ -109,10 +109,9 @@ async function main() {
  console.log('TokenOur - setTaxExclusion - Airdrop:');
  await runFunction(tokenOur, 'setTaxExclusion', airdrop.address, true);
 
-
  // LIQUIDITY MANAGER FUNCTIONS:
- console.log('LiquidityManager - createPair:');
- await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
+ //console.log('LiquidityManager - createPair:');
+ //await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
 
  // PRESALE FUNCTIONS:
  console.log('Presale - depositOwn:');
@@ -129,31 +128,31 @@ async function main() {
  //await runFunction(presale, 'start', presaleDelayBlocks, presaleDepositBlocks, presaleClaimBlocks);
 
  // AIRDROP FUNCTIONS:
- console.log('TokenOur - transfer:');
- await runFunction(tokenOur, 'transfer', airdrop.address, airdropAmount);
+ //console.log('TokenOur - transfer:');
+ //await runFunction(tokenOur, 'transfer', airdrop.address, airdropAmount);
 
  // AIRDROP FUNCTIONS - TEST:
  //console.log('Airdrop - start:');
  //await runFunction(airdrop, 'start', airdropDelayBlocks, airdropTimeBlocks);
 
  // POOL FUNCTIONS:
- console.log('LiquidityManager - getPairAddress:');
- const tokenOurUSDLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
- console.log('Pool - addDevAddress:');
- await runFunction(pool, 'addDevAddress', poolDevAddress1, poolDevAddress1Share);
- console.log('Pool - addDevAddress:');
- await runFunction(pool, 'addDevAddress', poolDevAddress2, poolDevAddress2Share);
- console.log('Token address: ' + tokenOur.address);
- console.log('USD address: ' + tokenTheir.address);
- console.log('Pair address: ' + tokenOurUSDLPAddress);
- console.log('Pool - createPool - tokenOur:');
- await runFunction(pool, 'createPool', poolTokenOurAllocPoint, tokenOur.address,  0); // Our -> Our
- console.log('Pool - createPool - tokenTheir:');
- await runFunction(pool, 'createPool', poolTokenUSDAllocPoint, tokenTheir.address,  400); // BUSD -> Our
- console.log('Pool - createPool - tokenOurLP:');
- await runFunction(pool, 'createPool', poolTokenOurUSDLPAllocPoint, tokenOurUSDLPAddress,  0); // Our-BUSD -> Our
- console.log('TokenOur - transfer:');
- await runFunction(tokenOur, 'transfer', pool.address, poolTokens);
+ //console.log('LiquidityManager - getPairAddress:');
+ //const tokenOurUSDLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
+ //console.log('Pool - addDevAddress:');
+ //await runFunction(pool, 'addDevAddress', poolDevAddress1, poolDevAddress1Share);
+ //console.log('Pool - addDevAddress:');
+ //await runFunction(pool, 'addDevAddress', poolDevAddress2, poolDevAddress2Share);
+ //console.log('Token address: ' + tokenOur.address);
+ //console.log('USD address: ' + tokenTheir.address);
+ //console.log('Pair address: ' + tokenOurUSDLPAddress);
+ //console.log('Pool - createPool - tokenOur:');
+ //await runFunction(pool, 'createPool', poolTokenOurAllocPoint, tokenOur.address,  0); // Our -> Our
+ //console.log('Pool - createPool - tokenTheir:');
+ //await runFunction(pool, 'createPool', poolTokenUSDAllocPoint, tokenTheir.address,  400); // BUSD -> Our
+ //console.log('Pool - createPool - tokenOurLP:');
+ //await runFunction(pool, 'createPool', poolTokenOurUSDLPAllocPoint, tokenOurUSDLPAddress,  0); // Our-BUSD -> Our
+ //console.log('TokenOur - transfer:');
+ //await runFunction(tokenOur, 'transfer', pool.address, poolTokens);
  
  // POOL FUNCTIONS - TEST:
  //console.log('Pool - start:');
