@@ -60,10 +60,10 @@ async function main() {
  // OTHER SETTINGS:
  const maxint = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
  const burnAddress = '0x000000000000000000000000000000000000dEaD';
- const routerAddress = '0x8954AfA98594b838bda56FE4C12a09D7739D179b'; // quickswap.exchange (Polygon Testnet)
- //const routerAddress = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'; // quickswap.exchange (Polygon Mainnet)
- //const routerAddress = '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3'; // pancake.kiemtienonline360.com (BSC Testnet)
+ const routerAddress = '0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff'; // quickswap.exchange (Polygon Mainnet)
+ //const routerAddress = '0x8954AfA98594b838bda56FE4C12a09D7739D179b'; // quickswap.exchange (Polygon Testnet)
  //const routerAddress = '0x10ED43C718714eb63d5aA57B78B54704E256024E'; // pancakeswap.finance (BSC Mainnet)
+ //const routerAddress = '0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3'; // pancake.kiemtienonline360.com (BSC Testnet)
 
  getWelcomeMessage('Pig Inu');
  netInfo = await getNetworkInfo();
@@ -74,13 +74,15 @@ async function main() {
 
  // CONTRACT ATTACH - RELEASE:
  //const TokenTheir = await ethers.getContractFactory('Token');
- //const tokenTheir = await TokenTheir.attach('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'); // DAI
+ //const tokenTheir = await TokenTheir.attach('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'); // DAI - MATIC MAINNET
  
  // CONTRACT ATTACH - TEST:
  const TokenTheir = await ethers.getContractFactory('Token');
- const tokenTheir = await TokenTheir.attach('0xF42a4429F107bD120C5E42E069FDad0AC625F615'); // XUSD
- const TokenOur = await ethers.getContractFactory('Token');
- const tokenOur = await TokenOur.attach('0xc4915f44280B5E3bc7115e229A272172Ad4A57b8');
+ const tokenTheir = await TokenTheir.attach('0x97F3AF0246B59E9e035A9E996eF9779983ed536B'); // XUSD - MATIC MAINNET
+ //const TokenTheir = await ethers.getContractFactory('Token');
+ //const tokenTheir = await TokenTheir.attach('0xF42a4429F107bD120C5E42E069FDad0AC625F615'); // XUSD - MATIC TESTNET
+ //const TokenOur = await ethers.getContractFactory('Token');
+ //const tokenOur = await TokenOur.attach('');
  //const LiquidityManager = await ethers.getContractFactory('LiquidityManager');
  //const liquidityManager = await LiquidityManager.attach('');
  //const Presale = await ethers.getContractFactory('Presale');
@@ -91,7 +93,7 @@ async function main() {
  //const pool = await Pool.attach('');
 
  // CONTRACT DEPLOY - RELEASE:
- //const tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
+ const tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
  const liquidityManager = await deploy('LiquidityManager');
  const presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, liquidityManager.address);
  const airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
