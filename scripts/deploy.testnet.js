@@ -92,59 +92,59 @@ async function main() {
 
  // CONTRACT DEPLOY - RELEASE:
  //const tokenOur = await deploy('Token', tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, burnAddress);
- const liquidityManager = await deploy('LiquidityManager');
- const presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, liquidityManager.address);
+ //const liquidityManager = await deploy('LiquidityManager');
+ //const presale = await deploy('Presale', tokenOur.address, tokenTheir.address, routerAddress, burnAddress, presalePricePresale, presalePriceLiquidity, liquidityManager.address);
  const airdrop = await deploy('Airdrop', tokenOur.address, burnAddress, airdropDrop, airdropMinBaseCoinBalance);
- const pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
+ //const pool = await deploy('Pool', tokenOur.address, burnAddress, poolTokensPerBlock, poolTokens);
 
  // SUMMARY - BEFORE FUNCTIONS:
  createVerifyScript();
  getTotalCost();
 
  // TOKEN FUNCTIONS:
- console.log('TokenOur - approve:');
- await runFunction(tokenOur, 'approve', presale.address, maxint);
- console.log('TokenOur - setTaxExclusion - Presale:');
- await runFunction(tokenOur, 'setTaxExclusion', presale.address, true);
- console.log('TokenOur - setTaxExclusion - Airdrop:');
- await runFunction(tokenOur, 'setTaxExclusion', airdrop.address, true);
+ //console.log('TokenOur - approve:');
+ //await runFunction(tokenOur, 'approve', presale.address, maxint);
+ //console.log('TokenOur - setTaxExclusion - Presale:');
+ //await runFunction(tokenOur, 'setTaxExclusion', presale.address, true);
+ //console.log('TokenOur - setTaxExclusion - Airdrop:');
+ //await runFunction(tokenOur, 'setTaxExclusion', airdrop.address, true);
 
  // LIQUIDITY MANAGER FUNCTIONS:
- console.log('LiquidityManager - createPair:');
- await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
+ //console.log('LiquidityManager - createPair:');
+ //await runFunction(liquidityManager, 'createPair', routerAddress, tokenOur.address, tokenTheir.address);
 
  // PRESALE FUNCTIONS:
- console.log('Presale - depositOwn:');
- await runFunction(presale, 'depositOwn', presaleAmount); 
- console.log('Presale - addDevAddress:');
- await runFunction(presale, 'addDevAddress', presaleDevAddress1, presaleDevAddress1Share);
- console.log('Presale - addDevAddress:');
- await runFunction(presale, 'addDevAddress', presaleDevAddress2, presaleDevAddress2Share);
- console.log('Presale - addDevAddress:');
- await runFunction(presale, 'addDevAddress', presaleDevAddress3, presaleDevAddress3Share);
+ //console.log('Presale - depositOwn:');
+ //await runFunction(presale, 'depositOwn', presaleAmount); 
+ //console.log('Presale - addDevAddress:');
+ //await runFunction(presale, 'addDevAddress', presaleDevAddress1, presaleDevAddress1Share);
+ //console.log('Presale - addDevAddress:');
+ //await runFunction(presale, 'addDevAddress', presaleDevAddress2, presaleDevAddress2Share);
+ //console.log('Presale - addDevAddress:');
+ //await runFunction(presale, 'addDevAddress', presaleDevAddress3, presaleDevAddress3Share);
  
  // AIRDROP FUNCTIONS:
  console.log('TokenOur - transfer:');
  await runFunction(tokenOur, 'transfer', airdrop.address, airdropAmount);
 
  // POOL FUNCTIONS:
- console.log('LiquidityManager - getPairAddress:');
- const tokenOurUSDLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
- console.log('Pool - addDevAddress:');
- await runFunction(pool, 'addDevAddress', poolDevAddress1, poolDevAddress1Share);
- console.log('Pool - addDevAddress:');
- await runFunction(pool, 'addDevAddress', poolDevAddress2, poolDevAddress2Share);
- console.log('Token address: ' + tokenOur.address);
- console.log('USD address: ' + tokenTheir.address);
- console.log('Pair address: ' + tokenOurUSDLPAddress);
- console.log('Pool - createPool - tokenOur:');
- await runFunction(pool, 'createPool', poolTokenOurAllocPoint, tokenOur.address,  0); // Our -> Our
- console.log('Pool - createPool - tokenTheir:');
- await runFunction(pool, 'createPool', poolTokenUSDAllocPoint, tokenTheir.address,  400); // BUSD -> Our
- console.log('Pool - createPool - tokenOurLP:');
- await runFunction(pool, 'createPool', poolTokenOurUSDLPAllocPoint, tokenOurUSDLPAddress,  0); // Our-BUSD -> Our
- console.log('TokenOur - transfer:');
- await runFunction(tokenOur, 'transfer', pool.address, poolTokens);
+ //console.log('LiquidityManager - getPairAddress:');
+ //const tokenOurUSDLPAddress = await runFunction(liquidityManager, 'getPairAddress', routerAddress, tokenOur.address, tokenTheir.address);
+ //console.log('Pool - addDevAddress:');
+ //await runFunction(pool, 'addDevAddress', poolDevAddress1, poolDevAddress1Share);
+ //console.log('Pool - addDevAddress:');
+ //await runFunction(pool, 'addDevAddress', poolDevAddress2, poolDevAddress2Share);
+ //console.log('Token address: ' + tokenOur.address);
+ //console.log('USD address: ' + tokenTheir.address);
+ //console.log('Pair address: ' + tokenOurUSDLPAddress);
+ //console.log('Pool - createPool - tokenOur:');
+ //await runFunction(pool, 'createPool', poolTokenOurAllocPoint, tokenOur.address,  0); // Our -> Our
+ //console.log('Pool - createPool - tokenTheir:');
+ //await runFunction(pool, 'createPool', poolTokenUSDAllocPoint, tokenTheir.address,  400); // BUSD -> Our
+ //console.log('Pool - createPool - tokenOurLP:');
+ //await runFunction(pool, 'createPool', poolTokenOurUSDLPAllocPoint, tokenOurUSDLPAddress,  0); // Our-BUSD -> Our
+ //console.log('TokenOur - transfer:');
+ //await runFunction(tokenOur, 'transfer', pool.address, poolTokens);
  
  // SUMMARY - AFTER FUNCTIONS:
  getTotalCost();
