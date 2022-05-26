@@ -17,12 +17,13 @@ read DEPLOY_CHOICE
 if [ "$DEPLOY_CHOICE" = '' ]; then
  DEPLOY_CHOICE=1
 fi
-if [ "$NET" = '1' ]; then
+if [ "$DEPLOY_CHOICE" = '1' ]; then
  DEPLOY_SCRIPT=scripts/deploy.testnet.js
 fi
-if [ "$NET" = '2' ]; then
+if [ "$DEPLOY_CHOICE" = '2' ]; then
  DEPLOY_SCRIPT=scripts/deploy.mainnet.js
 fi
+echo 'Selected script:' $DEPLOY_SCRIPT
 echo ''
 echo '---------------------------'
 echo 'List of available networks:'
