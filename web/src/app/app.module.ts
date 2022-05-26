@@ -19,6 +19,8 @@ import { TransactionLinkPipe } from 'src/pipe/transactionLink.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
+import { Config } from 'src/config';
 
 @NgModule({
   declarations: [	
@@ -42,7 +44,9 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CountdownModule 
+    CountdownModule,
+    NgxGoogleAnalyticsModule.forRoot(Config.main.analyticsId),
+    NgxGoogleAnalyticsRouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

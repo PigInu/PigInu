@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivationEnd, Router } from '@angular/router';
 import { interval } from 'rxjs';
 import { AppState, StateToken } from 'src/appState';
 import { Config } from 'src/config';
@@ -20,11 +20,36 @@ export class AppComponent implements OnInit {
   isCopiedVisible: boolean = false;
   tokenPriceValue: number = -1;
   numberPipe: NumberLocalePipe;
+  urlBefore: string;
+  toplistImg: any | null = null;
 
   constructor(private router: Router, private web3ModalService: Web3ModalService, private titleService: Title){
     this.actualYear = new Date().getFullYear().toString();
     this.titleService.setTitle(this.projectName());
     this.numberPipe = new NumberLocalePipe();
+    this.urlBefore = document.referrer;
+
+    this.router.events.subscribe((routeData) => {
+      if (routeData instanceof ActivationEnd ) {          
+        const toplistSrc = 'https://toplist.cz/dot.asp?id=' + Config.main.toplistId + '&http='+
+          encodeURIComponent(document.referrer)+'&t='+encodeURIComponent(document.title)+'&l='+encodeURIComponent(document.URL)+
+          '&wi='+encodeURIComponent(window.screen.width)+'&he='+encodeURIComponent(window.screen.height)+'&cd='+
+          encodeURIComponent(window.screen.colorDepth);
+          
+        if(this.toplistImg == null){
+          this.toplistImg = document.createElement("img");
+          this.toplistImg.setAttribute("width", "1");
+          this.toplistImg.setAttribute("height", "1");
+          this.toplistImg.setAttribute("border", "0");
+          this.toplistImg.setAttribute("alt", "TOPlist");
+          this.toplistImg.setAttribute("src", toplistSrc);
+          document.body.append(this.toplistImg);
+        } else {
+          this.toplistImg.setAttribute("src", toplistSrc);
+        }
+        this.urlBefore = document.URL;
+      }
+    });
   }
   ngOnInit(): void {
     interval(Config.main.updateInterval * 1000)

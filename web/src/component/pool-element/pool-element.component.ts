@@ -192,6 +192,9 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   calcTotalValueSamePool(value: BigNumber){
     if(this.owner)
       this.pool.tokenDeposit.balanceOf(this.owner)?.then(ownerValue => {
+        //console.log("SAME POOL VALUE")
+        //console.log(value.toBigInt());
+        //console.log(ownerValue.toBigInt());
         this.totalValue = value.sub(ownerValue);
         this.totalValueNumber = this.toEth(this.totalValue);
         this.calcAprApy();

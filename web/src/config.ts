@@ -5,14 +5,13 @@ export class Config {
         description: 'Claim your PIG tokens!',
         updateInterval: 10, 
         poolUpdateInterval: 10,
-        networkName: "Polygon (MATIC) - Mainnet",
-        network: 'https://polygon-rpc.com', // Polygon (MATIC) - Mainnet
-        explorer: 'https://polygonscan.com/', // Polygon (MATIC) - Mainnet
-        chainID: 137,
-        //networkName: "Polygon (MATIC) - Testnet",
-        //network: 'https://matic-mumbai.chainstacklabs.com', // Polygon (MATIC) - Testnet
-        //explorer: 'https://mumbai.polygonscan.com/', // Polygon (MATIC) - Testnet
-        //chainID: 80001,
+        analyticsId: "G-RJX9XP52DW",
+        toplistId: '1811895',
+        // network: 'https://rpc-mainnet.matic.quiknode.pro', // Polygon (MATIC) - Mainnet
+        // explorer: 'https://polygonscan.com/', // Polygon (MATIC) - Mainnet
+        // chainID: '137',
+        networkName: "Polygon (MATIC) - Testnet",
+        network: 'https://matic-mumbai.chainstacklabs.com', // Polygon (MATIC) - Testnet,
         nativeCurrency: {
             name: "MATIC",
             symbol: "MATIC",
@@ -55,33 +54,35 @@ export class Config {
                 symbol: 'PIG',
                 icon: '/assets/icons/PIG.png',
                 flag: 'token',
-                address: '0x0Bd3F5a10A1D0E33195Ac643C457301F1Ed4E9E2',
+                address: '0xc4915f44280B5E3bc7115e229A272172Ad4A57b8',
             }, 
             {
                 name: 'PIG-DAI LP',
                 symbol: 'PIG-DAI LP',
                 icon: '/assets/icons/PIG-DAI.png',
                 flag: 'lptoken',
-                address: '0x7DCf1c38A2360d5D0A8F8bf2F41B96079e559d4B',
-                lpAdresses: ['0x0Bd3F5a10A1D0E33195Ac643C457301F1Ed4E9E2', '0x97F3AF0246B59E9e035A9E996eF9779983ed536B'],
+                address: '0x218BdcfF3ba546F3802d17777883DaB5286e9017',
+                lpAdresses: ['0xc4915f44280B5E3bc7115e229A272172Ad4A57b8', '0xF42a4429F107bD120C5E42E069FDad0AC625F615'],
             }, 
             {
                 name: 'DAI',
                 symbol: 'DAI',
                 icon: '/assets/icons/DAI.png',
                 flag: 'usdtoken',
-                address: '0x97F3AF0246B59E9e035A9E996eF9779983ed536B',
+                address: '0xF42a4429F107bD120C5E42E069FDad0AC625F615',
             },             
         ],
+        explorer: 'https://mumbai.polygonscan.com/', // Polygon (MATIC) - Testnet
+        chainID: 80001,
         getHexChainId() : string{
             return "0x" + Config.main.chainID.toString(16);
         },       
-        addressToken: '0x0Bd3F5a10A1D0E33195Ac643C457301F1Ed4E9E2',
-        addressAirdrop: '0xee015544DBA867fF21Db3cEe84Ec4A1474F1f38a',
-        addressPresale: '0xe09E5b19471dd5CEE1d1CEdAAE8425D2B56Ed726',
-        addressPool: '0x8874EbF581e63619F79980E5a3cc551dC9d58ba5',
-        addressUSDToken: '0x97F3AF0246B59E9e035A9E996eF9779983ed536B',
-        addressLPToken: '0x7DCf1c38A2360d5D0A8F8bf2F41B96079e559d4B',
+        addressToken: '0xc4915f44280B5E3bc7115e229A272172Ad4A57b8',
+        addressAirdrop: '0x2BC911a1a09897DbA816E22fd2A4eE4ECE694615',
+        addressPresale: '0x5463d7d2Ba7C0825FC6A0BFa5b5Fa78A25508A16',
+        addressPool: '0x1a4D1365A64f40eDA835807E117F7a943F81fd02',
+        addressUSDToken: '0xF42a4429F107bD120C5E42E069FDad0AC625F615',
+        addressLPToken: '0x218BdcfF3ba546F3802d17777883DaB5286e9017',
         airdropContractInterface: [] = [
             "function claimCount () view returns (uint)",
             //"event Transfer(address indexed from, address indexed to, uint amount)",
