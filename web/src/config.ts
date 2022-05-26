@@ -79,7 +79,7 @@ export class Config {
             return "0x" + Config.main.chainID.toString(16);
         },       
         addressToken: '0x0Bd3F5a10A1D0E33195Ac643C457301F1Ed4E9E2',
-        addressAirdrop: '0x4c44506D3C571DF6c6267A7d0Ea71Ef75ad5356C',
+        addressAirdrop: '0xAb2643dBAE00D6A4B5832D720F6397Eb0c01f7cA',
         addressPresale: '0xe09E5b19471dd5CEE1d1CEdAAE8425D2B56Ed726',
         addressPool: '0x8874EbF581e63619F79980E5a3cc551dC9d58ba5',
         addressUSDToken: '0x97F3AF0246B59E9e035A9E996eF9779983ed536B',
