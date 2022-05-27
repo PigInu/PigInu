@@ -42,10 +42,10 @@ const config: HardhatUserConfig = {
    gasPrice: 35000000000,
   },
   polygonMainnet: {
-   url: 'https://polygon-rpc.com',
+   //url: 'https://polygon-rpc.com',
    //url: 'https://rpc-mainnet.matic.network',
    //url: 'https://matic-mainnet.chainstacklabs.com',
-   //url: 'https://rpc-mainnet.maticvigil.com',
+   url: 'https://rpc-mainnet.maticvigil.com',
    //url: 'https://rpc-mainnet.matic.quiknode.pro',
    //url: 'https://matic-mainnet-full-rpc.bwarelabs.com',
    chainId: 137,

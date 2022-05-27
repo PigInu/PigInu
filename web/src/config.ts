@@ -21,8 +21,8 @@ export class Config {
             decimals: 18
         },
         headerLinks: {
-            buyToken: "https://quickswap.exchange/#/swap?inputCurrency=0xF42a4429F107bD120C5E42E069FDad0AC625F615&outputCurrency=0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3",
-            buyLiguidity: "https://quickswap.exchange/#/swap?outputCurrency=0xF42a4429F107bD120C5E42E069FDad0AC625F615"
+            buyToken: "https://quickswap.exchange/#/swap?inputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063&outputCurrency=PIG",
+            buyLiguidity: "https://quickswap.exchange/#/add/0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063/PIG"
         },
         footerLinks:{
             github: 'https://github.com/PigInu/PigInu/',
@@ -31,9 +31,9 @@ export class Config {
         mainMenu: [
             {link: "", text: "About"},
             { text: "Trade", items :[
-                {href: "https://quickswap.exchange/#/swap?inputCurrency=0xF42a4429F107bD120C5E42E069FDad0AC625F615&outputCurrency=0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3", text: "Buy PIG for DAI", link: false},
-                {href: "https://quickswap.exchange/#/swap?outputCurrency=0xF42a4429F107bD120C5E42E069FDad0AC625F615", text: "Buy DAI for MATIC"},
-                {href: "https://quickswap.exchange/#/add/0xF42a4429F107bD120C5E42E069FDad0AC625F615/0x9b6452d8EE8B79605F3F73d04F5f43D7A9Df59A3", text: "Buy PIG-DAI liquidity"}
+                {href: "https://quickswap.exchange/#/swap?inputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063&outputCurrency=PIG", text: "Buy PIG for DAI", link: false},
+                {href: "https://quickswap.exchange/#/swap?outputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", text: "Buy DAI for MATIC"},
+                {href: "https://quickswap.exchange/#/add/0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063/PIG", text: "Buy PIG-DAI liquidity"}
             ]},
             {link: "presale", text: "Presale"},
             {link: "airdrop", text: "Airdrop"},
@@ -57,15 +57,15 @@ export class Config {
                 symbol: 'PIG',
                 icon: '/assets/icons/PIG.png',
                 flag: 'token',
-                address: '0x0Bd3F5a10A1D0E33195Ac643C457301F1Ed4E9E2',
+                address: '0xb52a0843530EA8F2ecb5fc30086bFE343a0B94FB',
             }, 
             {
                 name: 'PIG-DAI LP',
                 symbol: 'PIG-DAI LP',
                 icon: '/assets/icons/PIG-DAI.png',
                 flag: 'lptoken',
-                address: '0x7DCf1c38A2360d5D0A8F8bf2F41B96079e559d4B',
-                lpAdresses: ['0x0Bd3F5a10A1D0E33195Ac643C457301F1Ed4E9E2', '0x97F3AF0246B59E9e035A9E996eF9779983ed536B'],
+                address: '0x7076ECD482059cAe0297D70650E910a646d1c2b0',
+                lpAdresses: ['0xb52a0843530EA8F2ecb5fc30086bFE343a0B94FB', '0x97F3AF0246B59E9e035A9E996eF9779983ed536B'],
             }, 
             {
                 name: 'DAI',
@@ -78,12 +78,12 @@ export class Config {
         getHexChainId() : string{
             return "0x" + Config.main.chainID.toString(16);
         },       
-        addressToken: '0x0Bd3F5a10A1D0E33195Ac643C457301F1Ed4E9E2',
-        addressAirdrop: '0x2105Eeb3a663510c6e82BDff4f7E4bee981ca326',
-        addressPresale: '0xe09E5b19471dd5CEE1d1CEdAAE8425D2B56Ed726',
-        addressPool: '0x8874EbF581e63619F79980E5a3cc551dC9d58ba5',
+        addressToken: '0xb52a0843530EA8F2ecb5fc30086bFE343a0B94FB',
+        addressAirdrop: '0x5B0D04E2DFE0A742ceBC20934A3a183b0e91382b',
+        addressPresale: '0x0ECdB58caa6059231F54C11f12AdB8794f0d2d98',
+        addressPool: '0x0443EC19D4E439D78d83d7EFE019051cbF826B94',
         addressUSDToken: '0x97F3AF0246B59E9e035A9E996eF9779983ed536B',
-        addressLPToken: '0x7DCf1c38A2360d5D0A8F8bf2F41B96079e559d4B',
+        addressLPToken: '0x7076ECD482059cAe0297D70650E910a646d1c2b0',
         airdropContractInterface: [] = [
             "function claimCount () view returns (uint)",
             //"event Transfer(address indexed from, address indexed to, uint amount)",
