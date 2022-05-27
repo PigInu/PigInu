@@ -72,10 +72,6 @@ async function main() {
  console.log('Deploying smart contracts ...');
  console.log();
 
- // CONTRACT ATTACH - RELEASE:
- //const TokenTheir = await ethers.getContractFactory('Token');
- //const tokenTheir = await TokenTheir.attach('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'); // DAI
- 
  // CONTRACT ATTACH - TEST:
  const TokenTheir = await ethers.getContractFactory('Token');
  const tokenTheir = await TokenTheir.attach('0xF42a4429F107bD120C5E42E069FDad0AC625F615'); // XUSD
