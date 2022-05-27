@@ -146,7 +146,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
   public tokenPrice() : string{
     if(!this.pool.tokenDeposit.isReady())
       return "-";
-    if(this.pool.tokenDeposit.totalSupply >= 0 && this.tokenPriceValueLoaded == null)
+    if( this.tokenPriceValueLoaded == null) //this.pool.tokenDeposit.totalSupply >= 0 &&
     {
       this.tokenPriceValueLoaded = false;
       this.pool.tokenDeposit.updatePrice();

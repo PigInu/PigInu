@@ -95,14 +95,16 @@ export class PresaleComponent implements OnInit, OnDestroy  {
   claimablePercent() : number{
     if(this.presale.totalClaimable == -1 || this.presale.totalClaimed == -1 || !this.presale.tokenOur.isReady())
       return -1;
-    if(this.presale.totalClaimable == 0)
+    if(this.presale.totalClaimed == 0)
       return 100;
-    return Math.floor(this.presale.totalClaimed / (this.presale.totalClaimable / 100));
+    return Math.floor(this.presale.totalClaimable / (this.presale.totalClaimed / 100));
   }
 
   progressPercent() : number{
     if(this.presale.tokenTheirMax == -1 || this.presale.totalDeposited == -1 || !this.presale.tokenTheir.isReady())
       return -1;
+    if(this.presale.tokenTheirMax == 0)
+      return 100;
     return Math.floor(this.presale.totalDeposited / (this.presale.tokenTheirMax / 100));
   }
 
@@ -144,13 +146,13 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     return ret;
   }
 
-  checkClaimedResult: number = -1;
+  checkClaimedResult:  BigNumber | null = null;
   checkClaimedLoading: boolean = false;
   checkClaimedError: string | null = null;
   checkClaimed(address: string){
     if(this.checkClaimedLoading)
       return;
-    this.checkClaimedResult = -1;
+    this.checkClaimedResult = null;
     if(!ethers.utils.isAddress(address)){
       this.checkClaimedError = "Error: Wrong wallet address";
       return;
@@ -158,7 +160,7 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     this.checkClaimedLoading = true;
     this.checkClaimedError = null;
     this.web3ModalSevice.presaleClaimed(address).then(value => {
-      this.checkClaimedResult = AppState.presale.tokenOur.reduceDecimals(value);;
+      this.checkClaimedResult = value;
       this.checkClaimedLoading = false;
     }, reject => {
       this.checkClaimedError = reject;
@@ -166,13 +168,13 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     });
   }
 
-  checkClaimableResult: number = -1;
+  checkClaimableResult: BigNumber | null = null;
   checkClaimableLoading: boolean = false;
   checkClaimableError: string | null = null;
   checkClaimable(address: string){
     if(this.checkClaimedLoading)
       return;
-    this.checkClaimableResult = -1;
+    this.checkClaimableResult = null;
     if(!ethers.utils.isAddress(address)){
       this.checkClaimableError = "Error: Wrong wallet address";
       return;
@@ -180,7 +182,7 @@ export class PresaleComponent implements OnInit, OnDestroy  {
     this.checkClaimableLoading = true; 
     this.checkClaimableError = null;
     this.web3ModalSevice.presaleClaimeable(address).then(value => {
-      this.checkClaimableResult = AppState.presale.tokenOur.reduceDecimals(value);
+      this.checkClaimableResult = value
       this.checkClaimableLoading = false;
     }, reject => {
       this.checkClaimableError = reject;

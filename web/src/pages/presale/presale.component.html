@@ -379,13 +379,13 @@
         Claimed: 
     </th>
     <td class="check">
-        <input #tokenOurAddress (keyup)="checkClaimedResult = -1; checkClaimedError = null" (change)="checkClaimedResult = -1; checkClaimedError = null" [attr.disabled]="checkClaimedLoading ? 'disabled' : null" placeholder="Wallet address" value="{{walletAddress()}}" /> 
+        <input #tokenOurAddress (keyup)="checkClaimedResult = null; checkClaimedError = null" (change)="checkClaimedResult = null; checkClaimedError = null" [attr.disabled]="checkClaimedLoading ? 'disabled' : null" placeholder="Wallet address" value="{{walletAddress()}}" /> 
         <button (click)="checkClaimed(tokenOurAddress.value)">
           <span *ngIf="!checkClaimedLoading">Check</span>
           <app-loader *ngIf="checkClaimedLoading" class="center"></app-loader>
         </button>
-        <div *ngIf="checkClaimedResult != -1" class="result">
-            {{checkClaimedResult}} {{this.presale.tokenOur.symbol}}
+        <div *ngIf="checkClaimedResult != null" class="result">
+            {{checkClaimedResult | BigNumberLocale : this.presale.tokenOur.decimals}} {{this.presale.tokenOur.symbol}}
         </div>
         <div *ngIf="checkClaimedError != null" class="resultError">
           {{checkClaimedError}}
@@ -397,13 +397,13 @@
         Claimable: 
     </th>
     <td class="check">
-        <input #tokenOurAddress (keyup)="checkClaimableResult = -1; checkClaimableError = null" (change)="checkClaimableResult = -1; checkClaimableError = null" [attr.disabled]="checkClaimableLoading ? 'disabled' : null" placeholder="Wallet address" value="{{walletAddress()}}" /> 
+        <input #tokenOurAddress (keyup)="checkClaimableResult = null; checkClaimableError = null" (change)="checkClaimableResult = null; checkClaimableError = null" [attr.disabled]="checkClaimableLoading ? 'disabled' : null" placeholder="Wallet address" value="{{walletAddress()}}" /> 
         <button (click)="checkClaimable(tokenOurAddress.value)">
           <span *ngIf="!checkClaimableLoading">Check</span>
           <app-loader *ngIf="checkClaimableLoading" class="center"></app-loader>
         </button>
-        <div *ngIf="checkClaimableResult != -1" class="result">
-            {{checkClaimableResult}} {{this.presale.tokenOur.symbol}}
+        <div *ngIf="checkClaimableResult != null" class="result">
+            {{checkClaimableResult | BigNumberLocale : this.presale.tokenOur.decimals }} {{this.presale.tokenOur.symbol}}
         </div>
         <div *ngIf="checkClaimableError != null" class="resultError">
           {{checkClaimableError}}

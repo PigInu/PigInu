@@ -101,11 +101,9 @@ export class StateToken {
                 if(c && usdc){
                     const price = this.reduceDecimals(await c.balanceOf(Config.main.addressLPToken) as BigNumber);
                     const priceUsd = this.reduceDecimals(await usdc.balanceOf(Config.main.addressLPToken) as BigNumber);
-                    //console.log(price);
-                    //console.log(priceUsd);
                     this.price = priceUsd / price;
-                    this.priceLoading = -1;
                 }
+                this.priceLoading = -1;
             } else {
                 if(this.totalSupplyBigNumber == null){
                     this.updateTotalSupply();

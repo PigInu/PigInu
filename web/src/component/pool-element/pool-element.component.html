@@ -86,7 +86,6 @@
     </tr>  
     <tr class="noborder">
       <td colspan="2" class="actions">
-        <div *ngIf="!walletSigned()">Wallet not connected</div>
         <div *ngIf="walletSigned() && isTokenDepositApproved() != null">
           <button *ngIf="!isTokenDepositApproved()" (click)="approve()">
             <span *ngIf="!approveWaiting">Approve</span>
