@@ -156,8 +156,5 @@
               Claim period is over
           </button>
       </div>
-      <div class="connectButton" *ngIf="airdropRecieved()">
-          You have already received your {{tokenSymbol()}} tokens
-          <span *ngIf="airdropTransctionHash"><br />Transaction ID: <a href="{{airdropTransctionHash | transactionLink}}" target="_blank">{{airdropTransctionHash}}</a></span>
-      </div>
+      <div class="result" *ngIf="airdropTransctionHash"><br />Transaction ID: <a href="{{airdropTransctionHash | transactionLink}}" target="_blank">{{airdropTransctionHash}}</a></div>
 </div>
