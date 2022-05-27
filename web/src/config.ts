@@ -21,8 +21,8 @@ export class Config {
             decimals: 18
         },
         headerLinks: {
-            buyToken: "https://quickswap.exchange/#/swap?inputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063&outputCurrency=PIG",
-            buyLiguidity: "https://quickswap.exchange/#/add/0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063/PIG"
+            buyToken: "https://quickswap.exchange/#/swap?inputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063&outputCurrency=0x97d11E24Df7d0214353a6c881Fdb20Ed46A19A94",
+            buyLiguidity: "https://quickswap.exchange/#/add/0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063/0x97d11E24Df7d0214353a6c881Fdb20Ed46A19A94"
         },
         footerLinks:{
             github: 'https://github.com/PigInu/PigInu/',
@@ -31,9 +31,9 @@ export class Config {
         mainMenu: [
             {link: "", text: "About"},
             { text: "Trade", items :[
-                {href: "https://quickswap.exchange/#/swap?inputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063&outputCurrency=PIG", text: "Buy PIG for DAI", link: false},
+                {href: "https://quickswap.exchange/#/swap?inputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063&outputCurrency=0x97d11E24Df7d0214353a6c881Fdb20Ed46A19A94", text: "Buy PIG for DAI", link: false},
                 {href: "https://quickswap.exchange/#/swap?outputCurrency=0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", text: "Buy DAI for MATIC"},
-                {href: "https://quickswap.exchange/#/add/0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063/PIG", text: "Buy PIG-DAI liquidity"}
+                {href: "https://quickswap.exchange/#/add/0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063/0x97d11E24Df7d0214353a6c881Fdb20Ed46A19A94", text: "Buy PIG-DAI liquidity"}
             ]},
             {link: "presale", text: "Presale"},
             {link: "airdrop", text: "Airdrop"},
