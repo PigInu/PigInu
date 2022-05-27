@@ -73,12 +73,12 @@ async function main() {
  console.log();
 
  // CONTRACT ATTACH - RELEASE:
- //const TokenTheir = await ethers.getContractFactory('Token');
- //const tokenTheir = await TokenTheir.attach('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'); // DAI
+ const TokenTheir = await ethers.getContractFactory('Token');
+ const tokenTheir = await TokenTheir.attach('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'); // DAI
  
  // CONTRACT ATTACH - TEST:
- const TokenTheir = await ethers.getContractFactory('Token');
- const tokenTheir = await TokenTheir.attach('0x97F3AF0246B59E9e035A9E996eF9779983ed536B'); // XUSD
+ //const TokenTheir = await ethers.getContractFactory('Token');
+ //const tokenTheir = await TokenTheir.attach('0x97F3AF0246B59E9e035A9E996eF9779983ed536B'); // XUSD
  //const TokenOur = await ethers.getContractFactory('Token');
  //const tokenOur = await TokenOur.attach('');
  //const LiquidityManager = await ethers.getContractFactory('LiquidityManager');
