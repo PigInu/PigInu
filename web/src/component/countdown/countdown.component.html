@@ -1,0 +1,6 @@
+<span>
+  <span *ngIf="days > 0" class="item">{{days | number : '2.0'}}d</span>
+  <span *ngIf="hours > 0 || days > 0" class="item">{{hours | number : '2.0'}}h</span>
+  <span *ngIf="minutes > 0 || hours > 0 || days > 0" class="item">{{minutes | number : '2.0'}}m</span>
+  <span *ngIf="seconds > 0 || minutes > 0 || hours > 0 || days > 0" class="item">{{seconds | number : '2.0'}}s</span>
+</span>

@@ -46,7 +46,7 @@
             <span *ngIf="notStarted == true">
                 Not started
             </span>
-            <span *ngIf="airdropStarted != null">       
+            <span *ngIf="startBlock() > 0">       
                 <div *ngIf="airdropStartTimeout() != -1 && startBlock() > 0">
                     Block:  {{startBlock()}}
                 </div>    
@@ -61,8 +61,8 @@
         <th>
         End: 
         </th><td>
-            <span *ngIf="airdropTimeoutOver == null"><app-loader></app-loader></span>
-            <span *ngIf="airdropTimeoutOver != null">
+            <span *ngIf="endBlock() <= 0"><app-loader></app-loader></span>
+            <span *ngIf="endBlock() > 0">
                 <div *ngIf="airdropTimeoutOver != null && airdropStarted == true">
                     Block: 
                     {{endBlock()}}
@@ -70,7 +70,7 @@
                 <span *ngIf="airdropTimeoutIsReal() == false">Estimated time:</span>
                 <span *ngIf="airdropTimeoutIsReal() == true">Time:</span>
                 {{airdropTimeout() * 1000 | dateTimeLocale}}
-                <span *ngIf="airdropTimeoutOver == false"><countdown [config]="timeOutConfig(airdropTimeout())"></countdown></span>
+                <span *ngIf="airdropTimeoutIsReal() == false"><countdown [config]="timeOutConfig(airdropTimeout())"></countdown></span>
             </span>
         </td> 
     </tr>

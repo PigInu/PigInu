@@ -164,7 +164,7 @@ export class PoolComponent implements OnInit, OnDestroy {
     this.transactionError = transactionError;
   }
   
-  timeOutConfig(timestamp: number): CountdownConfig {
+  timeOutConfig(timestamp: number) {
     return AppState.timeOutConfig(timestamp);
   }
 }

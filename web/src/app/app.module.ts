@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CountdownModule } from 'ngx-countdown';
 import { AddTokenToWalletComponent } from 'src/component/add-token-to-wallet/add-token-to-wallet.component';
 import { LoaderComponent } from 'src/component/loader/loader.component';
 import { PoolElementComponent } from 'src/component/pool-element/pool-element.component';
@@ -21,6 +20,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 import { Config } from 'src/config';
+import { CountdownComponent } from 'src/component/countdown/countdown.component';
 
 @NgModule({
   declarations: [	
@@ -39,12 +39,12 @@ import { Config } from 'src/config';
     NumberLocalePipe,
     DateTimeLocalePipe,
     BigNumberLocalePipe,
-    OnlyNumbers
+    OnlyNumbers,
+    CountdownComponent
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CountdownModule,
     NgxGoogleAnalyticsModule.forRoot(Config.main.analyticsId),
     NgxGoogleAnalyticsRouterModule
   ],

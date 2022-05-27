@@ -32,6 +32,7 @@ export class PoolService {
     "function totalAllocPoint () view returns (uint)",
     "function start (uint256)",
     "function owner() view returns (uint256)",
+    "function getPoolSupply(uint256) view returns (uint256)"
   ];
   private state : PoolServiceState = {
     token: new StateToken("/assets/token.png"),
@@ -96,6 +97,10 @@ export class PoolService {
 
   pendingTokens(poolId: number, address: string): Promise<BigNumber>{
     return this.getSignedContract().pendingTokens(poolId, address);
+  }
+
+  getPoolSupply(poolId: number): Promise<BigNumber>{
+    return this.getSignedContract().getPoolSupply(poolId);
   }
 
   getTokensToBeBurned(): Promise<BigNumber>{
@@ -180,6 +185,11 @@ export class PoolState {
       }
       resolve(null);
     });
+   }
+
+
+   async getPoolSupply() : Promise<BigNumber>{
+    return this.service.getPoolSupply(this.poolId);
    }
 
    async addressPoolData() : Promise<AddressPoolData | null>{

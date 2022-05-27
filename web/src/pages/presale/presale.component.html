@@ -350,7 +350,7 @@
           <span *ngIf="presale.depositTimeOutIsReal == false">Estimated time:</span>
           <span *ngIf="presale.depositTimeOutIsReal == true">Time:</span>
           {{presale.depositTimeOut * 1000 | dateTimeLocale}}
-          <span *ngIf="depositPeriodOver == false"><countdown [config]="timeOutConfig(this.presale.depositTimeOut)"></countdown></span>
+          <span *ngIf="presale.startTimeIsReal == true && presale.depositTimeOutIsReal == false"><countdown [config]="timeOutConfig(this.presale.depositTimeOut)"></countdown></span>
         </span>
     </td> 
   </tr>

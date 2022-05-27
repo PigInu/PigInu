@@ -341,6 +341,7 @@ export class AppState {
         return timestamp - (Date.now() / 1000) + AppState.reduceActualTimestamp;
     }
 
+    /*
     public static timeOutConfig(timestamp: number): CountdownConfig {
     return {
         leftTime: this.timestampToTimeout(timestamp),
@@ -358,6 +359,10 @@ export class AppState {
         return ret;
         }
     };
+    }*/
+
+    public static timeOutConfig(timestamp: number): number {
+        return timestamp;
     }
 
     public static presale : IPresale = {

@@ -168,6 +168,12 @@ export class PoolElementComponent implements OnInit, OnDestroy {
       this.pendingTokens = val;
       this.calcAprApy();
     });
+    this.pool.getPoolSupply().then(value => {
+      this.totalValue = value;
+      this.totalValueNumber = this.toEth(this.totalValue);
+      this.calcAprApy();
+    });
+    /*OLD total value
     this.pool.tokenDeposit.balanceOf(this.contractAddress)?.then(value => {
       if(this.pool.tokenDeposit.address != this.pool.tokenEarn.address){
         this.totalValue = value;
@@ -183,6 +189,7 @@ export class PoolElementComponent implements OnInit, OnDestroy {
           this.calcTotalValueSamePool(value);
       }
     });
+    */
     this.poolService.getBlockTime().then(time => {
       this.blockTime = time
       this.calcAprApy();

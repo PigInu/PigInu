@@ -146,8 +146,8 @@ export class Web3ModalService {
       const actualBlock = await contract.provider.getBlock(actualBlockNumber);
       const blockTime = await this.getBlockTime(contract);
       let timeout = actualBlock.timestamp + ((blockNumber - actualBlockNumber) * blockTime);
-      if(timeout < actualBlock.timestamp + 10)
-        timeout = actualBlock.timestamp + 10;
+      if(timeout < actualBlock.timestamp + 35)
+        timeout = actualBlock.timestamp + 35;
       return {timeout: timeout, realTime: false};        
     });
   }
@@ -384,6 +384,9 @@ export class Web3ModalService {
       this.getBlockNumberTimeout(this.airdropNotLoggedContract, ret.toNumber()).then(blockTimeout => {
         AppState.airDropStartTimeout = blockTimeout.timeout;
         AppState.airDropStartTimeoutIsReal = blockTimeout.realTime;
+        console.log("start");
+        console.log(AppState.airDropStartTimeout);
+        console.log(AppState.airDropStartTimeoutIsReal );
       });
     });
   }

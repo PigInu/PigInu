@@ -191,7 +191,7 @@ export class AirdropComponent implements OnInit, OnDestroy {
     });
   }
 
-  timeOutConfig(timestamp: number): CountdownConfig {
+  timeOutConfig(timestamp: number) {
     return AppState.timeOutConfig(timestamp);
   }
 

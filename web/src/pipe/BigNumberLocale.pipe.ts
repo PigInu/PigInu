@@ -16,7 +16,8 @@ export class BigNumberLocalePipe implements PipeTransform {
 
     if(value == null)
       return "";
-
+    //return ethers.utils.formatEther(value);
+    
     const decimalsReducer = BigInt(10 ** decimals);
     const numberBigInt = value.div(BigNumber.from(decimalsReducer)).toBigInt();
     let decimalsBigInt = value.mod(BigNumber.from(decimalsReducer)).toBigInt();
@@ -31,11 +32,13 @@ export class BigNumberLocalePipe implements PipeTransform {
     let numberString = numberBigInt.toLocaleString(NumberLocalePipe.getLocale());
     if(decimalsBigInt == BigInt(0))
       return numberString;
-
-    const decimalPoint = (1.1).toLocaleString(NumberLocalePipe.getLocale()).replace(/1/g , "")
-    let decimalString = (reduceFormatDecimals && numberBigInt > 0)  ? (Math.round(Number(decimalsBigInt.toString().substring(0, decimals)) / (10 ** (decimals - 2)))).toString().replace(/0+$/, "") : this.formatDecimals(decimalsBigInt, decimals);
-    if(decimalString == "")
+    
+    let decimalString = this.formatDecimals(decimalsBigInt, decimals);
+    if(reduceFormatDecimals && numberBigInt > BigInt(0))
+      decimalString = decimalString.substring(0, 3);
+    if(decimalString == "" || decimalString == "000")
       return numberString;
+    const decimalPoint = (1.1).toLocaleString(NumberLocalePipe.getLocale()).replace(/1/g , "")
     return numberString + decimalPoint + decimalString;
   }
 
