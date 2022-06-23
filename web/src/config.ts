@@ -51,7 +51,11 @@ export class Config {
             { text: "Other links", items :[
                 {href: "https://github.com/PigInu/PigInu/", text: "GitHub sources", link: false},
             ]},
-            {href: "/assets/audit.pdf", text: "TechRate Audit"},
+            { text: "Audits & reviews", items :[
+                {href: "/assets/audit.pdf", text: "TechRate audit"},
+                {href: "https://rugdoc.io/project/pig-inu/", text: "RugDoc review"},
+            ]},
+
             {href: "/assets/whitepaper.pdf", text: "Whitepaper"},
         ],
         tokenAlias: [
