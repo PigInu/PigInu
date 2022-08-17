@@ -62,3 +62,26 @@ You can watch log file using:
 ```console
 screen -x PigInu
 ```
+
+You can proxy pass test version to port 80 using Nginx:
+
+```console
+server {
+    listen 80;
+    listen [::]:80;
+    root /data/www/test.piginu.com;
+    index index.html index.htm;
+    server_name test.piginu.com;
+    access_log /data/log/nginx/test.piginu.com.access.log;
+    error_log /data/log/nginx/test.piginu.com.error.log;
+
+    location / {
+        proxy_pass http://127.0.0.1:4001;
+        #try_files $uri /index.html;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+```
