@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import type { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { Airdrop, LiquidityManager, Pool, Presale, Token, Stablecoin, UniswapV2RouterMock, UniswapV2FactoryMock } from '../typechain-types';
+import { Airdrop, LiquidityManager, Pool, Presale, Token, Stablecoin, UniswapV2RouterMock, UniswapV2FactoryMock } from '../typechain';
 import { BigNumber } from 'ethers';
 
 describe('Token tests', function () {
@@ -615,4 +615,75 @@ describe('Pool tests', function () {
   tokensToBeDistributed = await _poolContract.getTokensToBeDistributed();
   expect(tokensToBeDistributed).to.be.equal(BigNumber.from(poolTokens).sub(poolTokensOPerBlock));
  });
+});
+
+
+describe('Audit Tests', function () {
+ let _owner: SignerWithAddress;
+ let _developer: SignerWithAddress;
+ let _burn: SignerWithAddress;
+ let _poolContract: Pool;
+ let _tokenContract: Token;
+ const tokenOurName = 'Test token';
+ const tokenOurSymbol = 'TEST';
+ const tokenOurSupply = 10000000; // 10 000 000 tokens
+ const tokenOurDecimals = 18;
+ const tokenOurBurnFee = 2;
+ const tokenOurDevFee = 3;
+ let tokenOwnerStartBalance: BigNumber;
+ let tokenInvestorStartBalance: BigNumber;
+ const poolTokens = '2000000000000000000000000'; // 2 000 000 tokens
+ const poolTokensOPerBlock = '100000000000000000'; // 0.1 tokens / block
+ const poolTokensOurAllocPoint = 100;
+ let _investor1: SignerWithAddress;
+ let _investor2: SignerWithAddress;
+
+ const poolOurId = 0;
+ beforeEach(async function () {
+  await ethers.provider.send('hardhat_reset', []);
+  await ethers.provider.send('evm_setAutomine', [true]);
+  [_owner, _developer, _burn, _investor1, _investor2] = await ethers.getSigners();
+  const Token = await ethers.getContractFactory('Token');
+  _tokenContract = await Token.deploy(tokenOurName, tokenOurSymbol, tokenOurSupply, tokenOurDecimals, tokenOurDevFee, tokenOurBurnFee, _burn.address);
+  await _tokenContract.deployed();
+  await _tokenContract.setDevAddress(_developer.address);
+  await _tokenContract.setTaxExclusion(_owner.address, true);
+  await _tokenContract.setTaxExclusion(_investor1.address, true);
+  await _tokenContract.setTaxExclusion(_investor2.address, true);
+  const Pool = await ethers.getContractFactory('Pool');
+  _poolContract = await Pool.deploy(_tokenContract.address, _burn.address, poolTokensOPerBlock, poolTokens);
+  await _poolContract.deployed();
+  await _tokenContract.transfer(_poolContract.address, poolTokens);
+  await _poolContract.createPool(poolTokensOurAllocPoint, _tokenContract.address, 0);
+  await _poolContract.start(10);
+  tokenOwnerStartBalance = await _tokenContract.balanceOf(_owner.address);
+  tokenInvestorStartBalance = tokenOwnerStartBalance.div(2);
+  _tokenContract.transfer(_investor1.address, tokenInvestorStartBalance);
+  _tokenContract.transfer(_investor2.address, tokenInvestorStartBalance);
+ });
+
+ it('Audit task: Withdrawals and harvests will fail once max supply is reached unless emissions and/or multipliers are set to zero. Users will still be able to emergency withdraw though.', async function () {
+  await _tokenContract.connect(_investor1).approve(_poolContract.address, tokenInvestorStartBalance);
+  await _tokenContract.connect(_investor2).approve(_poolContract.address, tokenInvestorStartBalance);
+  await ethers.provider.send('evm_setAutomine', [false]);
+  await _poolContract.connect(_investor1).deposit(poolOurId, tokenInvestorStartBalance);
+  await _poolContract.connect(_investor2).deposit(poolOurId, tokenInvestorStartBalance);
+  await ethers.provider.send('evm_setAutomine', [true]);
+
+  const blocks = BigNumber.from(poolTokens).div(BigNumber.from(poolTokensOPerBlock)).add(1000);
+  const timeInBlocksHex = BigNumber.from(blocks).toHexString().replace(/0x0+/, '0x');
+  await ethers.provider.send('hardhat_mine', [timeInBlocksHex]);
+
+  const expectedBalance = tokenInvestorStartBalance.add(BigNumber.from(poolTokens).div(2));
+  await _poolContract.connect(_investor1).withdraw(poolOurId, tokenInvestorStartBalance);
+  await _poolContract.connect(_investor2).withdraw(poolOurId, tokenInvestorStartBalance);
+
+  console.log("Pool tokens:                       ", poolTokens);
+  console.log("Investor start balance:            ", tokenInvestorStartBalance);
+  console.log("Investor1 balance after withdraw:  ", await _tokenContract.balanceOf(_investor1.address));
+  console.log("Investor2 balance after withdraw:  ", await _tokenContract.balanceOf(_investor2.address));
+  expect(await _tokenContract.balanceOf(_investor1.address)).to.eq(expectedBalance);
+  expect(await _tokenContract.balanceOf(_investor2.address)).to.eq(expectedBalance);
+ });
+
 });
